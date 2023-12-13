@@ -29,4 +29,5 @@ export default defineNuxtConfig({
   },
 
   plugins: [{ src: "@/plugins/aos", ssr: false, mode: "client" }],
+
 })

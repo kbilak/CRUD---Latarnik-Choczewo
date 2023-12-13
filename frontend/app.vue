@@ -8,7 +8,7 @@
     </v-app>
 </template>
 
-<script>
+<script lang="ts">
 import axios from 'axios';
 export default {
     async created() {
