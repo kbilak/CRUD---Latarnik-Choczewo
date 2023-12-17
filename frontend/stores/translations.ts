@@ -4,9 +4,10 @@ import { fetchTranslations } from "../services/i18n/translations"
 export const useLanguageStore = defineStore({
 	id: "languageStore",
 	state: () => ({
-		language: 'pl',
-		languages: '',
+		language: '',
+		languages: {},
 		translations: [],
+		selectedTranslations: [],
 	}),
 	actions: {
 		changeLanguage(language: string) {
@@ -14,8 +15,15 @@ export const useLanguageStore = defineStore({
 		},
 		async getTranslations() {
 			const translations = await fetchTranslations();
+
 			this.translations = translations;
-			this.languages = translations.map(entry => entry.language);
+			this.languages = translations.map(entry => {return {'name': entry.name, 'code': entry.code};});
+
+			this.language = this.languages[0];
+
+			let foundTranslations = this.translations.find(item => item.code === this.language.code)
+			this.selectedTranslations = foundTranslations.translations;
+
 			return translations;
 		}
 	},

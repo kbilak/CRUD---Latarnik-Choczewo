@@ -6,12 +6,14 @@ interface TranslationItem {
 }
 
 interface TranslationResponse {
-  language: string;
+  name: string;
+  code: string;
   translations: TranslationItem[];
 }
 
 export interface Translations {
-  language: string;
+  name: string;
+  code: string;
   translations: TranslationItem[];
 }
 

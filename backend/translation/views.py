@@ -1,37 +1,10 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework import status
+from rest_framework import status, generics
+from .models import *
+from .serializers import *
 
-class Translations(APIView):
-    def get(self, request, format=None):
-        
-        translations = [
-            {
-                'language': 'pl',
-                'translations': [
-                    {
-                        'code': 'auth.login',
-                        'translation': 'Logowanie'
-                    },
-                    {
-                        'code': 'auth.sign_up',
-                        'translation': 'Rejestracja'
-                    },
-                ]
-            },
-            {
-                'language': 'en',
-                'translations': [
-                    {
-                        'code': 'auth.login',
-                        'translation': 'Login'
-                    },
-                    {
-                        'code': 'auth.sign_up',
-                        'translation': 'Sign Up'
-                    },
-                ]
-            },
-        ]
 
-        return Response(translations)
+class LanguageListAPIView(generics.ListAPIView):
+    serializer_class = LanguageSerializer
+    queryset = Language.objects.filter(active=True)

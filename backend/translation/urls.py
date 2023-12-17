@@ -3,5 +3,5 @@ from .views import *
 
 
 urlpatterns = [
-    path('translations/', Translations.as_view(), name='get-translations'),
+    path('translations/', LanguageListAPIView.as_view(), name='get-translations'),
 ]
