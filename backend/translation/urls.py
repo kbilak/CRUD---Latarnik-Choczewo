@@ -3,5 +3,5 @@ from .views import *
 
 
 urlpatterns = [
-    path('pl/', TranslationsPL.as_view(), name='create-user'),
+    path('translations/', Translations.as_view(), name='get-translations'),
 ]
