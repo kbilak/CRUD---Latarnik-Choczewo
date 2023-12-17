@@ -1,18 +1,33 @@
 <template>
-    <v-app id="app" class="flex items-center justify-center w-full">
-        <NuxtLayout class="min-w-full">
-            <div class="flex flex-col justify-center items-center w-full">
-                <NuxtPage />
-            </div>
-        </NuxtLayout>
-    </v-app>
+    <div>
+        <ClientOnly v-if="loading">
+            <v-overlay v-model="loading" class="flex items-center justify-center">
+                <v-progress-circular indeterminate size="64"></v-progress-circular>
+            </v-overlay>
+        </ClientOnly>
+        <v-app v-else id="app" class="flex items-center justify-center w-full">
+            <NuxtLayout class="min-w-full">
+                <div class="flex flex-col justify-center items-center w-full">
+                    <NuxtPage />
+                </div>
+            </NuxtLayout>
+        </v-app>
+    </div>
 </template>
 
 <script lang="ts">
-import axios from 'axios';
+import { useLanguageStore } from './stores/translations'
 export default {
+    data() {
+        return {
+            languageStore: useLanguageStore(),
+            loading: false,
+        }
+    },
     async created() {
-        
+        this.loading = true;
+        await this.languageStore.getTranslations();
+        this.loading = false;
     }
 }
 </script>
