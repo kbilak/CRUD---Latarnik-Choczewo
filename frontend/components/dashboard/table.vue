@@ -1,8 +1,8 @@
 <template>
     <section id="table" class="flex flex-col items-center justify-start w-full min-h-[calc(100vh-202px)] text-black bg-gray-50 h-auto">
-        <div v-if="authStore.loggedIn" class="xs:max-w-screen-[450px] sm:max-w-screen-sm md:max-w-screen-md lg:max-w-screen-lg xl:max-w-screen-xl 2xl:max-w-screen-xl w-full h-full flex flex-col justify-center items-start">
-            <div class="flex justify-between items-center w-full h-[70px] mt-2">
-                <div class="w-auto px-5 bg-white border-[1px] border-gray-300 rounded-md">
+        <div v-if="authStore.loggedIn" class="xs:max-w-screen-[450px] sm:max-w-screen-sm md:max-w-screen-md lg:max-w-screen-lg xl:max-w-screen-xl 2xl:max-w-screen-xl w-full h-full flex flex-col justify-center items-center">
+            <div class="flex justify-between items-center w-[99%] h-[70px] mt-2">
+                <div class="w-auto px-5 bg-white border-[1px] border-gray-300 rounded-md shadow-md">
                     <div class="w-auto h-[60px] bg-white pt-1.5">
                         <v-tabs v-if="this.authStore.user.user.user_type === 'admin'" v-model="tab">
                             <v-tab value="1" class="rounded-tl-lg">Zawodnicy</v-tab>
@@ -79,12 +79,12 @@
                             </div>
                         </div>
                     </div>
-                    <article class="w-full border-[1px] border-gray-300 bg-white h-[500px] rounded-[6px] shadow-lg">
+                    <article class="w-full border-[1px] border-gray-300 bg-white h-auto rounded-[6px] shadow-md">
                         <div v-if="loading" class="w-full h-full bg-gray-200 flex items-center justify-center">
                             <div class="spinner"></div>
                         </div>
                         <div v-else>
-                            <div class="w-full h-[50px] border-b-[1px] border-gray-300 flex items-center justify-between px-10 font-inter text-gray-600">
+                            <div class="w-full h-[60px] border-b-[1px] border-gray-200 flex items-center justify-between px-10 font-inter text-gray-600">
                                 <div class="flex items-center justify-center">
                                     <span class="w-[70px] h-full">Photo</span>
                                 </div>
@@ -107,18 +107,48 @@
                                     <span class="w-[120px] h-full">Operacje</span>
                                 </div>
                             </div>
-                            {{ this.playersSorted[this.currentPagePlayers - 1] }}
+                            <div v-for="player in this.playersSorted[this.currentPagePlayers - 1]" :key="player.id" class="w-full h-[60px] border-b-[1px] border-gray-100 flex items-center justify-between px-10 font-inter text-gray-600">
+                                <div class="flex items-center justify-start w-[70px]">
+                                    <img :src="player.image" :alt="player.name" class="w-[50px] h-[50px] rounded-md">
+                                </div>
+                                <div class="flex items-center justify-center">
+                                    <span class="w-[150px] h-full">{{player.name}}</span>
+                                </div>
+                                <div class="flex items-center justify-center">
+                                    <span v-if="player.position === 'BR'" class="w-[90px] h-full">Bramkarz</span>
+                                    <span v-if="player.position === 'OB'" class="w-[90px] h-full">Obrońca</span>
+                                    <span v-if="player.position === 'PO'" class="w-[90px] h-full">Pomocnik</span>
+                                    <span v-if="player.position === 'NA'" class="w-[90px] h-full">Napastnik</span>
+                                </div>
+                                <div class="flex items-center justify-center">
+                                    <span class="w-[90px] h-full">{{player.status}}</span>
+                                </div>
+                                <div class="flex items-center justify-center">
+                                    <span class="w-[70px] h-full">{{player.number}}</span>
+                                </div>
+                                <div class="flex items-center justify-center">
+                                    <span class="w-[90px] h-full">{{player.year}}</span>
+                                </div>
+                                <div class="flex items-center justify-center">
+                                    <span class="w-[120px] h-full">Operacje</span>
+                                </div>
+                            </div>
+                            <!-- {{ this.playersSorted[this.currentPagePlayers - 1] }} -->
                             <!-- <div v-for="player in this.players" :key="player.id" class="mb-5">
                                 {{ player }}
                             </div> -->
                         </div>
                     </article>
-                    <div class="w-full h-auto mt-5 flex text-black items-center justify-center font-raleway">
-                        <select @change="this.changeItemsPerPage(this.itemsPerPage)" v-model="this.itemsPerPage" class="py-3 px-4 block w-[200px] bg-white rounded-md text-sm h-[44px]">
-                            <option :value="5">5</option>
-                            <option :value="6">6</option>
-                        </select>
-                        {{ itemsPerPage }}
+                    <div class="w-full h-auto mt-5 flex text-black items-center justify-between font-raleway">
+                        <div class="w-[230px] h-full border-[1px] border-gray-300 bg-white rounded-md flex items-center">
+                            <select @change="this.changeItemsPerPage(this.itemsPerPage)" v-model="this.itemsPerPage" class="py-3 px-4 block w-[88px] bg-white rounded-md text-sm h-[44px]">
+                                <option :value="5">5</option>
+                                <option :value="10">10</option>
+                                <option :value="20">20</option>
+                                <option :value="50">50</option>
+                            </select>
+                            <span class="text-sm border-l-[1px] h-full pl-2">Wyniki na stronie</span>
+                        </div>
                         <div class="pagination flex items-center justify-center flex-col">
                             <span v-if="this.pagesPlayers > 1" class="flex items-center">
                                 <button @click="this.currentPagePlayers = 1" class="text-black w-[35px] h-[35px]">
@@ -144,6 +174,11 @@
                             <span class="mt-2">
                                 Strona <b>{{ this.currentPagePlayers }}</b> z <b>{{ this.pagesPlayers }}</b>
                             </span>
+                        </div>
+                        <div class="w-[230px] h-full flex items-center justify-end">
+                            <span class="font-bold">{{ this.playersSorted[this.currentPagePlayers - 1].length }}</span>
+                            <span class="mx-1">z</span>
+                            <span class="font-bold">{{ this.players.length }}</span>
                         </div>
                     </div>
                 </v-window-item>
@@ -207,21 +242,6 @@
                     </article>
                 </v-window-item>
             </v-window>
-            <span></span>
-            
-            <div>
-                <label for="age">Sort by Age</label>
-            <input type="checkbox" id="age" v-model="sortingOptions.age" @change="updateSorting">
-
-            <label for="position">Sort by Position</label>
-            <input type="checkbox" id="position" v-model="sortingOptions.position" @change="updateSorting">
-
-            <label for="year">Sort by Year</label>
-            <input type="checkbox" id="year" v-model="sortingOptions.year" @change="updateSorting">
-
-                <!-- <button @click="this.sortData(['age', 'position'])" class="mb-10 p-5 bg-gray">sort</button> -->
-               
-            </div>
         </div>
     </section>
 </template>
@@ -245,7 +265,7 @@ export default{
             },
             players: [],
             tab: null,
-            itemsPerPage: 5,
+            itemsPerPage: 10,
 
             pagesPlayers: 0,
             currentPagePlayers: 1,
@@ -299,18 +319,15 @@ export default{
             }
         },
         async organizePlayers() {
-            console.log(this.itemsPerPage)
             let playersToSort = [...this.players]; // Create a copy of this.players
             this.pagesPlayers = Math.ceil(playersToSort.length / this.itemsPerPage);
             this.playersSorted = [];
             while (playersToSort.length > 0) {
                 this.playersSorted.push(playersToSort.splice(0, this.itemsPerPage));
             }
-            console.log(this.playersSorted)
         },
         async changeItemsPerPage(number) {
             this.itemsPerPage = number;
-            console.log(this.itemsPerPage)
             await this.organizePlayers();
         },
         async getTokenString() {
@@ -332,7 +349,6 @@ export default{
                 year: (a, b) => a.year - b.year,
                 number: (a, b) => a.number - b.number,
             };
-            
             const sortFunction = (a, b) => {
                 for (const option of sortingOptions) {
                     const result = sortingFunctions[option](a, b);
@@ -342,9 +358,9 @@ export default{
                 }
                 return 0;
             };
-
             const sortedArray = [...this.players].sort(sortFunction);
             this.players = sortedArray;
+            this.organizePlayers();
         }
     }
 };
