@@ -23,6 +23,7 @@ module.exports = {
             },
             fontFamily: {
                 'libre': ["'Libre Baskerville', sans-serif"],
+                'inter': ["'Inter', sans-serif"],
             }
         },
     },
