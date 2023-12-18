@@ -7,6 +7,7 @@ export const useAuthStore = defineStore({
 	state: () => ({
 		user: {},
         token: '',
+        loggedIn: false,
 	}),
 	actions: {
         async fetchToken() {
@@ -17,6 +18,7 @@ export const useAuthStore = defineStore({
             const response = await login(email, password, this.token);
             if (response) {
                 this.user = response;
+                this.loggedIn = true;
             } else {
                 this.user = {};
             }
