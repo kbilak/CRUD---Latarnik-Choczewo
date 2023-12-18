@@ -19,8 +19,10 @@ export const useAuthStore = defineStore({
             if (response) {
                 this.user = response;
                 this.loggedIn = true;
+                return true;
             } else {
                 this.user = {};
+                return false;
             }
         },
 		changeLanguage(language: string) {

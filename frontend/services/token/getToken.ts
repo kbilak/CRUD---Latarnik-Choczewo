@@ -6,7 +6,7 @@ interface TokenResponse {
 
 export async function getToken(): Promise<string | null> {
 	try {
-		const response: AxiosResponse<TokenResponse> = await axios.get(
+		const response: AxiosResponse<TokenResponse> = await axios.post(
 			'http://127.0.0.1:8000/token/get/'
 		);
 

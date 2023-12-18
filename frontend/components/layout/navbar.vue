@@ -2,16 +2,16 @@
     <section id="login" class="flex flex-col items-center justify-center w-full text-black bg-gray-50">
         <div class="xs:max-w-screen-[450px] sm:max-w-screen-sm md:max-w-screen-md lg:max-w-screen-lg xl:max-w-screen-xl 2xl:max-w-screen-xl w-full h-full flex flex-col justify-between items-center">
             <div class="flex items-center justify-between h-[100px] w-full">
-                <div class="flex flex-row items-center justify-start">
+                <NuxtLink to="/" class="flex flex-row items-center justify-start">
                     <img src="/logo/logo_latarnik.png" alt="Logo Latarnika Choczewo" class="h-[70px]">
                     <span class="ml-5 text-xl font-inter font-raleway">Latarnik Choczewo - panel zarządzania</span>
-                </div>
+                </NuxtLink>
                 <div class="flex flex-row items-center justify-end">
                     <NuxtLink v-if="!this.authStore.loggedIn" to="/auth/login" class="mr-5">
-                        <button type="button" class="btn h-[44px] border-[1px] border-black text-white bg-black hover:bg-[#101010] transition ease-in-out duration-300 font-medium rounded text-sm px-5 py-2.5 w-full uppercase flex items-center justify-center">{{this.languageStore.t.auth_login}}</button>
+                        <button type="button" class="btn h-[44px] border-[1px] border-black text-white bg-black hover:bg-[#101010] transition ease-in-out duration-300 font-medium rounded-md text-sm px-5 py-2.5 w-full uppercase flex items-center justify-center">{{this.languageStore.t.auth_login}}</button>
                     </NuxtLink>
                     <div class="flex flex-row border-[1px] border-gray-300 rounded-md">
-                        <select @change="this.changeLanguage()" v-model="selectedLanguage" class="py-3 px-4 block w-full bg-white rounded-lg text-sm h-[44px]">
+                        <select @change="this.changeLanguage()" v-model="selectedLanguage" class="py-3 px-4 block w-full bg-white rounded-md text-sm h-[44px]">
                             <option v-for="lang in this.languageStore.languages" :key="lang.code" :value="lang">{{ this.getFlagEmoji(lang.code) }} {{ lang.name }}</option>
                         </select>
                     </div>
