@@ -1,7 +1,7 @@
 <template>
-    <section id="login" class="flex flex-col items-center justify-center w-full h-[calc(100vh-200px)] min-h-[700px] text-black bg-gray-50">
+    <section id="login" class="flex flex-col items-center justify-center w-full h-[calc(100vh-202px)] min-h-[700px] text-black bg-gray-50">
         <div class="xs:max-w-screen-[450px] sm:max-w-screen-sm md:max-w-screen-md lg:max-w-screen-lg xl:max-w-screen-xl 2xl:max-w-screen-xl w-full h-full flex flex-col justify-center items-center">
-            <v-form @submit.prevent ref="form" v-model="valid" class="bg-white h-[600px] w-[450px] rounded-lg flex flex-col items-center justify-center border-[1px] border-gray-300 p-10 font-inter">
+            <v-form @submit.prevent ref="form" v-model="valid" class="bg-white h-[600px] 2xl:w-[450px] xl:w-[450px] lg:w-[450px] md:w-[450px] sm:w-[450px] xs:w-[350px] rounded-lg flex flex-col items-center justify-center border-[1px] border-gray-300 2xl:p-10 xl:p-10 lg:p-10 md:p-8 sm:p-8 xs:p-5 font-inter">
                 <h2 class="text-4xl font-inter font-bold">{{ this.languageStore.t.auth_sign_up }}</h2>
                 <div class="mt-10 w-full text-right">
                     <v-text-field v-model="this.email" :rules="this.emailRules" variant="outlined" class="max-h-[56px] w-full" :placeholder="this.languageStore.t.placeholder_email" :label="this.languageStore.t.placeholder_email" type="email"></v-text-field>
@@ -27,9 +27,7 @@
                         <span class="font-medium font-inter">{{ this.languageStore.t.auth_signup_mess_error }}</span> 
                     </div>
                 </v-snackbar>
-
             </ClientOnly>
-            <div class="h-[100px]"></div>
         </div>
     </section>
 </template>

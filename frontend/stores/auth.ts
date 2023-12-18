@@ -3,6 +3,7 @@ import { login } from "../services/auth/login";
 import { signUp } from "../services/auth/sign-up";
 import { getToken } from "../services/token/getToken";
 
+
 export const useAuthStore = defineStore({
 	id: "authStore",
 	state: () => ({
