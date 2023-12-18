@@ -7,7 +7,18 @@
                     <span class="ml-5 text-xl font-inter font-raleway">Latarnik Choczewo - panel zarządzania</span>
                 </NuxtLink>
                 <div class="flex flex-row items-center justify-end">
-                    <NuxtLink v-if="!this.authStore.loggedIn" to="/auth/login" class="mr-5">
+                    <div v-if="this.authStore.loggedIn" class="dropdown dropdown-bottom dropdown-end border-[1px] border-black rounded-full mr-5 p-1 h-[44px] w-[44px] flex items-center justify-center">
+                        <v-icon tabindex="0" role="button" class="text-black" style="font-size: 30px !important;">mdi-account</v-icon>
+                        <ul class="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-[250px]">
+                            <li v-if="this.authStore.user.user" class="text-left">
+                                <span class="flex flex-col text-left">Zalogowano jako <span class="font-bold">{{ this.authStore.user.user.email }}</span></span>
+                            </li>
+                            <li><NuxtLink to="/auth/login?action=logout" @click="this.logout()" class="text-red-400">
+                                <v-icon>mdi-logout</v-icon> Wyloguj
+                            </NuxtLink></li>
+                        </ul>
+                    </div>
+                    <NuxtLink v-if="!this.authStore.loggedIn" to="/auth/login" class="mr-5 cursor-pointer">
                         <button type="button" class="btn h-[44px] border-[1px] border-black text-white bg-black hover:bg-[#101010] transition ease-in-out duration-300 font-medium rounded-md text-sm px-5 py-2.5 w-full uppercase flex items-center justify-center">{{this.languageStore.t.auth_login}}</button>
                     </NuxtLink>
                     <div class="flex flex-row border-[1px] border-gray-300 rounded-md">
@@ -48,6 +59,9 @@ export default {
             const foundFlag = this.flags.find(flag => flag.code === code);
             return foundFlag ? foundFlag.emoji : '';
         },
+        async logout() {
+            await this.authStore.logout();
+        }
     },
 };
 </script>

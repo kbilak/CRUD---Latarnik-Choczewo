@@ -1,6 +1,7 @@
-import { defineStore } from "pinia";
-import { login } from "../services/auth/login"
-import { getToken } from "../services/token/getToken"
+import { defineStore } from "pinia";;
+import { login } from "../services/auth/login";
+import { signUp } from "../services/auth/sign-up";
+import { getToken } from "../services/token/getToken";
 
 export const useAuthStore = defineStore({
 	id: "authStore",
@@ -10,12 +11,18 @@ export const useAuthStore = defineStore({
         loggedIn: false,
 	}),
 	actions: {
+        logout() {
+            this.token = '';
+            this.user = {};
+            this.loggedIn = false;
+        },
         async fetchToken() {
             this.token = await getToken();
         },
         async login(email: string, password: string) {
             await this.fetchToken();
             const response = await login(email, password, this.token);
+            this.token = '';
             if (response) {
                 this.user = response;
                 this.loggedIn = true;
@@ -25,8 +32,15 @@ export const useAuthStore = defineStore({
                 return false;
             }
         },
-		changeLanguage(language: string) {
-			this.language = language;
-		},
+        async signUp(email: string, password: string) {
+            await this.fetchToken();
+            const response = await signUp(email, password, this.token);
+            this.token = '';
+            if (response) {
+                return true;
+            } else {
+                return false;
+            }
+        },
 	},
 });

@@ -13,7 +13,7 @@ class User(models.Model):
     email = models.CharField(max_length=255, unique=True)
     password_hash = models.CharField(max_length=255)
     date_joined = models.DateTimeField(default=timezone.now, verbose_name='Data dołączenia')
-    user_type = models.CharField(choices=USER_TYPES, max_length=255, default='individual', verbose_name='Typ użytkownika')
+    user_type = models.CharField(choices=USER_TYPES, max_length=255, default='normal', verbose_name='Typ użytkownika')
 
     def __str__(self):
         return self.email
