@@ -8,8 +8,13 @@
                     <v-text-field v-model="this.password" :rules="this.passwordRules" variant="outlined" class="max-h-[56px] w-full mt-8 mb-6" :placeholder="this.languageStore.t.placeholder_password" :label="this.languageStore.t.placeholder_password" type="password"></v-text-field>
                     <NuxtLink to="/auth/forgot-password" class="italic text-gray-600 transition ease-in-out duration-300 hover:text-black">{{this.languageStore.t.auth_forgot_password}}</NuxtLink>
                     <button @click="this.login()" :disabled="!valid" :class="{ 'button-disabled': !valid }" type="button" class="btn h-[56px] text-white bg-black hover:bg-[#101010] transition ease-in-out duration-300 font-medium rounded text-sm px-5 py-2.5 mt-8 w-full uppercase flex items-center justify-center">
-                        {{this.languageStore.t.auth_login_action}}
-                    </button>
+                        <template v-if="loading">
+                            <div class="spinner"></div>
+                        </template>
+                        <template v-else>
+                            {{this.languageStore.t.auth_login_action}}
+                        </template>
+                    </button> 
                     <hr class="mt-5 mb-3.5">
                     <div class="text-center">
                         <span class="text-gray-600">Nie masz jeszcze konta? <NuxtLink to="/auth/sign-up" class="italic transition ease-in-out duration-300 hover:text-black">Zarejestruj się</NuxtLink></span>
@@ -45,6 +50,7 @@ export default {
             valid: false,
             snackbar: false,
             snackbarTimeout: 5000,
+            loading: false,
         };
     },
     created() {
@@ -63,22 +69,26 @@ export default {
     },
     methods: {
         async login() {
+            this.loading = true;
             this.$refs.form.validate().then(async valid => {
                 if (valid) {
                     let response = await this.authStore.login(this.email, this.password);
                     if (response) {
                         this.$router.push('/app');
+                        this.loading = false;
                     } else {
                         this.snackbar = true;
                         setTimeout(() => {
                             this.snackbar = false;
                         }, 5000);
+                        this.loading = false;
                     }
                 } else {
                     this.snackbar = true;
                     setTimeout(() => {
                         this.snackbar = false;
                     }, 5000);
+                    this.loading = false;
                 }
             })
         }

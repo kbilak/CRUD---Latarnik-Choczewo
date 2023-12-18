@@ -40,6 +40,7 @@ INSTALLED_APPS = [
 
     'translation',
     'tokens',
+    'accounts',
 
     'rest_framework',
     'corsheaders',
