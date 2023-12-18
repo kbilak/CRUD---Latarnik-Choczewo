@@ -79,8 +79,8 @@
                             </div>
                         </div>
                     </div>
-                    <article class="w-full border-[1px] border-gray-300 bg-white h-auto rounded-[6px] shadow-md">
-                        <div v-if="loading" class="w-full h-full bg-gray-200 flex items-center justify-center">
+                    <article class="w-full border-[1px] border-gray-300 bg-white h-auto min-h-[660px] rounded-[6px] shadow-md">
+                        <div v-if="loading" class="w-full min-h-[660px] h-full bg-gray-100 flex items-center justify-center">
                             <div class="spinner"></div>
                         </div>
                         <div v-else>
@@ -95,7 +95,7 @@
                                     <span class="w-[90px] h-full">Pozycja</span>
                                 </div>
                                 <div class="flex items-center justify-center">
-                                    <span class="w-[90px] h-full">Status</span>
+                                    <span class="w-[120px] h-full">Status</span>
                                 </div>
                                 <div class="flex items-center justify-center">
                                     <span class="w-[70px] h-full">Number</span>
@@ -120,8 +120,9 @@
                                     <span v-if="player.position === 'PO'" class="w-[90px] h-full">Pomocnik</span>
                                     <span v-if="player.position === 'NA'" class="w-[90px] h-full">Napastnik</span>
                                 </div>
-                                <div class="flex items-center justify-center">
-                                    <span class="w-[90px] h-full">{{player.status}}</span>
+                                <div class="flex items-center justify-center text-center">
+                                    <span v-if="player.status === 'nieaktywny'" class="h-full border-[1px] border-red-600 bg-red-50 text-red text-sm rounded-full w-[120px] py-1">Nieaktywny</span>
+                                    <span v-else class="h-full border-[1px] border-green-600 bg-green-50 text-green text-sm rounded-full w-[120px] py-1">Aktywny</span>
                                 </div>
                                 <div class="flex items-center justify-center">
                                     <span class="w-[70px] h-full">{{player.number}}</span>
@@ -133,16 +134,11 @@
                                     <span class="w-[120px] h-full">Operacje</span>
                                 </div>
                             </div>
-                            <!-- {{ this.playersSorted[this.currentPagePlayers - 1] }} -->
-                            <!-- <div v-for="player in this.players" :key="player.id" class="mb-5">
-                                {{ player }}
-                            </div> -->
                         </div>
                     </article>
-                    <div class="w-full h-auto mt-5 flex text-black items-center justify-between font-raleway">
+                    <div v-if="!loading" class="w-full h-auto mt-5 flex text-black items-center justify-between font-raleway">
                         <div class="w-[230px] h-full border-[1px] border-gray-300 bg-white rounded-md flex items-center">
                             <select @change="this.changeItemsPerPage(this.itemsPerPage)" v-model="this.itemsPerPage" class="py-3 px-4 block w-[88px] bg-white rounded-md text-sm h-[44px]">
-                                <option :value="5">5</option>
                                 <option :value="10">10</option>
                                 <option :value="20">20</option>
                                 <option :value="50">50</option>
@@ -348,6 +344,9 @@ export default{
                 },
                 year: (a, b) => a.year - b.year,
                 number: (a, b) => a.number - b.number,
+                status: (a, b) => {
+                    const statusOrder = { aktywny: 0, nieaktywny: 1}
+                }
             };
             const sortFunction = (a, b) => {
                 for (const option of sortingOptions) {
