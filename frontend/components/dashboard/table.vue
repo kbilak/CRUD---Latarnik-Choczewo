@@ -191,14 +191,14 @@
                             <div class="dropdown dropdown-bottom dropdown-end">
                                 <button tabindex="0" role="button" class="btn h-[40px] text-white bg-black hover:bg-[#101010] transition ease-in-out duration-300 font-medium rounded text-sm px-4 py-1 w-auto uppercase flex items-center justify-center">Sortuj <v-icon>mdi-arrow-down</v-icon></button>
                                 <ul class="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-[180px]">
-                                    <li>
+                                    <!-- <li>
                                         <div class="form-control">
                                             <label class="label cursor-pointer">
                                                 <input v-model="sortingOptions.age" @change="updateSorting" type="checkbox" class="checkbox checkbox-[#000000] bg-gray-300 border-[1px] border-gray-300 mr-2" />
                                                 <span class="label-text">Wiek</span> 
                                             </label>
                                         </div>
-                                    </li>
+                                    </li> -->
                                     <li>
                                         <div class="form-control">
                                             <label class="label cursor-pointer">
@@ -220,6 +220,14 @@
                                             <label class="label cursor-pointer">
                                                 <input v-model="sortingOptions.number" @change="updateSorting" type="checkbox" class="checkbox checkbox-[#000000] bg-gray-300 border-[1px] border-gray-300 mr-2" />
                                                 <span class="label-text">Numer</span> 
+                                            </label>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="form-control">
+                                            <label class="label cursor-pointer">
+                                                <input v-model="sortingOptions.status" @change="updateSorting" type="checkbox" class="checkbox checkbox-[#000000] bg-gray-300 border-[1px] border-gray-300 mr-2" />
+                                                <span class="label-text">Status</span> 
                                             </label>
                                         </div>
                                     </li>
@@ -258,6 +266,7 @@ export default{
                 position: false,
                 year: false,
                 number: false,
+                status: false,
             },
             players: [],
             tab: null,
@@ -315,7 +324,7 @@ export default{
             }
         },
         async organizePlayers() {
-            let playersToSort = [...this.players]; // Create a copy of this.players
+            let playersToSort = [...this.players];
             this.pagesPlayers = Math.ceil(playersToSort.length / this.itemsPerPage);
             this.playersSorted = [];
             while (playersToSort.length > 0) {
@@ -345,7 +354,8 @@ export default{
                 year: (a, b) => a.year - b.year,
                 number: (a, b) => a.number - b.number,
                 status: (a, b) => {
-                    const statusOrder = { aktywny: 0, nieaktywny: 1}
+                    const statusOrder = { aktywny: 0, nieaktywny: 1 };
+                    return statusOrder[a.status] - statusOrder[b.position];
                 }
             };
             const sortFunction = (a, b) => {
