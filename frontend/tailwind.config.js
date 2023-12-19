@@ -24,6 +24,7 @@ module.exports = {
             fontFamily: {
                 'libre': ["'Libre Baskerville', sans-serif"],
                 'inter': ["'Inter', sans-serif"],
+                'poppins': ["'Poppins', sans-serif"],
             }
         },
     },

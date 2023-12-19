@@ -35,7 +35,7 @@
                     <div class="flex flex-row w-full justify-between items-center my-2 h-[70px]">
                         <div class="flex flex-row justify-start items-center">
                             <span class="text-3xl font-bold font-raleway mr-10">Zawodnicy</span>
-                            <button class="btn h-[40px] text-white bg-black hover:bg-[#101010] transition ease-in-out duration-300 font-medium rounded text-sm px-4 py-1 w-auto uppercase flex items-center justify-center">
+                            <button @click="this.addPlayer()" class="btn h-[40px] text-white bg-black hover:bg-[#101010] transition ease-in-out duration-300 font-medium rounded text-sm px-4 py-1 w-auto uppercase flex items-center justify-center">
                                 Dodaj zawodnika
                             </button> 
                         </div>
@@ -43,14 +43,6 @@
                             <div class="dropdown dropdown-bottom dropdown-end">
                                 <button tabindex="0" role="button" class="btn h-[40px] text-white bg-black hover:bg-[#101010] transition ease-in-out duration-300 font-medium rounded text-sm px-4 py-1 w-auto uppercase flex items-center justify-center">Sortuj <v-icon>mdi-arrow-down</v-icon></button>
                                 <ul class="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-[180px]">
-                                    <li>
-                                        <div class="form-control">
-                                            <label class="label cursor-pointer">
-                                                <input v-model="sortingOptions.age" @change="updateSorting" type="checkbox" class="checkbox checkbox-[#000000] bg-gray-300 border-[1px] border-gray-300 mr-2" />
-                                                <span class="label-text">Wiek</span> 
-                                            </label>
-                                        </div>
-                                    </li>
                                     <li>
                                         <div class="form-control">
                                             <label class="label cursor-pointer">
@@ -72,6 +64,14 @@
                                             <label class="label cursor-pointer">
                                                 <input v-model="sortingOptions.number" @change="updateSorting" type="checkbox" class="checkbox checkbox-[#000000] bg-gray-300 border-[1px] border-gray-300 mr-2" />
                                                 <span class="label-text">Numer</span> 
+                                            </label>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="form-control">
+                                            <label class="label cursor-pointer">
+                                                <input v-model="sortingOptions.status" @change="updateSorting" type="checkbox" class="checkbox checkbox-[#000000] bg-gray-300 border-[1px] border-gray-300 mr-2" />
+                                                <span class="label-text">Status</span> 
                                             </label>
                                         </div>
                                     </li>
@@ -97,13 +97,13 @@
                                 <div class="flex items-center justify-center">
                                     <span class="w-[120px] h-full">Status</span>
                                 </div>
-                                <div class="flex items-center justify-center">
+                                <div class="flex items-center justify-center text-center">
                                     <span class="w-[70px] h-full">Number</span>
                                 </div>
-                                <div class="flex items-center justify-center">
+                                <div class="flex items-center justify-center text-center">
                                     <span class="w-[90px] h-full">Year</span>
                                 </div>
-                                <div class="flex items-center justify-center">
+                                <div class="flex items-center justify-center text-center">
                                     <span class="w-[120px] h-full">Operacje</span>
                                 </div>
                             </div>
@@ -115,23 +115,25 @@
                                     <span class="w-[150px] h-full">{{player.name}}</span>
                                 </div>
                                 <div class="flex items-center justify-center">
-                                    <span v-if="player.position === 'BR'" class="w-[90px] h-full">Bramkarz</span>
-                                    <span v-if="player.position === 'OB'" class="w-[90px] h-full">Obrońca</span>
-                                    <span v-if="player.position === 'PO'" class="w-[90px] h-full">Pomocnik</span>
-                                    <span v-if="player.position === 'NA'" class="w-[90px] h-full">Napastnik</span>
+                                    <span v-if="player.position.value === 'BR'" class="w-[90px] h-full">Bramkarz</span>
+                                    <span v-if="player.position.value === 'OB'" class="w-[90px] h-full">Obrońca</span>
+                                    <span v-if="player.position.value === 'PO'" class="w-[90px] h-full">Pomocnik</span>
+                                    <span v-if="player.position.value === 'NA'" class="w-[90px] h-full">Napastnik</span>
                                 </div>
                                 <div class="flex items-center justify-center text-center">
-                                    <span v-if="player.status === 'nieaktywny'" class="h-full border-[1px] border-red-600 bg-red-50 text-red text-sm rounded-full w-[120px] py-1">Nieaktywny</span>
+                                    <span v-if="player.status.value === 'nieaktywny'" class="h-full border-[1px] border-red-600 bg-red-50 text-red text-sm rounded-full w-[120px] py-1">Nieaktywny</span>
                                     <span v-else class="h-full border-[1px] border-green-600 bg-green-50 text-green text-sm rounded-full w-[120px] py-1">Aktywny</span>
                                 </div>
-                                <div class="flex items-center justify-center">
+                                <div class="flex items-center justify-center text-center">
                                     <span class="w-[70px] h-full">{{player.number}}</span>
                                 </div>
-                                <div class="flex items-center justify-center">
+                                <div class="flex items-center justify-center text-center">
                                     <span class="w-[90px] h-full">{{player.year}}</span>
                                 </div>
-                                <div class="flex items-center justify-center">
-                                    <span class="w-[120px] h-full">Operacje</span>
+                                <div class="flex items-center justify-center w-[120px]">
+                                    <v-icon @click="this.updatePlayer(player.id, player.name, player.position, player.status, player.image, player.number, player.year)">mdi-pencil-plus</v-icon>
+                                    <v-icon class="mx-5">mdi-image-edit</v-icon>
+                                    <v-icon @click="this.deletePlayer(player.id, player.name)">mdi-delete</v-icon>
                                 </div>
                             </div>
                         </div>
@@ -191,14 +193,6 @@
                             <div class="dropdown dropdown-bottom dropdown-end">
                                 <button tabindex="0" role="button" class="btn h-[40px] text-white bg-black hover:bg-[#101010] transition ease-in-out duration-300 font-medium rounded text-sm px-4 py-1 w-auto uppercase flex items-center justify-center">Sortuj <v-icon>mdi-arrow-down</v-icon></button>
                                 <ul class="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-[180px]">
-                                    <!-- <li>
-                                        <div class="form-control">
-                                            <label class="label cursor-pointer">
-                                                <input v-model="sortingOptions.age" @change="updateSorting" type="checkbox" class="checkbox checkbox-[#000000] bg-gray-300 border-[1px] border-gray-300 mr-2" />
-                                                <span class="label-text">Wiek</span> 
-                                            </label>
-                                        </div>
-                                    </li> -->
                                     <li>
                                         <div class="form-control">
                                             <label class="label cursor-pointer">
@@ -246,6 +240,107 @@
                     </article>
                 </v-window-item>
             </v-window>
+            <v-dialog v-model="dialogUpdate" persistent transition="dialog-bottom-transition">
+                <div class="bg-white h-auto w-[500px] p-10 rounded-lg border-[1px] border-gray-300 shadow-md">
+                    <div class="flex flex-row justify-between items-start w-full mb-6">
+                        <div class="bg-gray-300 h-[50px] w-[50px] rounded-full flex items-center justify-center">
+                            <v-icon>mdi-pencil-plus</v-icon>
+                        </div>
+                        <v-icon @click="this.dialogUpdate = false; this.currentUpdate = {};" class="cursor-pointer text-gray-500 transition ease-in-out duration-300" style="font-size:28px !important;">mdi-close</v-icon>
+                    </div>
+                    <div class="flex flex-col mb-10 font-poppins">
+                        <span class="font-bold mb-1">Edycja danych zawodnika.</span>
+                        <span class="text-sm text-gray-500">Historię edycji tego zawodnika możesz sprawdzić w <NuxtLink :to="`/app/user-history?id=${this.currentUpdate.id}`" class="font-bold text-black">Jego historii</NuxtLink>.</span>
+                    </div>
+                    <div class="flex flex-col mt-3 mb-8 font-poppins">
+                        <v-text-field v-model="this.currentUpdate.name" variant="outlined" class="max-h-[56px] w-full mb-6" placeholder="Name" label="Name"></v-text-field>
+                        <div class="flex flex-row justify-between mb-6">
+                            <v-text-field v-model="this.currentUpdate.number" variant="outlined" class="max-h-[56px] max-w-[48%]" placeholder="Number" label="Number"></v-text-field>
+                            <v-text-field v-model="this.currentUpdate.year" variant="outlined" class="max-h-[56px] max-w-[48%]" placeholder="Birth year" label="Birth year"></v-text-field>
+                        </div>
+                        <div class="flex flex-row justify-between">
+                            <v-select v-model="this.currentUpdate.status" variant="outlined" class="max-h-[56px] max-w-[48%]" :items="statuses" item-title="title" item-value="value" return-object placeholder="Status" label="Status"></v-select>
+                            <v-select v-model="this.currentUpdate.position" variant="outlined" class="max-h-[56px] max-w-[48%]" :items="positions" item-title="title" item-value="value" return-object placeholder="Position" label="Position"></v-select>
+                        </div>
+                    </div>
+                    <div class="flex flex-row w-full items-center justify-end font-poppins">
+                        <div @click="this.dialogUpdate = false; this.currentUpdate = {};" class="h-[50px] w-[100px] border-[1px] border-gray-300 mr-3 rounded">
+                            <button class="btn max-h-[48px] w-[98px] text-black bg-white hover:bg-gray-50 transition ease-in-out duration-300 font-medium rounded text-sm flex items-center justify-center">
+                                Anuluj
+                            </button> 
+                        </div>
+                        <div class="h-[50px] w-[100px] rounded">
+                            <button class="btn h-[50px] w-[98px] text-white bg-black hover:bg-[#101010] transition ease-in-out duration-300 font-medium rounded text-sm flex items-center justify-center">
+                                Zapisz
+                            </button> 
+                        </div>
+                    </div>
+                </div>
+            </v-dialog>
+            <v-dialog v-model="dialogDelete" persistent transition="dialog-bottom-transition">
+                <div class="bg-white h-auto w-[500px] p-10 rounded-lg border-[1px] border-gray-300 shadow-md">
+                    <div class="flex flex-row justify-between items-start w-full mb-6">
+                        <div class="bg-red-200 h-[50px] w-[50px] rounded-full flex items-center justify-center">
+                            <v-icon class="text-red-700">mdi-delete</v-icon>
+                        </div>
+                        <v-icon @click="this.dialogDelete = false; this.currentDelete = {};" class="cursor-pointer text-gray-500 transition ease-in-out duration-300" style="font-size:28px !important;">mdi-close</v-icon>
+                    </div>
+                    <div class="flex flex-col mb-10 font-poppins">
+                        <span class="font-bold mb-1">Usuwanie zawodnika.</span>
+                        <span class="text-sm text-gray-500 mb-5">Czy na pewno chcesz usunąć zawdonika <b>{{ this.currentDelete.name }}</b> z bazy danych?</span>
+                        <span class="text-sm text-red-700">Ta akcja <b>nie może</b> być cofnięta.</span>
+                    </div>
+                    <div class="flex flex-row w-full items-center justify-end font-poppins">
+                        <div @click="this.dialogDelete = false; this.currentDelete = {};" class="h-[50px] w-[100px] border-[1px] border-gray-300 mr-3 rounded">
+                            <button class="btn max-h-[48px] w-[98px] text-black bg-white hover:bg-gray-50 transition ease-in-out duration-300 font-medium rounded text-sm flex items-center justify-center">
+                                Anuluj
+                            </button> 
+                        </div>
+                        <div class="h-[50px] w-auto rounded">
+                            <button class="btn h-[50px] w-auto text-white bg-red-700 hover:bg-red-800 transition ease-in-out duration-300 font-medium rounded text-sm flex items-center justify-center">
+                                Usuń zawodnika
+                            </button> 
+                        </div>
+                    </div>
+                </div>
+            </v-dialog>
+            <v-dialog v-model="dialogAdd" persistent transition="dialog-top-transition">
+                <div class="bg-white h-auto w-[500px] p-10 rounded-lg border-[1px] border-gray-300 shadow-md">
+                    <div class="flex flex-row justify-between items-start w-full mb-6">
+                        <div class="bg-green-200 h-[50px] w-[50px] rounded-full flex items-center justify-center">
+                            <v-icon class="text-green-700">mdi-account-plus</v-icon>
+                        </div>
+                        <v-icon @click="this.dialogAdd = false; this.currentAdd = {};" class="cursor-pointer text-gray-500 transition ease-in-out duration-300" style="font-size:28px !important;">mdi-close</v-icon>
+                    </div>
+                    <div class="flex flex-col mb-10 font-poppins">
+                        <span class="font-bold mb-1">Dodawanie zawodnika.</span>
+                        <span class="text-sm text-gray-500">Dodajesz zawodnika do bazy danych <b>Latarnika Choczewo</b></span>
+                    </div>
+                    <div class="flex flex-col mt-3 mb-8 font-poppins">
+                        <v-text-field v-model="this.currentAdd.name" variant="outlined" class="max-h-[56px] w-full mb-6" placeholder="Name" label="Name"></v-text-field>
+                        <div class="flex flex-row justify-between mb-6">
+                            <v-text-field v-model="this.currentAdd.number" variant="outlined" class="max-h-[56px] max-w-[48%]" placeholder="Number" label="Number"></v-text-field>
+                            <v-text-field v-model="this.currentAdd.year" variant="outlined" class="max-h-[56px] max-w-[48%]" placeholder="Birth year" label="Birth year"></v-text-field>
+                        </div>
+                        <div class="flex flex-row justify-between">
+                            <v-select v-model="this.currentAdd.status" variant="outlined" class="max-h-[56px] max-w-[48%]" :items="statuses" item-title="title" item-value="value" return-object placeholder="Status" label="Status"></v-select>
+                            <v-select v-model="this.currentAdd.position" variant="outlined" class="max-h-[56px] max-w-[48%]" :items="positions" item-title="title" item-value="value" return-object placeholder="Position" label="Position"></v-select>
+                        </div>
+                    </div>
+                    <div class="flex flex-row w-full items-center justify-end font-poppins">
+                        <div @click="this.dialogAdd = false; this.currentAdd = {};" class="h-[50px] w-[100px] border-[1px] border-gray-300 mr-3 rounded">
+                            <button class="btn max-h-[48px] w-[98px] text-black bg-white hover:bg-gray-50 transition ease-in-out duration-300 font-medium rounded text-sm flex items-center justify-center">
+                                Anuluj
+                            </button> 
+                        </div>
+                        <div class="h-[50px] w-auto rounded">
+                            <button class="btn h-[50px] w-auto text-white bg-green-700 green:bg-red-800 transition ease-in-out duration-300 font-medium rounded text-sm flex items-center justify-center">
+                                Dodaj zawodnika
+                            </button> 
+                        </div>
+                    </div>
+                </div>
+            </v-dialog>
         </div>
     </section>
 </template>
@@ -280,6 +375,25 @@ export default{
             currentPageTrainers: 1,
             trainersSorted: [],
 
+            dialogUpdate: false,
+            dialogImage: false,
+            dialogDelete: false,
+            dialogAdd: false,
+
+            currentUpdate: {},
+            currentDelete: {},
+            currentAdd: {}, 
+
+            statuses: [
+                { title: 'Nieaktywny', value: 'Nieaktywny' },
+                { title: 'Aktywny', value: 'Aktywny' },
+            ],
+            positions: [
+                { title: 'Bramkarz', value: 'BR' },
+                { title: 'Obrońca', value: 'OB' },
+                { title: 'Pomocnik', value: 'PO' },
+                { title: 'Napastnik', value: 'NA' },
+            ],
         }
     },
     async created() {
@@ -323,15 +437,62 @@ export default{
                 this.loading = false;
             }
         },
+        updatePlayer(id: String, name: String, position: Object, status: Object, image: String, number: String, year: String) {
+            this.currentUpdate = {
+                id: id,
+                name: name,
+                position: position,
+                status: status,
+                image: image,
+                number: number,
+                year: year
+            };
+            this.dialogUpdate = true;
+        },
+        deletePlayer(id: String, name: String) {
+            this.currentDelete = {
+                id: id,
+                name: name,
+            };
+            this.dialogDelete = true;
+        },
+        addPlayer() {
+            this.currentAdd = {
+                name: '',
+                position: {title: 'Bramkarz', value: 'BR'},
+                status: {title: 'Aktywny', value: 'aktywny'},
+                image: {},
+                number: '',
+                year: ''
+            }
+            this.dialogAdd = true;
+        },
         async organizePlayers() {
             let playersToSort = [...this.players];
+            for (let i = 0; i < playersToSort.length; i++) {
+                if (playersToSort[i].status === 'nieaktywny') {
+                    playersToSort[i].status = {title: 'Nieaktywny', value: 'nieaktywny'};
+                } else if (playersToSort[i].status === 'aktywny') {
+                    playersToSort[i].status = {title: 'Aktywny', value: 'aktywny'};
+                }
+
+                if (playersToSort[i].position === 'BR') {
+                    playersToSort[i].position = {title: 'Bramkarz', value: 'BR'};
+                } else if (playersToSort[i].position === 'OB') {
+                    playersToSort[i].position = {title: 'Obrońca', value: 'OB'};
+                } else if (playersToSort[i].position === 'PO') {
+                    playersToSort[i].position = {title: 'Pomocnik', value: 'PO'};
+                } else if (playersToSort[i].position === 'NA') {
+                    playersToSort[i].position = {title: 'Napastnik', value: 'NA'};
+                }
+            }
             this.pagesPlayers = Math.ceil(playersToSort.length / this.itemsPerPage);
             this.playersSorted = [];
             while (playersToSort.length > 0) {
                 this.playersSorted.push(playersToSort.splice(0, this.itemsPerPage));
             }
         },
-        async changeItemsPerPage(number) {
+        async changeItemsPerPage(number: Number) {
             this.itemsPerPage = number;
             await this.organizePlayers();
         },
@@ -355,7 +516,7 @@ export default{
                 number: (a, b) => a.number - b.number,
                 status: (a, b) => {
                     const statusOrder = { aktywny: 0, nieaktywny: 1 };
-                    return statusOrder[a.status] - statusOrder[b.position];
+                    return statusOrder[a.status] - statusOrder[b.status];
                 }
             };
             const sortFunction = (a, b) => {
