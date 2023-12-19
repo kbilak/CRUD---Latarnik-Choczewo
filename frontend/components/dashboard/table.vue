@@ -510,13 +510,13 @@ export default{
                 age: (a, b) => a.age - b.age,
                 position: (a, b) => {
                     const positionsOrder = { BR: 0, OB: 1, PO: 2, NA: 3 };
-                    return positionsOrder[a.position] - positionsOrder[b.position];
+                    return positionsOrder[a.position.value] - positionsOrder[b.position.value];
                 },
                 year: (a, b) => a.year - b.year,
                 number: (a, b) => a.number - b.number,
                 status: (a, b) => {
                     const statusOrder = { aktywny: 0, nieaktywny: 1 };
-                    return statusOrder[a.status] - statusOrder[b.status];
+                    return statusOrder[a.status.value] - statusOrder[b.status.value];
                 }
             };
             const sortFunction = (a, b) => {
