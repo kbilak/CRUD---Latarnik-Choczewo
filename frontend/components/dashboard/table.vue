@@ -48,7 +48,8 @@
                                     <input v-model="searchText" type="text" class="h-full pl-10 pr-4 py-2 rounded-[0.5rem] border border-gray-300 block w-full font-inter text-[1rem] leading-[1.5] tracking-[0.005em]" placeholder="Szukaj...">
                                 </div>
                             </div>
-                            
+                            <div class="flex">
+                                <BlackButton :icon="false" mdi="mdi-icon-name" :click="filter" buttonText="Filtruj..." class="mr-5"/>
                                 <div class="dropdown dropdown-bottom dropdown-end">
                                     <button tabindex="0" role="button" class="btn h-[40px] text-white font-inter bg-black hover:bg-[#101010] transition ease-in-out duration-300 font-medium rounded-[0.5rem] text-[1rem] px-4 py-1 w-auto flex items-center justify-center leading-[1.5] tracking-[0.005em]">Sortuj <v-icon>mdi-arrow-down</v-icon></button>
                                     <ul class="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-[180px]">
@@ -86,9 +87,10 @@
                                         </li>
                                     </ul>
                                 </div>
+                            </div>
                         </div>
                     </div>
-                    <article class="w-full border-[1px] border-gray-300 bg-white h-auto min-h-[661px] rounded-[6px] shadow-md">
+                    <article class="w-full border-[1px] border-gray-300 bg-white h-auto min-h-[662px] rounded-[6px] shadow-md">
                         <div v-if="loading" class="w-full min-h-[660px] h-full bg-gray-100 flex items-center justify-center">
                             <div class="spinner"></div>
                         </div>
@@ -152,7 +154,7 @@
                             </div>
                         </div>
                     </article>
-                    <div v-if="!loading && pagesPlayers > 0" class="w-full h-auto mt-5 flex text-black items-start justify-between font-inter">
+                    <div v-if="!loading && pagesPlayers > 0" class="w-full h-auto mt-5 flex text-black items-start justify-between font-inter mb-2">
                         <div class="w-[230px] h-full border-[1px] border-gray-300 bg-white rounded-md flex items-center">
                             <select @change="this.changeItemsPerPage(this.itemsPerPage)" v-model="this.itemsPerPage" class="py-3 px-4 block w-[88px] bg-white rounded-md text-sm h-[44px]">
                                 <option :value="10">10</option>
@@ -263,8 +265,8 @@
                         <v-icon @click="this.dialogUpdate = false; this.currentUpdate = {};" class="cursor-pointer text-gray-500 transition ease-in-out duration-300" style="font-size:28px !important;">mdi-close</v-icon>
                     </div>
                     <div class="flex flex-col mb-10 font-poppins">
-                        <span class="font-bold mb-1">Edycja danych zawodnika.</span>
-                        <span class="text-sm text-gray-500">Historię edycji tego zawodnika możesz sprawdzić w <NuxtLink :to="`/app/user-history?id=${this.currentUpdate.id}`" class="font-bold text-black">Jego historii</NuxtLink>.</span>
+                        <span class="font-medium mb-1 text-[1.5rem] leading-[1.5] tracking-[0.005em]">Edycja danych zawodnika.</span>
+                        <span class="text-[1rem] text-gray-500 leading-[1.5] tracking-[0.005em] mb-3">Historię edycji tego zawodnika możesz sprawdzić w <NuxtLink :to="`/app/user-history?id=${this.currentUpdate.id}`" class="font-bold text-black">Jego historii</NuxtLink>.</span>
                     </div>
                     <div class="flex flex-col mt-3 mb-8 font-poppins">
                         <v-text-field v-model="this.currentUpdate.name" variant="outlined" class="max-h-[56px] w-full mb-6" placeholder="Name" label="Name"></v-text-field>
@@ -292,12 +294,12 @@
                         <v-icon @click="this.dialogDelete = false; this.currentDelete = {};" class="cursor-pointer text-gray-500 transition ease-in-out duration-300" style="font-size:28px !important;">mdi-close</v-icon>
                     </div>
                     <div class="flex flex-col mb-10 font-poppins">
-                        <span class="font-bold mb-1">Usuwanie zawodnika.</span>
-                        <span class="text-sm text-gray-500 mb-5">Czy na pewno chcesz usunąć zawdonika <b>{{ this.currentDelete.name }}</b> z bazy danych?</span>
-                        <span class="text-sm text-red-700">Ta akcja <b>nie może</b> być cofnięta.</span>
+                        <span class="font-medium mb-1 text-[1.5rem] leading-[1.5] tracking-[0.005em]">Usuwanie zawodnika.</span>
+                        <span class="text-[1rem] text-gray-500 leading-[1.5] tracking-[0.005em] mb-3">Czy na pewno chcesz usunąć zawdonika <b>{{ this.currentDelete.name }}</b> z bazy danych?</span>
+                        <span class="text-[1rem] text-red-700 leading-[1.5] tracking-[0.005em]">Ta akcja <b>nie może</b> być cofnięta.</span>
                     </div>
                     <div class="flex flex-row w-full items-center justify-end font-poppins">
-                        <WhiteButton :icon="false" mdi="mdi-icon-name" :click="addPlayerClose" buttonText="Anuluj"/>
+                        <WhiteButton :icon="false" mdi="mdi-icon-name" :click="deletePlayerClose" buttonText="Anuluj"/>
                         <RedButton :icon="false" mdi="mdi-icon-name" :click="deletePlayerDialog" buttonText="Usuń zawodnika" class="ml-5"/>
                     </div>
                 </div>
@@ -311,8 +313,8 @@
                         <v-icon @click="this.dialogAdd = false; this.currentAdd = {};" class="cursor-pointer text-gray-500 transition ease-in-out duration-300" style="font-size:28px !important;">mdi-close</v-icon>
                     </div>
                     <div class="flex flex-col mb-10 font-poppins">
-                        <span class="font-bold mb-1">Dodawanie zawodnika.</span>
-                        <span class="text-sm text-gray-500">Dodajesz zawodnika do bazy danych <b>Latarnika Choczewo</b></span>
+                        <span class="font-medium mb-1 text-[1.5rem] leading-[1.5] tracking-[0.005em]">Dodawanie zawodnika.</span>
+                        <span class="text-[1rem] text-gray-500 leading-[1.5] tracking-[0.005em]">Dodajesz zawodnika do bazy danych <b>Latarnika Choczewo</b>.</span>
                     </div>
                     <div class="flex flex-col mt-3 mb-8 font-poppins">
                         <v-text-field v-model="this.currentAdd.name" variant="outlined" class="max-h-[56px] w-full mb-6" placeholder="Name" label="Name"></v-text-field>
@@ -331,6 +333,35 @@
                     </div>
                 </div>
             </v-dialog>
+            <v-dialog v-model="dialogFilter" persistent transition="dialog-top-transition">
+                <div class="bg-white h-auto w-[500px] p-10 rounded-lg border-[1px] border-gray-300 shadow-md">
+                    <div class="flex flex-row justify-between items-start w-full mb-6">
+                        <div class="bg-yellow-200 h-[50px] w-[50px] rounded-full flex items-center justify-center">
+                            <v-icon class="text-yellow-700">mdi-filter</v-icon>
+                        </div>
+                        <v-icon @click="this.dialogFilter = false;" class="cursor-pointer text-gray-500 transition ease-in-out duration-300" style="font-size:28px !important;">mdi-close</v-icon>
+                    </div>
+                    <div class="flex flex-col mb-10 font-inter">
+                        <span class="font-medium mb-1 text-[1.5rem] leading-[1.5] tracking-[0.005em]">Filtrowanie zawodników.</span>
+                        <span class="text-[1rem] text-gray-500 leading-[1.5] tracking-[0.005em]">Wybierz opcje, według których mają być zwróceni zawodnicy.</span>
+                    </div>
+                    <div class="flex flex-col mt-3 mb-8 font-poppins">
+                        <v-text-field v-model="this.currentAdd.name" variant="outlined" class="max-h-[56px] w-full mb-6" placeholder="Name" label="Name"></v-text-field>
+                        <div class="flex flex-row justify-between mb-6">
+                            <v-text-field v-model="this.currentAdd.number" variant="outlined" class="max-h-[56px] max-w-[48%]" placeholder="Number" label="Number"></v-text-field>
+                            <v-text-field v-model="this.currentAdd.year" variant="outlined" class="max-h-[56px] max-w-[48%]" placeholder="Birth year" label="Birth year"></v-text-field>
+                        </div>
+                        <div class="flex flex-row justify-between">
+                            <v-select v-model="this.currentAdd.status" variant="outlined" class="max-h-[56px] max-w-[48%]" :items="statuses" item-title="title" item-value="value" return-object placeholder="Status" label="Status"></v-select>
+                            <v-select v-model="this.currentAdd.position" variant="outlined" class="max-h-[56px] max-w-[48%]" :items="positions" item-title="title" item-value="value" return-object placeholder="Position" label="Position"></v-select>
+                        </div>
+                    </div>
+                    <div class="flex flex-row w-full items-center justify-end font-poppins">
+                            <WhiteButton :icon="false" mdi="mdi-icon-name" :click="filterClose" buttonText="Anuluj"/>
+                            <GreenButton :icon="false" mdi="mdi-icon-name" :click="addPlayerDialog" buttonText="Dodaj zawodnika" class="ml-5"/>
+                    </div>
+                </div>
+            </v-dialog>
         </div>
     </section>
 </template>
@@ -344,6 +375,16 @@ import BlackButton from '../elements/buttons/BlackButton.vue'
 import GreenButton from '../elements/buttons/GreenButton.vue'
 import WhiteButton from '../elements/buttons/WhiteButton.vue'
 import RedButton from '../elements/buttons/RedButton.vue'
+
+interface Player {
+    id: string;
+    name: string;
+    position: { title: string; value: string };
+    status: { title: string; value: string };
+    image: string;
+    number: string;
+    year: string;
+}
 
 export default{
     components: {
@@ -371,7 +412,6 @@ export default{
             pagesPlayers: 0,
             currentPagePlayers: 1,
             playersSorted: [],
-            // playersFiltered: [],
 
             pagesTrainers: 0,
             currentPageTrainers: 1,
@@ -381,10 +421,11 @@ export default{
             dialogImage: false,
             dialogDelete: false,
             dialogAdd: false,
-
-            currentUpdate: {},
-            currentDelete: {},
-            currentAdd: {}, 
+            dialogFilter: false,
+            
+            currentUpdate: {} as Player,
+            currentDelete: {} as Player,
+            currentAdd: {} as Player,
 
             statuses: [
                 { title: 'Nieaktywny', value: 'Nieaktywny' },
@@ -409,7 +450,7 @@ export default{
     watch: {
         async searchText(newVal) {
             if (newVal === '') {
-                await this.getAllPlayers(); // Reset to all players if search is empty
+                await this.getAllPlayers();
                 return;
             }
             this.players = await getPlayers(); 
@@ -442,10 +483,9 @@ export default{
             });
             this.players = filteredPlayers;
             this.organizePlayers();
+            this.updateSorting();
         }
     },
-
-
     computed: {
         displayedPages() {
             const maxDisplayed = 5;
@@ -532,6 +572,12 @@ export default{
         async addPlayerDialog() {
             console.log(1)
         },
+        filter() {
+            this.dialogFilter = true;
+        },
+        filterClose() {
+            this.dialogFilter = false;
+        },
         async organizePlayers() {
             let playersToSort = [...this.players];
             for (let i = 0; i < playersToSort.length; i++) {
@@ -560,6 +606,7 @@ export default{
         async changeItemsPerPage(number: Number) {
             this.itemsPerPage = number;
             await this.organizePlayers();
+            this.updateSorting();
         },
         async getTokenString() {
             return await getToken()
