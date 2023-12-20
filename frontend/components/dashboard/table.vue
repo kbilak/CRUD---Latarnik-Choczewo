@@ -32,59 +32,68 @@
             </div>
             <v-window v-model="tab" class="w-full">
                 <v-window-item value="1" class="w-[99%] flex flex-col items-center justify-center">
-                    <div class="flex flex-row w-full justify-between items-center my-2 h-[70px]">
-                        <div class="flex flex-row justify-start items-center">
-                            <span class="text-3xl font-bold font-raleway mr-10">Zawodnicy</span>
-                            <button @click="this.addPlayer()" class="btn h-[40px] text-white bg-black hover:bg-[#101010] transition ease-in-out duration-300 font-medium rounded text-sm px-4 py-1 w-auto uppercase flex items-center justify-center">
-                                Dodaj zawodnika
-                            </button> 
-                        </div>
-                        <div>
-                            <div class="dropdown dropdown-bottom dropdown-end">
-                                <button tabindex="0" role="button" class="btn h-[40px] text-white bg-black hover:bg-[#101010] transition ease-in-out duration-300 font-medium rounded text-sm px-4 py-1 w-auto uppercase flex items-center justify-center">Sortuj <v-icon>mdi-arrow-down</v-icon></button>
-                                <ul class="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-[180px]">
-                                    <li>
-                                        <div class="form-control">
-                                            <label class="label cursor-pointer">
-                                                <input v-model="sortingOptions.position" @change="updateSorting" type="checkbox" class="checkbox checkbox-[#000000] bg-gray-300 border-[1px] border-gray-300 mr-2" />
-                                                <span class="label-text">Pozycja</span> 
-                                            </label>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="form-control">
-                                            <label class="label cursor-pointer">
-                                                <input v-model="sortingOptions.year" @change="updateSorting" type="checkbox" class="checkbox checkbox-[#000000] bg-gray-300 border-[1px] border-gray-300 mr-2" />
-                                                <span class="label-text">Rocznik</span> 
-                                            </label>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="form-control">
-                                            <label class="label cursor-pointer">
-                                                <input v-model="sortingOptions.number" @change="updateSorting" type="checkbox" class="checkbox checkbox-[#000000] bg-gray-300 border-[1px] border-gray-300 mr-2" />
-                                                <span class="label-text">Numer</span> 
-                                            </label>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="form-control">
-                                            <label class="label cursor-pointer">
-                                                <input v-model="sortingOptions.status" @change="updateSorting" type="checkbox" class="checkbox checkbox-[#000000] bg-gray-300 border-[1px] border-gray-300 mr-2" />
-                                                <span class="label-text">Status</span> 
-                                            </label>
-                                        </div>
-                                    </li>
-                                </ul>
-                            </div>
+                    <div class="flex flex-row w-full justify-between items-center mt-2 h-[70px]">
+                        <div class="flex flex-row justify-between items-center w-full">
+                            <span class="text-[1.5rem] font-medium font-inter mr-10 leading-[1.333] tracking-[0.02em] text-[#0f0f0f]">Zawodnicy</span>
+                            <BlackButton :icon="false" mdi="mdi-icon-name" :click="addPlayer" buttonText="Dodaj zawodnika"/>
                         </div>
                     </div>
-                    <article class="w-full border-[1px] border-gray-300 bg-white h-auto min-h-[660px] rounded-[6px] shadow-md">
+                    <div class="flex flex-row h-[70px] mb-2 justify-between w-full items-center">
+                        <div class="w-full h-[48px] flex justify-between">
+                            <div class="bg-white w-[300px] h-[48px]">
+                                <div class="relative h-[48px]">
+                                    <span class="absolute inset-y-0 left-0 flex items-center pl-3">
+                                        <v-icon>mdi-magnify</v-icon>
+                                    </span>
+                                    <input v-model="searchText" type="text" class="h-full pl-10 pr-4 py-2 rounded-[0.5rem] border border-gray-300 block w-full font-inter text-[1rem] leading-[1.5] tracking-[0.005em]" placeholder="Szukaj...">
+                                </div>
+                            </div>
+                            
+                                <div class="dropdown dropdown-bottom dropdown-end">
+                                    <button tabindex="0" role="button" class="btn h-[40px] text-white font-inter bg-black hover:bg-[#101010] transition ease-in-out duration-300 font-medium rounded-[0.5rem] text-[1rem] px-4 py-1 w-auto flex items-center justify-center leading-[1.5] tracking-[0.005em]">Sortuj <v-icon>mdi-arrow-down</v-icon></button>
+                                    <ul class="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-[180px]">
+                                        <li>
+                                            <div class="form-control">
+                                                <label class="label cursor-pointer">
+                                                    <input v-model="sortingOptions.position" @change="updateSorting" type="checkbox" class="checkbox checkbox-[#000000] bg-gray-300 border-[1px] border-gray-300 mr-2" />
+                                                    <span class="label-text">Pozycja</span> 
+                                                </label>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="form-control">
+                                                <label class="label cursor-pointer">
+                                                    <input v-model="sortingOptions.year" @change="updateSorting" type="checkbox" class="checkbox checkbox-[#000000] bg-gray-300 border-[1px] border-gray-300 mr-2" />
+                                                    <span class="label-text">Rocznik</span> 
+                                                </label>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="form-control">
+                                                <label class="label cursor-pointer">
+                                                    <input v-model="sortingOptions.number" @change="updateSorting" type="checkbox" class="checkbox checkbox-[#000000] bg-gray-300 border-[1px] border-gray-300 mr-2" />
+                                                    <span class="label-text">Numer</span> 
+                                                </label>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="form-control">
+                                                <label class="label cursor-pointer">
+                                                    <input v-model="sortingOptions.status" @change="updateSorting" type="checkbox" class="checkbox checkbox-[#000000] bg-gray-300 border-[1px] border-gray-300 mr-2" />
+                                                    <span class="label-text">Status</span> 
+                                                </label>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                        </div>
+                    </div>
+                    <article class="w-full border-[1px] border-gray-300 bg-white h-auto min-h-[661px] rounded-[6px] shadow-md">
                         <div v-if="loading" class="w-full min-h-[660px] h-full bg-gray-100 flex items-center justify-center">
                             <div class="spinner"></div>
                         </div>
-                        <div v-else>
-                            <div class="w-full h-[60px] border-b-[1px] border-gray-200 flex items-center justify-between px-10 font-inter text-gray-600">
+                        <div v-else class="w-full flex items-center justify-center flex-col">
+                            <div class="w-full h-[60px] border-b-[1px] border-gray-200 flex items-center justify-between px-10 font-inter text-[#0f0f0f] text-[1rem] font-medium leading-6 tracking-[0.005em]">
                                 <div class="flex items-center justify-center">
                                     <span class="w-[70px] h-full">Photo</span>
                                 </div>
@@ -107,7 +116,12 @@
                                     <span class="w-[120px] h-full">Operacje</span>
                                 </div>
                             </div>
-                            <div v-for="player in this.playersSorted[this.currentPagePlayers - 1]" :key="player.id" class="w-full h-[60px] border-b-[1px] border-gray-100 flex items-center justify-between px-10 font-inter text-gray-600">
+                            <div v-if="this.playersSorted.length === 0" class="w-full h-[599px] border-b-[0.0625rem] border-[hsl(0 0% 92%)] flex items-center justify-center px-10 font-inter text-[#2b2b2b]">
+                                <span class="font-inter text-[3rem]">
+                                    Nic nie znaleziono!
+                                </span>
+                            </div>
+                            <div v-for="player in this.playersSorted[this.currentPagePlayers - 1]" :key="player.id" class="w-full h-[60px] border-b-[0.0625rem] border-[hsl(0 0% 92%)] flex items-center justify-between px-10 font-inter text-[#2b2b2b]">
                                 <div class="flex items-center justify-start w-[70px]">
                                     <img :src="player.image" :alt="player.name" class="w-[50px] h-[50px] rounded-md">
                                 </div>
@@ -138,7 +152,7 @@
                             </div>
                         </div>
                     </article>
-                    <div v-if="!loading" class="w-full h-auto mt-5 flex text-black items-center justify-between font-raleway">
+                    <div v-if="!loading && pagesPlayers > 0" class="w-full h-auto mt-5 flex text-black items-start justify-between font-inter">
                         <div class="w-[230px] h-full border-[1px] border-gray-300 bg-white rounded-md flex items-center">
                             <select @change="this.changeItemsPerPage(this.itemsPerPage)" v-model="this.itemsPerPage" class="py-3 px-4 block w-[88px] bg-white rounded-md text-sm h-[44px]">
                                 <option :value="10">10</option>
@@ -264,16 +278,8 @@
                         </div>
                     </div>
                     <div class="flex flex-row w-full items-center justify-end font-poppins">
-                        <div @click="this.dialogUpdate = false; this.currentUpdate = {};" class="h-[50px] w-[100px] border-[1px] border-gray-300 mr-3 rounded">
-                            <button class="btn max-h-[48px] w-[98px] text-black bg-white hover:bg-gray-50 transition ease-in-out duration-300 font-medium rounded text-sm flex items-center justify-center">
-                                Anuluj
-                            </button> 
-                        </div>
-                        <div class="h-[50px] w-[100px] rounded">
-                            <button class="btn h-[50px] w-[98px] text-white bg-black hover:bg-[#101010] transition ease-in-out duration-300 font-medium rounded text-sm flex items-center justify-center">
-                                Zapisz
-                            </button> 
-                        </div>
+                        <WhiteButton :icon="false" :click="updatePlayerClose" buttonText="Anuluj"/>
+                        <BlackButton :icon="false" :click="updatePlayerDialog" buttonText="Zapisz" class="ml-5"/>
                     </div>
                 </div>
             </v-dialog>
@@ -291,16 +297,8 @@
                         <span class="text-sm text-red-700">Ta akcja <b>nie może</b> być cofnięta.</span>
                     </div>
                     <div class="flex flex-row w-full items-center justify-end font-poppins">
-                        <div @click="this.dialogDelete = false; this.currentDelete = {};" class="h-[50px] w-[100px] border-[1px] border-gray-300 mr-3 rounded">
-                            <button class="btn max-h-[48px] w-[98px] text-black bg-white hover:bg-gray-50 transition ease-in-out duration-300 font-medium rounded text-sm flex items-center justify-center">
-                                Anuluj
-                            </button> 
-                        </div>
-                        <div class="h-[50px] w-auto rounded">
-                            <button class="btn h-[50px] w-auto text-white bg-red-700 hover:bg-red-800 transition ease-in-out duration-300 font-medium rounded text-sm flex items-center justify-center">
-                                Usuń zawodnika
-                            </button> 
-                        </div>
+                        <WhiteButton :icon="false" mdi="mdi-icon-name" :click="addPlayerClose" buttonText="Anuluj"/>
+                        <RedButton :icon="false" mdi="mdi-icon-name" :click="deletePlayerDialog" buttonText="Usuń zawodnika" class="ml-5"/>
                     </div>
                 </div>
             </v-dialog>
@@ -328,16 +326,8 @@
                         </div>
                     </div>
                     <div class="flex flex-row w-full items-center justify-end font-poppins">
-                        <div @click="this.dialogAdd = false; this.currentAdd = {};" class="h-[50px] w-[100px] border-[1px] border-gray-300 mr-3 rounded">
-                            <button class="btn max-h-[48px] w-[98px] text-black bg-white hover:bg-gray-50 transition ease-in-out duration-300 font-medium rounded text-sm flex items-center justify-center">
-                                Anuluj
-                            </button> 
-                        </div>
-                        <div class="h-[50px] w-auto rounded">
-                            <button class="btn h-[50px] w-auto text-white bg-green-700 green:bg-red-800 transition ease-in-out duration-300 font-medium rounded text-sm flex items-center justify-center">
-                                Dodaj zawodnika
-                            </button> 
-                        </div>
+                            <WhiteButton :icon="false" mdi="mdi-icon-name" :click="addPlayerClose" buttonText="Anuluj"/>
+                            <GreenButton :icon="false" mdi="mdi-icon-name" :click="addPlayerDialog" buttonText="Dodaj zawodnika" class="ml-5"/>
                     </div>
                 </div>
             </v-dialog>
@@ -350,7 +340,18 @@ import { useAuthStore } from '../../stores/auth';
 import { getToken } from '../../services/token/getToken';
 import { getPlayers } from '../../services/players/players';
 
+import BlackButton from '../elements/buttons/BlackButton.vue'
+import GreenButton from '../elements/buttons/GreenButton.vue'
+import WhiteButton from '../elements/buttons/WhiteButton.vue'
+import RedButton from '../elements/buttons/RedButton.vue'
+
 export default{
+    components: {
+        BlackButton,
+        GreenButton,
+        WhiteButton,
+        RedButton,
+    },
     data() {
         return {
             loadingTest: true,
@@ -370,6 +371,7 @@ export default{
             pagesPlayers: 0,
             currentPagePlayers: 1,
             playersSorted: [],
+            // playersFiltered: [],
 
             pagesTrainers: 0,
             currentPageTrainers: 1,
@@ -394,6 +396,8 @@ export default{
                 { title: 'Pomocnik', value: 'PO' },
                 { title: 'Napastnik', value: 'NA' },
             ],
+
+            searchText: '',
         }
     },
     async created() {
@@ -402,6 +406,46 @@ export default{
         }
         await this.getAllPlayers();
     },
+    watch: {
+        async searchText(newVal) {
+            if (newVal === '') {
+                await this.getAllPlayers(); // Reset to all players if search is empty
+                return;
+            }
+            this.players = await getPlayers(); 
+            const filteredPlayers = this.players.filter(player => {
+                for (const key in player) {
+                    if (key !== 'id') {
+                        if (typeof player[key] === 'object') {
+                            for (const prop in player[key]) {
+                                if (
+                                    typeof player[key][prop] === 'string' &&
+                                    player[key][prop].toLowerCase().includes(newVal.toLowerCase())
+                                ) {
+                                    return true;
+                                }
+                            }
+                        } else if (
+                            typeof player[key] === 'string' &&
+                            player[key].toLowerCase().includes(newVal.toLowerCase())
+                        ) {
+                            return true;
+                        } else if (
+                            typeof player[key] === 'number' &&
+                            player[key].toString().toLowerCase().includes(newVal.toLowerCase())
+                        ) {
+                            return true;
+                        }
+                    }
+                }
+                return false;
+            });
+            this.players = filteredPlayers;
+            this.organizePlayers();
+        }
+    },
+
+
     computed: {
         displayedPages() {
             const maxDisplayed = 5;
@@ -449,12 +493,26 @@ export default{
             };
             this.dialogUpdate = true;
         },
+        updatePlayerClose() {
+            this.dialogUpdate = false;
+            this.currentUpdate = {};
+        },
+        updatePlayerDialog() {
+            console.log(1)
+        },
         deletePlayer(id: String, name: String) {
             this.currentDelete = {
                 id: id,
                 name: name,
             };
             this.dialogDelete = true;
+        },
+        deletePlayerClose() {
+            this.dialogDelete = false;
+            this.currentDelete = {};
+        },
+        deletePlayerDialog() {
+            console.log(1)
         },
         addPlayer() {
             this.currentAdd = {
@@ -466,6 +524,13 @@ export default{
                 year: ''
             }
             this.dialogAdd = true;
+        },
+        addPlayerClose() {
+            this.dialogAdd = false; 
+            this.currentAdd = {};
+        },
+        async addPlayerDialog() {
+            console.log(1)
         },
         async organizePlayers() {
             let playersToSort = [...this.players];

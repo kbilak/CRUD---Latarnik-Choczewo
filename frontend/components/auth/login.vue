@@ -6,7 +6,7 @@
                 <div class="mt-10 w-full text-right">
                     <v-text-field v-model="this.email" :rules="this.emailRules" variant="outlined" class="max-h-[56px] w-full" :placeholder="this.languageStore.t.placeholder_email" :label="this.languageStore.t.placeholder_email" type="email"></v-text-field>
                     <v-text-field v-model="this.password" :rules="this.passwordRules" variant="outlined" class="max-h-[56px] w-full mt-8 mb-6" :placeholder="this.languageStore.t.placeholder_password" :label="this.languageStore.t.placeholder_password" type="password"></v-text-field>
-                    <button @click="this.login()" :disabled="!valid" :class="{ 'button-disabled': !valid }" type="button" class="btn h-[56px] text-white bg-black hover:bg-[#101010] transition ease-in-out duration-300 font-medium rounded text-sm px-5 py-2.5 mt-8 w-full uppercase flex items-center justify-center">
+                    <button @click="this.login()" :disabled="!valid" :class="{ 'button-disabled': !valid }" type="button" class="btn h-[56px] text-white bg-black hover:bg-[#101010] transition ease-in-out duration-300 font-medium rounded-[0.5rem] text-[1rem] px-5 py-2.5 mt-8 w-full font-inter flex items-center justify-center leading-[1.5] tracking-[0.005em]">
                         <template v-if="loading">
                             <div class="spinner"></div>
                         </template>
