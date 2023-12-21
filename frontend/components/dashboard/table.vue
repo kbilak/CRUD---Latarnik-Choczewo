@@ -306,37 +306,42 @@
                         <span class="text-[1rem] text-gray-500 leading-[1.5] tracking-[0.005em] mb-3">Dodajesz nowe zdjęcie zawodnika <b>{{ this.currentImage.name }}</b>.</span>
                         <span class="text-[1rem] text-red-700 leading-[1.5] tracking-[0.005em]">Ta akcja <b>nie może</b> być cofnięta.</span>
                     </div>
+
                     <div v-if="currentImage.image !== null && isObjectEmpty(selectedImage)" class="flex flex-col mt-3 mb-8 font-inter">
                         <span class="font-medium text-[1.25rem] leading-[1.5] tracking-[0.005em] mb-3">Obecne zdjęcie</span>
                         <img :src="currentImage.image" :alt="currentImage.name" class="rounded-xl">
                     </div>
-                    <div v-else class="flex flex-col mt-3 mb-8 font-inter">
-                        <div v-if="!loadingImage && !isObjectEmpty(selectedImage)" class="flex flex-row justify-between w-full items-center">
+
+                    <div v-else class="flex flex-col mt-3 font-inter">
+                        <span v-if="isObjectEmpty(selectedImage)" class="italic mb-10">Zawodnik obecnie nie ma zdjęcia.</span>
+
+                        <div v-if="!isObjectEmpty(selectedImage)" class="flex flex-row justify-between w-full items-center">
                             <span class="font-medium text-[1.25rem] leading-[1.5] tracking-[0.005em] mb-3">Dodane zdjęcie</span>
-                            <v-icon @click="this.selectedImage = {};" class="cursor-pointer">mdi-close</v-icon>
+                            <v-icon @click="this.selectedImage = {};this.imageIsCropped = null;" class="cursor-pointer">mdi-close</v-icon>
                         </div>
-                        <span v-if="isObjectEmpty(selectedImage)" class="italic">Zawodnik obecnie nie ma zdjęcia.</span>
-                        <cropper v-if="croppedImage === null" class="cropper" :src="selectedImage.url" :stencil-props="{aspectRatio: 1 / 1, }" ref="cropper"/>
-                        <div class="flex mt-3" v-if="croppedImage === null">
-                            <button class="bg-esc text-black p-3 rounded-lg mr-3" @click="deleteImagePreview">
-                                <v-icon>mdi-close</v-icon>
-                            </button>
-                            <button  @click="cropImage" class="bg-esc-light text-black px-3 py-2 rounded-lg">
-                                Crop
-                            </button>
+
+                        <cropper v-if="!isObjectEmpty(selectedImage) && !this.imageIsCropped" class="cropper" :src="selectedImage.url" :stencil-props="{aspectRatio: 1 / 1, }" ref="cropper"/>
+                        <div v-if="!isObjectEmpty(selectedImage) && !this.imageIsCropped" class="flex mt-5 w-full items-center justify-end">
+                            <WhiteButton :icon="false" :click="imagePlayerClose" buttonText="Anuluj"/>
+                            <RedButton :icon="false" :click="deleteImagePreview" buttonText="Usuń zdjęcie" class="ml-5" />
+                            <GreenButton :icon="false" :click="cropImage" buttonText="Wytnij" class="ml-5" />
                         </div>
-                        <canvas v-if="croppedImage !== null" ref="canvas" class="rounded-xl max-h-[600px] w-auto object-contain"></canvas>
-                        <button v-if="croppedImage !== null" @click="deleteCavnasImage" class="bg-black text-white px-3 py-2 rounded-lg">Delete Image</button>
-                        <!-- <img v-if="!loadingImage && !isObjectEmpty(selectedImage)" :src="selectedImage.url" :alt="selectedImage.name" class="rounded-xl max-h-[600px] w-auto object-contain"> -->
+
+                        <canvas v-if="!isObjectEmpty(selectedImage) && this.imageIsCropped" ref="canvas" class="rounded-xl max-h-[600px] w-auto object-contain"></canvas>
                     </div>
-                    <div v-if="loadingImage" class="skeleton h-auto w-full ml-2 rounded-md"></div>
-                    <div class="flex flex-row w-full items-center justify-end font-poppins">
+
+                    <div v-if="isObjectEmpty(selectedImage)" class="flex flex-row w-full items-center justify-end font-poppins">
                         <WhiteButton :icon="false" :click="imagePlayerClose" buttonText="Anuluj"/>
                         <label v-if="isObjectEmpty(selectedImage)" @click="this.loadingImage = true;" for="file-upload" class="btn h-[40px] text-white bg-blue-700 hover:bg-blue-800 transition ease-in-out duration-300 rounded-[0.5rem] text-[1rem] font-medium px-4 py-1 w-auto flex items-center justify-center font-inter leading-[1.5] tracking-[0.005em] ml-5">
                             Dodaj nowe zdjęcie
                         </label>
-                        <BlueButton v-else :icon="false" :click="imagePlayerDialog" buttonText="Zapisz zdjęcie" class="ml-5" />
                         <input type="file" id="file-upload" ref="fileInput" accept="image/*" @change="previewImage">
+                    </div>
+
+                    <div v-if="imageIsCropped && !isObjectEmpty(selectedImage)" class="flex flex-row items-center justify-end mt-10">
+                        <WhiteButton :icon="false" :click="imagePlayerClose" buttonText="Anuluj"/>
+                        <RedButton v-if="croppedImage !== null" :icon="false" :click="deleteCanvasImage" buttonText="Usuń zdjęcie" class="ml-5" />
+                        <BlueButton :icon="false" :click="imagePlayerDialog" buttonText="Zapisz zdjęcie" class="ml-5" />
                     </div>
                 </div>
             </v-dialog>
@@ -599,6 +604,7 @@ export default{
             selectedImage: {} as SelectedImage,
             allowedExtensions: ["png", "jpg", "jpeg", "webp"],
             croppedImage: null,
+            imageIsCropped: null,
 
             statuses: [
                 { title: 'Nieaktywny', value: 'Nieaktywny' },
@@ -717,6 +723,7 @@ export default{
             this.dialogImage = false;
             this.currentImage = {};
             this.selectedImage = {};
+            this.imageIsCropped = null;
         },
         imagePlayer(id: String, name: String, image: String) {
             this.currentImage = {
@@ -869,6 +876,7 @@ export default{
         },
         previewImage(event) {
             this.loadingImage = true;
+            this.imageIsCropped = false;
             const file = event.target.files[0];
             const extension = file.name.split(".").pop().toLowerCase();
             const fileSizeInBytes = file.size;
@@ -891,11 +899,13 @@ export default{
             this.loadingImage = false;
         },
         isObjectEmpty(obj) {
-            return Object.keys(obj).length === 0; // Checks if object has no keys
+            return Object.keys(obj).length === 0;
         },
         deleteImagePreview() {
-            this.selectedImage = null;
-            this.$refs.fileInput.value = "";
+            this.selectedImage = {};
+            this.imageIsCropped = null;
+            // console.log(this.$refs.fileInput)
+            // this.$refs.fileInput.value = "";
         },
         cropImage() {
             const { canvas } = this.$refs.cropper.getResult();
@@ -919,17 +929,19 @@ export default{
                 this.$refs.canvas.height = img.height;
 
                 this.ctx = this.$refs.canvas.getContext("2d");
-                this.ctx.clearRect(0, 0, this.$refs.canvas.width, this.$refs.canvas.height);  // Clear any previous drawings
-                this.ctx.drawImage(img, 0, 0, img.width, img.height);  // Specify dimensions here as well
+                this.ctx.clearRect(0, 0, this.$refs.canvas.width, this.$refs.canvas.height);
+                this.ctx.drawImage(img, 0, 0, img.width, img.height);
             }
             img.src = this.croppedImage;
+            this.imageIsCropped = true;
         },
-        deleteCavnasImage() {
+        deleteCanvasImage() {
             const canvas = this.$refs.canvas;
             const ctx = canvas.getContext('2d');
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             this.selectedImage = {};
             this.croppedImage = null;
+            this.imageIsCropped = null;
         },
     }
 };
