@@ -156,7 +156,7 @@
                                 </div>
                                 <div class="flex items-center justify-center w-[120px]">
                                     <v-icon @click="this.updatePlayer(player.id, player.name, player.position, player.status, player.image, player.number, player.year)">mdi-pencil-plus</v-icon>
-                                    <v-icon class="mx-5">mdi-image-edit</v-icon>
+                                    <v-icon @click="this.imagePlayer(player.id, player.name, player.image)" class="mx-5">mdi-image-edit</v-icon>
                                     <v-icon @click="this.deletePlayer(player.id, player.name)">mdi-delete</v-icon>
                                 </div>
                             </div>
@@ -290,6 +290,53 @@
                     <div class="flex flex-row w-full items-center justify-end font-poppins">
                         <WhiteButton :icon="false" :click="updatePlayerClose" buttonText="Anuluj"/>
                         <BlackButton :icon="false" :click="updatePlayerDialog" buttonText="Zapisz" class="ml-5"/>
+                    </div>
+                </div>
+            </v-dialog>
+            <v-dialog v-model="dialogImage" persistent transition="dialog-bottom-transition">
+                <div class="bg-white h-auto w-[500px] p-10 rounded-lg border-[1px] border-gray-300 shadow-md">
+                    <div class="flex flex-row justify-between items-start w-full mb-6">
+                        <div class="bg-blue-300 h-[50px] w-[50px] rounded-full flex items-center justify-center">
+                            <v-icon class="text-blue-700">mdi-image-edit</v-icon>
+                        </div>
+                        <v-icon @click="this.dialogImage = false; this.currentImage = {}; this.selectedImage = {};" class="cursor-pointer text-gray-500 transition ease-in-out duration-300" style="font-size:28px !important;">mdi-close</v-icon>
+                    </div>
+                    <div class="flex flex-col mb-10 font-poppins">
+                        <span class="font-medium mb-1 text-[1.5rem] leading-[1.5] tracking-[0.005em]">Edycja zdjęcia zawodnika.</span>
+                        <span class="text-[1rem] text-gray-500 leading-[1.5] tracking-[0.005em] mb-3">Dodajesz nowe zdjęcie zawodnika <b>{{ this.currentImage.name }}</b>.</span>
+                        <span class="text-[1rem] text-red-700 leading-[1.5] tracking-[0.005em]">Ta akcja <b>nie może</b> być cofnięta.</span>
+                    </div>
+                    <div v-if="currentImage.image !== null && isObjectEmpty(selectedImage)" class="flex flex-col mt-3 mb-8 font-inter">
+                        <span class="font-medium text-[1.25rem] leading-[1.5] tracking-[0.005em] mb-3">Obecne zdjęcie</span>
+                        <img :src="currentImage.image" :alt="currentImage.name" class="rounded-xl">
+                    </div>
+                    <div v-else class="flex flex-col mt-3 mb-8 font-inter">
+                        <div v-if="!loadingImage && !isObjectEmpty(selectedImage)" class="flex flex-row justify-between w-full items-center">
+                            <span class="font-medium text-[1.25rem] leading-[1.5] tracking-[0.005em] mb-3">Dodane zdjęcie</span>
+                            <v-icon @click="this.selectedImage = {};" class="cursor-pointer">mdi-close</v-icon>
+                        </div>
+                        <span v-if="isObjectEmpty(selectedImage)" class="italic">Zawodnik obecnie nie ma zdjęcia.</span>
+                        <cropper v-if="croppedImage === null" class="cropper" :src="selectedImage.url" :stencil-props="{aspectRatio: 1 / 1, }" ref="cropper"/>
+                        <div class="flex mt-3" v-if="croppedImage === null">
+                            <button class="bg-esc text-black p-3 rounded-lg mr-3" @click="deleteImagePreview">
+                                <v-icon>mdi-close</v-icon>
+                            </button>
+                            <button  @click="cropImage" class="bg-esc-light text-black px-3 py-2 rounded-lg">
+                                Crop
+                            </button>
+                        </div>
+                        <canvas v-if="croppedImage !== null" ref="canvas" class="rounded-xl max-h-[600px] w-auto object-contain"></canvas>
+                        <button v-if="croppedImage !== null" @click="deleteCavnasImage" class="bg-black text-white px-3 py-2 rounded-lg">Delete Image</button>
+                        <!-- <img v-if="!loadingImage && !isObjectEmpty(selectedImage)" :src="selectedImage.url" :alt="selectedImage.name" class="rounded-xl max-h-[600px] w-auto object-contain"> -->
+                    </div>
+                    <div v-if="loadingImage" class="skeleton h-auto w-full ml-2 rounded-md"></div>
+                    <div class="flex flex-row w-full items-center justify-end font-poppins">
+                        <WhiteButton :icon="false" :click="imagePlayerClose" buttonText="Anuluj"/>
+                        <label v-if="isObjectEmpty(selectedImage)" @click="this.loadingImage = true;" for="file-upload" class="btn h-[40px] text-white bg-blue-700 hover:bg-blue-800 transition ease-in-out duration-300 rounded-[0.5rem] text-[1rem] font-medium px-4 py-1 w-auto flex items-center justify-center font-inter leading-[1.5] tracking-[0.005em] ml-5">
+                            Dodaj nowe zdjęcie
+                        </label>
+                        <BlueButton v-else :icon="false" :click="imagePlayerDialog" buttonText="Zapisz zdjęcie" class="ml-5" />
+                        <input type="file" id="file-upload" ref="fileInput" accept="image/*" @change="previewImage">
                     </div>
                 </div>
             </v-dialog>
@@ -464,6 +511,12 @@ import BlackButton from '../elements/buttons/BlackButton.vue'
 import GreenButton from '../elements/buttons/GreenButton.vue'
 import WhiteButton from '../elements/buttons/WhiteButton.vue'
 import RedButton from '../elements/buttons/RedButton.vue'
+import BlueButton from '../elements/buttons/BlueButton.vue'
+
+import { Cropper } from 'vue-advanced-cropper';
+import 'vue-advanced-cropper/dist/style.css'; 
+
+import axios from 'axios';
 
 interface Player {
     id: string;
@@ -475,18 +528,26 @@ interface Player {
     year: string;
 }
 
+interface SelectedImage {
+    name: string;
+    url: string;
+}
+
 export default{
     components: {
         BlackButton,
         GreenButton,
         WhiteButton,
         RedButton,
+        BlueButton,
+        Cropper
     },
     data() {
         return {
             loadingTest: true,
             authStore: useAuthStore(),
             loading: false,
+            loadingImage: false,
 
             sortingOptions: {
                 age: false,
@@ -533,6 +594,11 @@ export default{
             currentUpdate: {} as Player,
             currentDelete: {} as Player,
             currentAdd: {} as Player,
+            currentImage: {} as Player,
+
+            selectedImage: {} as SelectedImage,
+            allowedExtensions: ["png", "jpg", "jpeg", "webp"],
+            croppedImage: null,
 
             statuses: [
                 { title: 'Nieaktywny', value: 'Nieaktywny' },
@@ -646,6 +712,22 @@ export default{
         updatePlayerClose() {
             this.dialogUpdate = false;
             this.currentUpdate = {};
+        },
+        imagePlayerClose() {
+            this.dialogImage = false;
+            this.currentImage = {};
+            this.selectedImage = {};
+        },
+        imagePlayer(id: String, name: String, image: String) {
+            this.currentImage = {
+                id: id,
+                name: name,
+                image: image,
+            }
+            this.dialogImage = true;
+        },
+        imagePlayerDialog() {
+            console.log(1)
         },
         updatePlayerDialog() {
             console.log(1)
@@ -784,7 +866,71 @@ export default{
             const sortedArray = [...this.players].sort(sortFunction);
             this.players = sortedArray;
             this.organizePlayers();
-        }
+        },
+        previewImage(event) {
+            this.loadingImage = true;
+            const file = event.target.files[0];
+            const extension = file.name.split(".").pop().toLowerCase();
+            const fileSizeInBytes = file.size;
+            const maxSizeInBytes = 2 * 1024 * 1024; // 2MB
+
+            if (!this.allowedExtensions.includes(extension)) {
+                this.showMessage("image.upload.error.wrong.extension", "showMessageImage", "messageImage");
+                return;
+            }
+
+            const image = new Image();
+            image.src = URL.createObjectURL(file);
+            image.onload = () => {
+                this.selectedImage = {
+                    url: image.src,
+                    name: file.name,
+                };
+            };
+
+            this.loadingImage = false;
+        },
+        isObjectEmpty(obj) {
+            return Object.keys(obj).length === 0; // Checks if object has no keys
+        },
+        deleteImagePreview() {
+            this.selectedImage = null;
+            this.$refs.fileInput.value = "";
+        },
+        cropImage() {
+            const { canvas } = this.$refs.cropper.getResult();
+            this.croppedImage = canvas.toDataURL();
+            const img = new Image()
+            img.onload = () => {
+                this.image = img;
+
+                const aspectRatio = img.height / img.width;
+                const viewportWidth = window.innerWidth;
+
+                img.width = viewportWidth * 0.9;
+                img.height = aspectRatio * viewportWidth;
+
+                if (img.width > 800) {
+                    img.width = 800;
+                    img.height = aspectRatio * img.width;
+                }
+
+                this.$refs.canvas.width = img.width;
+                this.$refs.canvas.height = img.height;
+
+                this.ctx = this.$refs.canvas.getContext("2d");
+                this.ctx.clearRect(0, 0, this.$refs.canvas.width, this.$refs.canvas.height);  // Clear any previous drawings
+                this.ctx.drawImage(img, 0, 0, img.width, img.height);  // Specify dimensions here as well
+            }
+            img.src = this.croppedImage;
+        },
+        deleteCavnasImage() {
+            const canvas = this.$refs.canvas;
+            const ctx = canvas.getContext('2d');
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            this.selectedImage = {};
+            this.croppedImage = null;
+        },
     }
 };
 </script>
@@ -815,5 +961,9 @@ export default{
 
 .current-page-div {
     border: 1px solid black !important;
+}
+
+input[type="file"] {
+    display: none !important;
 }
 </style>
