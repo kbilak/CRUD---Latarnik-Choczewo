@@ -3,3 +3,9 @@
         <AuthLogin></AuthLogin>
     </div>
 </template>
+
+<script setup>
+definePageMeta({
+  layout: false,
+});
+</script>

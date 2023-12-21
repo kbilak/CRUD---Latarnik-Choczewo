@@ -19,7 +19,8 @@ module.exports = {
                 'heigth': 'height'
             },
             colors: {
-
+                'blackish': '#2b2b2b',
+                'dark': '#0f0f0f'
             },
             fontFamily: {
                 'libre': ["'Libre Baskerville', sans-serif"],
