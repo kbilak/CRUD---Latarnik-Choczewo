@@ -45,14 +45,14 @@
                                     <span class="absolute inset-y-0 left-0 flex items-center pl-3">
                                         <v-icon>mdi-magnify</v-icon>
                                     </span>
-                                    <input v-model="searchText" type="text" class="h-full pl-10 pr-4 py-2 rounded-[0.5rem] border border-gray-300 block w-full font-inter text-[1rem] leading-[1.5] tracking-[0.005em]" placeholder="Szukaj...">
+                                    <input v-model="searchText" type="text" class="h-full pl-10 pr-4 py-2 rounded-[0.5rem] border border-gray-300 block w-full font-inter text-[1rem] leading-[1.5] tracking-[0.005em]" placeholder="Szukaj zawodnika...">
                                 </div>
                             </div>
                             <div class="flex">
                                 <BlackButton :icon="false" mdi="mdi-icon-name" :click="filter" buttonText="Filtruj..." class="mr-5"/>
                                 <div class="dropdown dropdown-bottom dropdown-end">
                                     <button tabindex="0" role="button" class="btn h-[40px] text-white font-inter bg-black hover:bg-[#101010] transition ease-in-out duration-300 font-medium rounded-[0.5rem] text-[1rem] px-4 py-1 w-auto flex items-center justify-center leading-[1.5] tracking-[0.005em]">Sortuj <v-icon>mdi-arrow-down</v-icon></button>
-                                    <ul class="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-[180px]">
+                                    <ul class="dropdown-content z-[1] menu p-2 shadow bg-white border-[1px] border-gray-300 rounded-box w-[180px] mt-2">
                                         <li>
                                             <div class="form-control">
                                                 <label class="label cursor-pointer">
@@ -327,9 +327,9 @@
                             <v-select v-model="this.currentAdd.position" variant="outlined" class="max-h-[56px] max-w-[48%]" :items="positions" item-title="title" item-value="value" return-object placeholder="Position" label="Position"></v-select>
                         </div>
                     </div>
-                    <div class="flex flex-row w-full items-center justify-end font-poppins">
-                            <WhiteButton :icon="false" mdi="mdi-icon-name" :click="addPlayerClose" buttonText="Anuluj"/>
-                            <GreenButton :icon="false" mdi="mdi-icon-name" :click="addPlayerDialog" buttonText="Dodaj zawodnika" class="ml-5"/>
+                    <div class="flex flex-row w-full items-center justify-end font-inter">
+                        <WhiteButton :icon="false" mdi="mdi-icon-name" :click="addPlayerClose" buttonText="Anuluj"/>
+                        <GreenButton :icon="false" mdi="mdi-icon-name" :click="addPlayerDialog" buttonText="Dodaj zawodnika" class="ml-5"/>
                     </div>
                 </div>
             </v-dialog>
@@ -346,19 +346,90 @@
                         <span class="text-[1rem] text-gray-500 leading-[1.5] tracking-[0.005em]">Wybierz opcje, według których mają być zwróceni zawodnicy.</span>
                     </div>
                     <div class="flex flex-col mt-3 mb-8 font-poppins">
-                        <v-text-field v-model="this.currentAdd.name" variant="outlined" class="max-h-[56px] w-full mb-6" placeholder="Name" label="Name"></v-text-field>
-                        <div class="flex flex-row justify-between mb-6">
-                            <v-text-field v-model="this.currentAdd.number" variant="outlined" class="max-h-[56px] max-w-[48%]" placeholder="Number" label="Number"></v-text-field>
-                            <v-text-field v-model="this.currentAdd.year" variant="outlined" class="max-h-[56px] max-w-[48%]" placeholder="Birth year" label="Birth year"></v-text-field>
+                        <div class="w-full flex items-center">
+                            <v-icon class="mr-3">mdi-account-badge</v-icon>
+                            <span class="text-[1rem]">Status</span>
                         </div>
-                        <div class="flex flex-row justify-between">
-                            <v-select v-model="this.currentAdd.status" variant="outlined" class="max-h-[56px] max-w-[48%]" :items="statuses" item-title="title" item-value="value" return-object placeholder="Status" label="Status"></v-select>
-                            <v-select v-model="this.currentAdd.position" variant="outlined" class="max-h-[56px] max-w-[48%]" :items="positions" item-title="title" item-value="value" return-object placeholder="Position" label="Position"></v-select>
+                        <div class="flex flex-wrap ml-5 mt-2 font-inter text-black">
+                            <div class="form-control w-1/2">
+                                <label class="label cursor-pointer flex justify-start">
+                                    <input v-model="filterOptions.statusA" type="checkbox" class="checkbox checkbox-[#000000] bg-gray-300 border-[1px] border-gray-300 mr-2" />
+                                    <span class="label-text">Aktywny</span> 
+                                </label>
+                            </div>
+                            <div class="form-control w-1/2">
+                                <label class="label cursor-pointer flex justify-start">
+                                    <input v-model="filterOptions.statusN" type="checkbox" class="checkbox checkbox-[#000000] bg-gray-300 border-[1px] border-gray-300 mr-2" />
+                                    <span class="label-text">Nieaktywny</span> 
+                                </label>
+                            </div>
+                        </div>
+                        <hr class="w-full h-[0.0625rem] bg-[hsl(0 0% 92%)] my-2">
+                        <div class="w-full flex items-center">
+                            <v-icon class="mr-3">mdi-soccer-field</v-icon>
+                            <span class="text-[1rem]">Pozycja</span>
+                        </div>
+                        <div class="flex flex-wrap ml-5 mt-2 font-inter text-black">
+                            <div class="form-control w-1/2">
+                                <label class="label cursor-pointer flex justify-start">
+                                    <input v-model="filterOptions.positionB" type="checkbox" class="checkbox checkbox-[#000000] bg-gray-300 border-[1px] border-gray-300 mr-2" />
+                                    <span class="label-text">Bramkarz</span> 
+                                </label>
+                            </div>
+                            <div class="form-control w-1/2">
+                                <label class="label cursor-pointer flex justify-start">
+                                    <input v-model="filterOptions.positionO" type="checkbox" class="checkbox checkbox-[#000000] bg-gray-300 border-[1px] border-gray-300 mr-2" />
+                                    <span class="label-text">Obrońca</span> 
+                                </label>
+                            </div>
+                            <div class="form-control w-1/2">
+                                <label class="label cursor-pointer flex justify-start">
+                                    <input v-model="filterOptions.positionP" type="checkbox" class="checkbox checkbox-[#000000] bg-gray-300 border-[1px] border-gray-300 mr-2" />
+                                    <span class="label-text">Pomocnik</span> 
+                                </label>
+                            </div>
+                            <div class="form-control w-1/2">
+                                <label class="label cursor-pointer flex justify-start">
+                                    <input v-model="filterOptions.positionN" type="checkbox" class="checkbox checkbox-[#000000] bg-gray-300 border-[1px] border-gray-300 mr-2" />
+                                    <span class="label-text">Napastnik</span> 
+                                </label>
+                            </div>
+                        </div>
+                        <hr class="w-full h-[0.0625rem] bg-[hsl(0 0% 92%)] my-2">
+                        <div class="w-full flex items-center">
+                            <v-icon class="mr-3">mdi-cake</v-icon>
+                            <span class="text-[1rem]">Rocznik</span>
+                        </div>
+                        <div class="flex flex-wrap ml-5 mt-2 font-inter text-black">
+                            <div class="form-control w-1/2">
+                                <label class="label cursor-pointer flex justify-start">
+                                    <input v-model="filterOptions.year1" type="checkbox" class="checkbox checkbox-[#000000] bg-gray-300 border-[1px] border-gray-300 mr-2" />
+                                    <span class="label-text">1970-1999</span> 
+                                </label>
+                            </div>
+                            <div class="form-control w-1/2">
+                                <label class="label cursor-pointer flex justify-start">
+                                    <input v-model="filterOptions.year2" type="checkbox" class="checkbox checkbox-[#000000] bg-gray-300 border-[1px] border-gray-300 mr-2" />
+                                    <span class="label-text">2000-2005</span> 
+                                </label>
+                            </div>
+                            <div class="form-control w-1/2">
+                                <label class="label cursor-pointer flex justify-start">
+                                    <input v-model="filterOptions.year3" type="checkbox" class="checkbox checkbox-[#000000] bg-gray-300 border-[1px] border-gray-300 mr-2" />
+                                    <span class="label-text">2006-2010</span> 
+                                </label>
+                            </div>
+                            <div class="form-control w-1/2">
+                                <label class="label cursor-pointer flex justify-start">
+                                    <input v-model="filterOptions.year4" type="checkbox" class="checkbox checkbox-[#000000] bg-gray-300 border-[1px] border-gray-300 mr-2" />
+                                    <span class="label-text">2010-2019</span> 
+                                </label>
+                            </div>
                         </div>
                     </div>
                     <div class="flex flex-row w-full items-center justify-end font-poppins">
-                            <WhiteButton :icon="false" mdi="mdi-icon-name" :click="filterClose" buttonText="Anuluj"/>
-                            <GreenButton :icon="false" mdi="mdi-icon-name" :click="addPlayerDialog" buttonText="Dodaj zawodnika" class="ml-5"/>
+                        <WhiteButton :icon="false" mdi="mdi-icon-name" :click="filterClose" buttonText="Anuluj"/>
+                        <GreenButton :icon="false" mdi="mdi-icon-name" :click="updateFilter" buttonText="Filtruj" class="ml-5"/>
                     </div>
                 </div>
             </v-dialog>
@@ -398,6 +469,7 @@ export default{
             loadingTest: true,
             authStore: useAuthStore(),
             loading: false,
+
             sortingOptions: {
                 age: false,
                 position: false,
@@ -405,6 +477,20 @@ export default{
                 number: false,
                 status: false,
             },
+
+            filterOptions: {
+                statusA: false,
+                statusN: false,
+                positionB: false,
+                positionO: false,
+                positionP: false,
+                positionN: false,
+                year1: false,
+                year2: false,
+                year3: false,
+                year4: false,
+            },
+
             players: [],
             tab: null,
             itemsPerPage: 10,
@@ -577,6 +663,37 @@ export default{
         },
         filterClose() {
             this.dialogFilter = false;
+        },
+        async updateFilter() {
+            this.loading = true;
+            this.dialogFilter = false;
+            this.players = await getPlayers();
+
+            function filterPlayers(players, filterOptions) {
+                return players.filter(player => {
+                    const statusCondition =
+                    (!filterOptions.statusA || player.status === "aktywny") &&
+                    (!filterOptions.statusN || player.status === "nieaktywny");
+
+                    const positionCondition =
+                    (!filterOptions.positionB || player.position === "BR") &&
+                    (!filterOptions.positionO || player.position === "OB") &&
+                    (!filterOptions.positionP || player.position === "PO") &&
+                    (!filterOptions.positionN || player.position === "NA");
+
+                    const yearCondition =
+                    (!filterOptions.year1 || (parseInt(player.year) >= 1970 && parseInt(player.year) <= 1999)) &&
+                    (!filterOptions.year2 || (parseInt(player.year) >= 2000 && parseInt(player.year) <= 2005)) &&
+                    (!filterOptions.year3 || (parseInt(player.year) >= 2006 && parseInt(player.year) <= 2010)) &&
+                    (!filterOptions.year4 || (parseInt(player.year) >= 2010 && parseInt(player.year) <= 2019));
+
+                    return statusCondition && positionCondition && yearCondition;
+                });
+            }
+
+            this.players = filterPlayers(this.players, this.filterOptions);
+            this.organizePlayers();
+            this.loading = false;
         },
         async organizePlayers() {
             let playersToSort = [...this.players];

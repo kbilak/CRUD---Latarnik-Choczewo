@@ -4,7 +4,7 @@
             <div class="flex items-center justify-between h-[100px] w-full 2xl:p-0 xl:p-0 lg:p-0 md:p-0 sm:p-0 xs:p-5">
                 <NuxtLink to="/" class="flex flex-row items-center justify-start">
                     <img src="/logo/logo_latarnik.png" alt="Logo Latarnika Choczewo" class="h-[70px]">
-                    <span class="ml-5 2xl:text-xl xl:text-xl lg:text-xl md:text-xl sm:text-xl xs:text-md font-raleway">Latarnik Choczewo - lista zawodników</span>
+                    <span class="ml-5 2xl:text-xl xl:text-xl lg:text-xl md:text-xl sm:text-xl xs:text-md font-inter flex flex-col"><span class="text-[1.5rem]">Latarnik Choczewo</span><span class="text-[1rem]">Lista zawodników</span></span>
                 </NuxtLink>
                 <div class="2xl:flex xl:flex lg:flex md:hidden sm:hidden xs:hidden flex-row items-center justify-end">
                     <div v-if="this.authStore.loggedIn" class="dropdown dropdown-bottom dropdown-end border-[1px] border-gray-300 rounded-full mr-5 p-1 h-[44px] w-[44px] flex items-center justify-center">
