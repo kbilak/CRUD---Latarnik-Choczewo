@@ -516,6 +516,11 @@
                 <span class="font-medium font-inter">{{ this.languageStore.t.auth_login_mess_error }}</span> 
             </div>
         </v-snackbar>
+        <v-snackbar v-model="snackbarErrorPhoto" :timeout="snackbarTimeout" variant="outlined" color="rgba(1, 1, 1, 0)">
+            <div class="p-4 my-4 w-[350px] text-sm text-red-600 border-[1px] border-red-900 rounded-lg bg-red-50 text-center" role="alert">
+                <span class="font-medium font-inter">{{ this.languageStore.t.auth_login_mess_error }}</span> 
+            </div>
+        </v-snackbar>
     </section>
 </template>
 
@@ -642,6 +647,7 @@ export default{
 
             snackbar: false,
             snackbarError: false,
+            snackbarErrorPhoto: false,
             snackbarTimeout: 5000,
 
             nameRules: [],
@@ -776,9 +782,6 @@ export default{
                 image: image,
             }
             this.dialogImage = true;
-        },
-        imagePlayerDialog() {
-            console.log(1)
         },
         async updatePlayerDialog(): Promise<void> {
             this.buttonLoading = true;
@@ -1007,10 +1010,15 @@ export default{
             const file = event.target.files[0];
             const extension = file.name.split(".").pop().toLowerCase();
             const fileSizeInBytes = file.size;
-            const maxSizeInBytes = 2 * 1024 * 1024; // 2MB
+            const maxSizeInBytes = 1 * 1024 * 1024; // 2MB
 
             if (!this.allowedExtensions.includes(extension)) {
-                this.showMessage("image.upload.error.wrong.extension", "showMessageImage", "messageImage");
+                this.snackbarErrorPhoto = true;
+                return;
+            }
+
+            if (fileSizeInBytes > maxSizeInBytes) {
+                this.snackbarErrorPhoto = true;
                 return;
             }
 
@@ -1031,8 +1039,6 @@ export default{
         deleteImagePreview() {
             this.selectedImage = {};
             this.imageIsCropped = null;
-            // console.log(this.$refs.fileInput)
-            // this.$refs.fileInput.value = "";
         },
         cropImage() {
             const { canvas } = this.$refs.cropper.getResult();
@@ -1069,6 +1075,48 @@ export default{
             this.selectedImage = {};
             this.croppedImage = null;
             this.imageIsCropped = null;
+        },
+        async imagePlayerDialog() {
+            const resultDataURL = this.$refs.canvas.toDataURL('image/webp');
+            this.buttonLoading = true;
+            this.token = await getToken();
+
+            const formData = new FormData();
+            formData.append("playerId", this.currentImage.id);
+            formData.append("token", this.token);
+
+            const blob = await fetch(resultDataURL).then(res => res.blob());
+
+            formData.append('image', blob, `${this.currentImage.id}${new Date()}.webp`);
+
+            try {
+                const response = await axios.post(`http://127.0.0.1:8000/players/image/`, formData, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data',
+                    },
+                });
+
+                if (response.data && response.data.status === 0) {
+                    await this.getAllPlayers();
+                    this.snackbar = true;
+                    this.buttonLoading = false;
+                    this.dialogImage = false;
+                    this.currentImage = {
+                        name: '',
+                        id: ''
+                    };
+                    this.selectedImage = {};
+                    this.croppedImage = null;
+                    this.imageIsCropped = null;
+                } else {
+                    this.snackbarError = true;
+                    this.buttonLoading = false;
+                }
+            } catch (error) {
+                console.error("Error:", error);
+                this.snackbarError = true;
+                this.buttonLoading = false;
+            }
         },
         changePlayersDirection() {
             this.playersSorted = this.playersSorted.slice().reverse();

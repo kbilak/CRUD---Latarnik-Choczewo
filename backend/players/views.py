@@ -5,7 +5,9 @@ from rest_framework.views import APIView
 from .models import Player
 from .serializers import PlayerSerializer
 from tokens.models import Token
-
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+from django.shortcuts import get_object_or_404
 
 def check_token(token_to_check):
     try:
@@ -73,4 +75,23 @@ class UpdatePlayerView(APIView):
 class ListPlayersView(ListAPIView):
     queryset = Player.objects.all()
     serializer_class = PlayerSerializer
-    
+
+
+@csrf_exempt
+def image_upload_view(request):
+    if request.method == 'POST':
+        token = request.POST.get('token')
+        if not check_token(token):
+            return JsonResponse({'status': 1, 'error': 'Invalid or expired token'}, status=403)
+        
+        player_id = request.POST.get('playerId')
+        player = get_object_or_404(Player, id=player_id)
+        image_file = request.FILES.get('image')
+
+        if image_file:
+            player.image = image_file
+            player.save()
+
+            return JsonResponse({'status': 0, 'message': 'Image saved successfully'})
+
+    return JsonResponse({'status': 1, 'error': 'Invalid request'}, status=400)
