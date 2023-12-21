@@ -1,7 +1,7 @@
 <template>
     <section id="table" class="flex flex-col items-center justify-start w-full min-h-[calc(100vh-202px)] text-black bg-gray-50 h-auto">
         <div v-if="authStore.loggedIn" class="xs:max-w-screen-[450px] sm:max-w-screen-sm md:max-w-screen-md lg:max-w-screen-lg xl:max-w-screen-xl 2xl:max-w-screen-xl w-full h-full flex flex-col justify-center items-center">
-            <div class="flex justify-between items-center w-[99%] h-[70px] mt-2">
+            <div class="flex justify-between items-center w-full h-[70px] mt-2">
                 <div class="w-auto px-5 bg-white border-[1px] border-gray-300 rounded-md shadow-md">
                     <div class="w-auto h-[60px] bg-white pt-1.5">
                         <v-tabs v-if="this.authStore.user.user.user_type === 'admin'" v-model="tab">
@@ -31,7 +31,7 @@
                 </div>
             </div>
             <v-window v-model="tab" class="w-full">
-                <v-window-item value="1" class="w-[99%] flex flex-col items-center justify-center">
+                <v-window-item value="1" class="w-full flex flex-col items-center justify-center">
                     <div class="flex flex-row w-full justify-between items-center mt-2 h-[70px]">
                         <div class="flex flex-row justify-between items-center w-full">
                             <span class="text-[1.5rem] font-medium font-inter mr-10 leading-[1.333] tracking-[0.02em] text-[#0f0f0f]">Zawodnicy</span>
@@ -49,6 +49,14 @@
                                 </div>
                             </div>
                             <div class="flex">
+                                <div v-if="shouldDisplayFilterDiv" class="flex flex-col font-inter mr-3 items-end justify-center">
+                                    <span class="text-[1rem]">Filtrowanie:</span>
+                                    <div class="flex flex-row">
+                                        <span v-for="(key, i) in Object.keys(this.filterOptions)" :key="i" class="text-[0.825rem] text-gray-500 flex flex-row">
+                                            <span v-if="this.filterOptions[key] === true" class="flex ml-1"><v-icon @click="this.filterOptions[key] = false, updateFilter()" class="cursor-pointer">mdi-close</v-icon>{{ this.filterOptionsTranslations[i] }}</span>
+                                        </span>
+                                    </div>
+                                </div>
                                 <BlackButton :icon="false" mdi="mdi-icon-name" :click="filter" buttonText="Filtruj..." class="mr-5"/>
                                 <div class="dropdown dropdown-bottom dropdown-end">
                                     <button tabindex="0" role="button" class="btn h-[40px] text-white font-inter bg-black hover:bg-[#101010] transition ease-in-out duration-300 font-medium rounded-[0.5rem] text-[1rem] px-4 py-1 w-auto flex items-center justify-center leading-[1.5] tracking-[0.005em]">Sortuj <v-icon>mdi-arrow-down</v-icon></button>
@@ -353,13 +361,15 @@
                         <div class="flex flex-wrap ml-5 mt-2 font-inter text-black">
                             <div class="form-control w-1/2">
                                 <label class="label cursor-pointer flex justify-start">
-                                    <input v-model="filterOptions.statusA" type="checkbox" class="checkbox checkbox-[#000000] bg-gray-300 border-[1px] border-gray-300 mr-2" />
+                                    <input v-if="this.filterOptions.statusN" v-model="filterOptions.statusA" disabled type="checkbox" class="checkbox checkbox-[#000000] bg-gray-300 border-[1px] border-gray-300 mr-2" />
+                                    <input v-else v-model="filterOptions.statusA" type="checkbox" class="checkbox checkbox-[#000000] bg-gray-300 border-[1px] border-gray-300 mr-2" />
                                     <span class="label-text">Aktywny</span> 
                                 </label>
                             </div>
                             <div class="form-control w-1/2">
                                 <label class="label cursor-pointer flex justify-start">
-                                    <input v-model="filterOptions.statusN" type="checkbox" class="checkbox checkbox-[#000000] bg-gray-300 border-[1px] border-gray-300 mr-2" />
+                                    <input v-if="this.filterOptions.statusA" v-model="filterOptions.statusN" disabled type="checkbox" class="checkbox checkbox-[#000000] bg-gray-300 border-[1px] border-gray-300 mr-2" />
+                                    <input v-else v-model="filterOptions.statusN" type="checkbox" class="checkbox checkbox-[#000000] bg-gray-300 border-[1px] border-gray-300 mr-2" />
                                     <span class="label-text">Nieaktywny</span> 
                                 </label>
                             </div>
@@ -372,25 +382,29 @@
                         <div class="flex flex-wrap ml-5 mt-2 font-inter text-black">
                             <div class="form-control w-1/2">
                                 <label class="label cursor-pointer flex justify-start">
-                                    <input v-model="filterOptions.positionB" type="checkbox" class="checkbox checkbox-[#000000] bg-gray-300 border-[1px] border-gray-300 mr-2" />
+                                    <input v-if="this.filterOptions.positionO || this.filterOptions.positionP || this.filterOptions.positionN" v-model="filterOptions.positionB" disabled type="checkbox" class="checkbox checkbox-[#000000] bg-gray-300 border-[1px] border-gray-300 mr-2" />
+                                    <input v-else v-model="filterOptions.positionB" type="checkbox" class="checkbox checkbox-[#000000] bg-gray-300 border-[1px] border-gray-300 mr-2" />
                                     <span class="label-text">Bramkarz</span> 
                                 </label>
                             </div>
                             <div class="form-control w-1/2">
                                 <label class="label cursor-pointer flex justify-start">
-                                    <input v-model="filterOptions.positionO" type="checkbox" class="checkbox checkbox-[#000000] bg-gray-300 border-[1px] border-gray-300 mr-2" />
+                                    <input v-if="this.filterOptions.positionB || this.filterOptions.positionP || this.filterOptions.positionN" v-model="filterOptions.positionO" disabled type="checkbox" class="checkbox checkbox-[#000000] bg-gray-300 border-[1px] border-gray-300 mr-2" />
+                                    <input v-else v-model="filterOptions.positionO" type="checkbox" class="checkbox checkbox-[#000000] bg-gray-300 border-[1px] border-gray-300 mr-2" />
                                     <span class="label-text">Obrońca</span> 
                                 </label>
                             </div>
                             <div class="form-control w-1/2">
                                 <label class="label cursor-pointer flex justify-start">
-                                    <input v-model="filterOptions.positionP" type="checkbox" class="checkbox checkbox-[#000000] bg-gray-300 border-[1px] border-gray-300 mr-2" />
+                                    <input v-if="this.filterOptions.positionO || this.filterOptions.positionB || this.filterOptions.positionN" v-model="filterOptions.positionP" disabled type="checkbox" class="checkbox checkbox-[#000000] bg-gray-300 border-[1px] border-gray-300 mr-2" />
+                                    <input v-else v-model="filterOptions.positionP" type="checkbox" class="checkbox checkbox-[#000000] bg-gray-300 border-[1px] border-gray-300 mr-2" />
                                     <span class="label-text">Pomocnik</span> 
                                 </label>
                             </div>
                             <div class="form-control w-1/2">
                                 <label class="label cursor-pointer flex justify-start">
-                                    <input v-model="filterOptions.positionN" type="checkbox" class="checkbox checkbox-[#000000] bg-gray-300 border-[1px] border-gray-300 mr-2" />
+                                    <input v-if="this.filterOptions.positionO || this.filterOptions.positionP || this.filterOptions.positionB" v-model="filterOptions.positionB" disabled type="checkbox" class="checkbox checkbox-[#000000] bg-gray-300 border-[1px] border-gray-300 mr-2" />
+                                    <input v-else v-model="filterOptions.positionN" type="checkbox" class="checkbox checkbox-[#000000] bg-gray-300 border-[1px] border-gray-300 mr-2" />
                                     <span class="label-text">Napastnik</span> 
                                 </label>
                             </div>
@@ -403,25 +417,29 @@
                         <div class="flex flex-wrap ml-5 mt-2 font-inter text-black">
                             <div class="form-control w-1/2">
                                 <label class="label cursor-pointer flex justify-start">
-                                    <input v-model="filterOptions.year1" type="checkbox" class="checkbox checkbox-[#000000] bg-gray-300 border-[1px] border-gray-300 mr-2" />
+                                    <input v-if="this.filterOptions.year2 || this.filterOptions.year3 || this.filterOptions.year4" v-model="filterOptions.year1" type="checkbox" disabled class="checkbox checkbox-[#000000] bg-gray-300 border-[1px] border-gray-300 mr-2" />
+                                    <input v-else v-model="filterOptions.year1" type="checkbox" class="checkbox checkbox-[#000000] bg-gray-300 border-[1px] border-gray-300 mr-2" />
                                     <span class="label-text">1970-1999</span> 
                                 </label>
                             </div>
                             <div class="form-control w-1/2">
                                 <label class="label cursor-pointer flex justify-start">
-                                    <input v-model="filterOptions.year2" type="checkbox" class="checkbox checkbox-[#000000] bg-gray-300 border-[1px] border-gray-300 mr-2" />
+                                    <input v-if="this.filterOptions.year1 || this.filterOptions.year3 || this.filterOptions.year4" v-model="filterOptions.year2" type="checkbox" disabled class="checkbox checkbox-[#000000] bg-gray-300 border-[1px] border-gray-300 mr-2" />
+                                    <input v-else v-model="filterOptions.year2" type="checkbox" class="checkbox checkbox-[#000000] bg-gray-300 border-[1px] border-gray-300 mr-2" />
                                     <span class="label-text">2000-2005</span> 
                                 </label>
                             </div>
                             <div class="form-control w-1/2">
                                 <label class="label cursor-pointer flex justify-start">
-                                    <input v-model="filterOptions.year3" type="checkbox" class="checkbox checkbox-[#000000] bg-gray-300 border-[1px] border-gray-300 mr-2" />
+                                    <input v-if="this.filterOptions.year2 || this.filterOptions.year1 || this.filterOptions.year4" v-model="filterOptions.year3" type="checkbox" disabled class="checkbox checkbox-[#000000] bg-gray-300 border-[1px] border-gray-300 mr-2" />
+                                    <input v-else v-model="filterOptions.year3" type="checkbox" class="checkbox checkbox-[#000000] bg-gray-300 border-[1px] border-gray-300 mr-2" />
                                     <span class="label-text">2006-2010</span> 
                                 </label>
                             </div>
                             <div class="form-control w-1/2">
                                 <label class="label cursor-pointer flex justify-start">
-                                    <input v-model="filterOptions.year4" type="checkbox" class="checkbox checkbox-[#000000] bg-gray-300 border-[1px] border-gray-300 mr-2" />
+                                    <input v-if="this.filterOptions.year2 || this.filterOptions.year3 || this.filterOptions.year1" v-model="filterOptions.year4" type="checkbox" disabled class="checkbox checkbox-[#000000] bg-gray-300 border-[1px] border-gray-300 mr-2" />
+                                    <input v-else v-model="filterOptions.year4" type="checkbox" class="checkbox checkbox-[#000000] bg-gray-300 border-[1px] border-gray-300 mr-2" />
                                     <span class="label-text">2010-2019</span> 
                                 </label>
                             </div>
@@ -490,6 +508,9 @@ export default{
                 year3: false,
                 year4: false,
             },
+            filterOptionsTranslations: [
+                'Aktywny', 'Nieaktywny', 'Bramkarz', 'Obrońca', 'Pomocnik', 'Napastnik', '1970-1999', '2000-2005', '2006-2010', '2010-2019'
+            ],
 
             players: [],
             tab: null,
@@ -593,6 +614,9 @@ export default{
             }
 
             return Array.from({ length: end - start + 1 }, (_, i) => i + start);
+        },
+        shouldDisplayFilterDiv() {
+            return Object.values(this.filterOptions).some(value => value === true);
         }
     },
     methods: {
