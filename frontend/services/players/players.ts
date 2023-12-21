@@ -36,10 +36,10 @@ export async function createPlayer(token: string, playerData: Partial<Player>): 
   }
 }
 
-export async function updatePlayer(token: string, playerId: string, playerData: Partial<Player>): Promise<Player | null> {
+export async function updatePlayer(token: string, playerData: Partial<Player>): Promise<Player | null> {
   try {
     const data: Partial<Player> & TokenCredentials = { ...playerData, token };
-    const response: AxiosResponse<Player> = await axios.put(`http://127.0.0.1:8000/players/${playerId}/update/`, data);
+    const response: AxiosResponse<Player> = await axios.put(`http://127.0.0.1:8000/players/${playerData.id}/update/`, data);
 
     return response.data;
   } catch (error) {

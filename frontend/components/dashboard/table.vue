@@ -59,7 +59,7 @@
                                 </div>
                                 <BlackButton :icon="false" mdi="mdi-icon-name" :click="filter" buttonText="Filtruj..." class="mr-5"/>
                                 <div class="dropdown dropdown-bottom dropdown-end">
-                                    <button tabindex="0" role="button" class="btn h-[40px] text-white font-inter bg-black hover:bg-[#101010] transition ease-in-out duration-300 font-medium rounded-[0.5rem] text-[1rem] px-4 py-1 w-auto flex items-center justify-center leading-[1.5] tracking-[0.005em]">Sortuj <v-icon>mdi-arrow-down</v-icon></button>
+                                    <button tabindex="0" role="button" class="btn h-[40px] text-white font-inter bg-black hover:bg-[#101010] transition ease-in-out duration-300 font-medium rounded-[0.5rem] text-[1rem] px-4 py-1 w-auto flex items-center justify-center leading-[1.5] tracking-[0.005em]">Sortuj</button>
                                     <ul class="dropdown-content z-[1] menu p-2 shadow bg-white border-[1px] border-gray-300 rounded-box w-[180px] mt-2">
                                         <li>
                                             <div class="form-control">
@@ -95,6 +95,7 @@
                                         </li>
                                     </ul>
                                 </div>
+                                <v-icon @click="changePlayersDirection()" class="text-white bg-black h-[48px] w-[48px] hover:bg-[#101010] transition ease-in-out duration-300 font-medium rounded-[0.5rem] text-[1rem] ml-5 flex items-center justify-center leading-[1.5] tracking-[0.005em] cursor-pointer">mdi-arrow-up-down</v-icon>
                             </div>
                         </div>
                     </div>
@@ -155,7 +156,7 @@
                                     <span class="w-[90px] h-full">{{player.year}}</span>
                                 </div>
                                 <div class="flex items-center justify-center w-[120px]">
-                                    <v-icon @click="this.updatePlayer(player.id, player.name, player.position, player.status, player.image, player.number, player.year)">mdi-pencil-plus</v-icon>
+                                    <v-icon @click="this.updatePlayer(player.id, player.name, player.position, player.status, player.number, player.year)">mdi-pencil-plus</v-icon>
                                     <v-icon @click="this.imagePlayer(player.id, player.name, player.image)" class="mx-5">mdi-image-edit</v-icon>
                                     <v-icon @click="this.deletePlayer(player.id, player.name)">mdi-delete</v-icon>
                                 </div>
@@ -265,7 +266,7 @@
                 </v-window-item>
             </v-window>
             <v-dialog v-model="dialogUpdate" persistent transition="dialog-bottom-transition">
-                <div class="bg-white h-auto w-[500px] p-10 rounded-lg border-[1px] border-gray-300 shadow-md">
+                <v-form @submit.prevent ref="updateValid" v-model="updateValid" class="bg-white h-auto w-[500px] p-10 rounded-lg border-[1px] border-gray-300 shadow-md">
                     <div class="flex flex-row justify-between items-start w-full mb-6">
                         <div class="bg-gray-300 h-[50px] w-[50px] rounded-full flex items-center justify-center">
                             <v-icon>mdi-pencil-plus</v-icon>
@@ -277,10 +278,10 @@
                         <span class="text-[1rem] text-gray-500 leading-[1.5] tracking-[0.005em] mb-3">Historię edycji tego zawodnika możesz sprawdzić w <NuxtLink :to="`/app/user-history?id=${this.currentUpdate.id}`" class="font-bold text-black">Jego historii</NuxtLink>.</span>
                     </div>
                     <div class="flex flex-col mt-3 mb-8 font-poppins">
-                        <v-text-field v-model="this.currentUpdate.name" variant="outlined" class="max-h-[56px] w-full mb-6" placeholder="Name" label="Name"></v-text-field>
-                        <div class="flex flex-row justify-between mb-6">
-                            <v-text-field v-model="this.currentUpdate.number" variant="outlined" class="max-h-[56px] max-w-[48%]" placeholder="Number" label="Number"></v-text-field>
-                            <v-text-field v-model="this.currentUpdate.year" variant="outlined" class="max-h-[56px] max-w-[48%]" placeholder="Birth year" label="Birth year"></v-text-field>
+                        <v-text-field v-model="this.currentUpdate.name" :rules="this.nameRules" variant="outlined" class="max-h-[56px] w-full mb-8" placeholder="Name" label="Name"></v-text-field>
+                        <div class="flex flex-row justify-between mb-8">
+                            <v-text-field v-model="this.currentUpdate.number" :rules="this.numberRules" variant="outlined" class="max-h-[56px] max-w-[48%]" placeholder="Number" label="Number"></v-text-field>
+                            <v-text-field v-model="this.currentUpdate.year" :rules="this.yearRules" variant="outlined" class="max-h-[56px] max-w-[48%]" placeholder="Birth year" label="Birth year"></v-text-field>
                         </div>
                         <div class="flex flex-row justify-between">
                             <v-select v-model="this.currentUpdate.status" variant="outlined" class="max-h-[56px] max-w-[48%]" :items="statuses" item-title="title" item-value="value" return-object placeholder="Status" label="Status"></v-select>
@@ -289,9 +290,9 @@
                     </div>
                     <div class="flex flex-row w-full items-center justify-end font-poppins">
                         <WhiteButton :icon="false" :click="updatePlayerClose" buttonText="Anuluj"/>
-                        <BlackButton :icon="false" :click="updatePlayerDialog" buttonText="Zapisz" class="ml-5"/>
+                        <BlackButton :icon="false" :click="updatePlayerDialog" :loading="buttonLoading" :disabled="updateValid" buttonText="Zapisz" class="ml-5 min-w-[83px]"/>
                     </div>
-                </div>
+                </v-form>
             </v-dialog>
             <v-dialog v-model="dialogImage" persistent transition="dialog-bottom-transition">
                 <div class="bg-white h-auto w-[500px] p-10 rounded-lg border-[1px] border-gray-300 shadow-md">
@@ -346,7 +347,8 @@
                 </div>
             </v-dialog>
             <v-dialog v-model="dialogDelete" persistent transition="dialog-bottom-transition">
-                <div class="bg-white h-auto w-[500px] p-10 rounded-lg border-[1px] border-gray-300 shadow-md">
+                {{ currentDelete.id }}
+                <v-form @submit.prevent ref="deleteValid" v-model="deleteValid"  class="bg-white h-auto w-[500px] p-10 rounded-lg border-[1px] border-gray-300 shadow-md">
                     <div class="flex flex-row justify-between items-start w-full mb-6">
                         <div class="bg-red-200 h-[50px] w-[50px] rounded-full flex items-center justify-center">
                             <v-icon class="text-red-700">mdi-delete</v-icon>
@@ -362,10 +364,10 @@
                         <WhiteButton :icon="false" mdi="mdi-icon-name" :click="deletePlayerClose" buttonText="Anuluj"/>
                         <RedButton :icon="false" mdi="mdi-icon-name" :click="deletePlayerDialog" buttonText="Usuń zawodnika" class="ml-5"/>
                     </div>
-                </div>
+                </v-form>
             </v-dialog>
             <v-dialog v-model="dialogAdd" persistent transition="dialog-top-transition">
-                <div class="bg-white h-auto w-[500px] p-10 rounded-lg border-[1px] border-gray-300 shadow-md">
+                <v-form @submit.prevent ref="addValid" v-model="addValid" class="bg-white h-auto w-[500px] p-10 rounded-lg border-[1px] border-gray-300 shadow-md">
                     <div class="flex flex-row justify-between items-start w-full mb-6">
                         <div class="bg-green-200 h-[50px] w-[50px] rounded-full flex items-center justify-center">
                             <v-icon class="text-green-700">mdi-account-plus</v-icon>
@@ -377,10 +379,10 @@
                         <span class="text-[1rem] text-gray-500 leading-[1.5] tracking-[0.005em]">Dodajesz zawodnika do bazy danych <b>Latarnika Choczewo</b>.</span>
                     </div>
                     <div class="flex flex-col mt-3 mb-8 font-poppins">
-                        <v-text-field v-model="this.currentAdd.name" variant="outlined" class="max-h-[56px] w-full mb-6" placeholder="Name" label="Name"></v-text-field>
-                        <div class="flex flex-row justify-between mb-6">
-                            <v-text-field v-model="this.currentAdd.number" variant="outlined" class="max-h-[56px] max-w-[48%]" placeholder="Number" label="Number"></v-text-field>
-                            <v-text-field v-model="this.currentAdd.year" variant="outlined" class="max-h-[56px] max-w-[48%]" placeholder="Birth year" label="Birth year"></v-text-field>
+                        <v-text-field v-model="this.currentAdd.name" :rules="this.nameRules" variant="outlined" class="max-h-[56px] w-full mb-8" placeholder="Name" label="Name"></v-text-field>
+                        <div class="flex flex-row justify-between mb-8">
+                            <v-text-field v-model="this.currentAdd.number" :rules="this.numberRules" variant="outlined" class="max-h-[56px] max-w-[48%]" placeholder="Number" label="Number"></v-text-field>
+                            <v-text-field v-model="this.currentAdd.year" :rules="this.yearRules" variant="outlined" class="max-h-[56px] max-w-[48%]" placeholder="Birth year" label="Birth year"></v-text-field>
                         </div>
                         <div class="flex flex-row justify-between">
                             <v-select v-model="this.currentAdd.status" variant="outlined" class="max-h-[56px] max-w-[48%]" :items="statuses" item-title="title" item-value="value" return-object placeholder="Status" label="Status"></v-select>
@@ -389,9 +391,9 @@
                     </div>
                     <div class="flex flex-row w-full items-center justify-end font-inter">
                         <WhiteButton :icon="false" mdi="mdi-icon-name" :click="addPlayerClose" buttonText="Anuluj"/>
-                        <GreenButton :icon="false" mdi="mdi-icon-name" :click="addPlayerDialog" buttonText="Dodaj zawodnika" class="ml-5"/>
+                        <GreenButton :icon="false" mdi="mdi-icon-name" :click="addPlayerDialog" :loading="buttonLoading" :disabled="addValid" buttonText="Dodaj zawodnika" class="ml-5 min-w-[164px]"/>
                     </div>
-                </div>
+                </v-form>
             </v-dialog>
             <v-dialog v-model="dialogFilter" persistent transition="dialog-top-transition">
                 <div class="bg-white h-auto w-[500px] p-10 rounded-lg border-[1px] border-gray-300 shadow-md">
@@ -499,24 +501,36 @@
                     </div>
                     <div class="flex flex-row w-full items-center justify-end font-poppins">
                         <WhiteButton :icon="false" mdi="mdi-icon-name" :click="filterClose" buttonText="Anuluj"/>
-                        <GreenButton :icon="false" mdi="mdi-icon-name" :click="updateFilter" buttonText="Filtruj" class="ml-5"/>
+                        <YellowButton :icon="false" mdi="mdi-icon-name" :click="updateFilter" buttonText="Filtruj" class="ml-5"/>
                     </div>
                 </div>
             </v-dialog>
         </div>
+        <v-snackbar v-model="snackbar" :timeout="snackbarTimeout" variant="outlined" color="rgba(1, 1, 1, 0)">
+            <div class="p-4 my-4 w-[350px] text-sm text-green-600 border-[1px] border-green-900 rounded-lg bg-green-50 text-center" role="alert">
+                <span class="font-medium font-inter">{{ this.languageStore.t.auth_sign_up_mess_success }}</span> 
+            </div>
+        </v-snackbar>
+        <v-snackbar v-model="snackbarError" :timeout="snackbarTimeout" variant="outlined" color="rgba(1, 1, 1, 0)">
+            <div class="p-4 my-4 w-[350px] text-sm text-red-600 border-[1px] border-red-900 rounded-lg bg-red-50 text-center" role="alert">
+                <span class="font-medium font-inter">{{ this.languageStore.t.auth_login_mess_error }}</span> 
+            </div>
+        </v-snackbar>
     </section>
 </template>
 
 <script lang="ts">
 import { useAuthStore } from '../../stores/auth';
+import { useLanguageStore } from '../../stores/translations';
 import { getToken } from '../../services/token/getToken';
-import { getPlayers } from '../../services/players/players';
+import { getPlayers, updatePlayer, createPlayer, deletePlayer } from '../../services/players/players';
 
 import BlackButton from '../elements/buttons/BlackButton.vue'
 import GreenButton from '../elements/buttons/GreenButton.vue'
 import WhiteButton from '../elements/buttons/WhiteButton.vue'
 import RedButton from '../elements/buttons/RedButton.vue'
 import BlueButton from '../elements/buttons/BlueButton.vue'
+import YellowButton from '../elements/buttons/YellowButton.vue'
 
 import { Cropper } from 'vue-advanced-cropper';
 import 'vue-advanced-cropper/dist/style.css'; 
@@ -538,6 +552,10 @@ interface SelectedImage {
     url: string;
 }
 
+interface ApiResponse {
+    status: number;
+}
+
 export default{
     components: {
         BlackButton,
@@ -545,14 +563,17 @@ export default{
         WhiteButton,
         RedButton,
         BlueButton,
+        YellowButton,
         Cropper
     },
     data() {
         return {
             loadingTest: true,
             authStore: useAuthStore(),
+            languageStore: useLanguageStore(),
             loading: false,
             loadingImage: false,
+            buttonLoading: false,
 
             sortingOptions: {
                 age: false,
@@ -607,8 +628,8 @@ export default{
             imageIsCropped: null,
 
             statuses: [
-                { title: 'Nieaktywny', value: 'Nieaktywny' },
-                { title: 'Aktywny', value: 'Aktywny' },
+                { title: 'Nieaktywny', value: 'nieaktywny' },
+                { title: 'Aktywny', value: 'aktywny' },
             ],
             positions: [
                 { title: 'Bramkarz', value: 'BR' },
@@ -618,6 +639,17 @@ export default{
             ],
 
             searchText: '',
+
+            snackbar: false,
+            snackbarError: false,
+            snackbarTimeout: 5000,
+
+            nameRules: [],
+            numberRules: [],
+            yearRules: [],
+            addValid: false,
+            updateValid: false,
+            deleteValid: false
         }
     },
     async created() {
@@ -625,6 +657,19 @@ export default{
             this.$router.push('/auth/login?action=login');
         }
         await this.getAllPlayers();
+
+        this.nameRules = [
+            (v) => !!v || this.languageStore.t.rules_email_not,
+            (v) => (v && v.length >= 5 && v.length <= 60) || this.languageStore.t.rules_email_length,
+        ];
+        this.numberRules = [
+            (v) => !isNaN(parseFloat(v)) && isFinite(v) && v >= 1 && v <= 99 || 'Number',
+        ];
+
+        this.yearRules = [
+            (v) => !isNaN(parseFloat(v)) && isFinite(v) && Number.isInteger(parseFloat(v)) && v >= 1970 && v <= 2019 || 'Year',
+        ];
+
     },
     watch: {
         async searchText(newVal) {
@@ -703,13 +748,12 @@ export default{
                 this.loading = false;
             }
         },
-        updatePlayer(id: String, name: String, position: Object, status: Object, image: String, number: String, year: String) {
+        updatePlayer(id: String, name: String, position: Object, status: Object, number: String, year: String) {
             this.currentUpdate = {
                 id: id,
                 name: name,
                 position: position,
                 status: status,
-                image: image,
                 number: number,
                 year: year
             };
@@ -736,8 +780,40 @@ export default{
         imagePlayerDialog() {
             console.log(1)
         },
-        updatePlayerDialog() {
-            console.log(1)
+        async updatePlayerDialog(): Promise<void> {
+            this.buttonLoading = true;
+            try {
+                const valid = await this.$refs.updateValid.validate();
+                if (valid) {
+                    this.token = await getToken();
+                    this.currentUpdate.position = this.currentUpdate.position.value;
+                    this.currentUpdate.status = this.currentUpdate.status.value;
+                    const response = await updatePlayer(this.token, this.currentUpdate);
+                    if (response.status === 0) {
+                        await this.getAllPlayers();
+                        this.snackbar = true;
+                        this.buttonLoading = false;
+                        this.dialogUpdate = false;
+                        this.currentUpdate = {
+                            name: '',
+                            position: { title: 'Bramkarz', value: 'BR' },
+                            status: { title: 'Aktywny', value: 'aktywny' },
+                            number: '',
+                            year: ''
+                        };
+                    } else {
+                        this.snackbarError = true;
+                        this.buttonLoading = false;
+                    }
+                } else {
+                    this.snackbarError = true;
+                    this.buttonLoading = false;
+                }
+            } catch (error) {
+                console.error(error);
+                this.snackbarError = true;
+                this.buttonLoading = false;
+            }
         },
         deletePlayer(id: String, name: String) {
             this.currentDelete = {
@@ -750,15 +826,41 @@ export default{
             this.dialogDelete = false;
             this.currentDelete = {};
         },
-        deletePlayerDialog() {
-            console.log(1)
+        async deletePlayerDialog(): Promise<void> {
+            this.buttonLoading = true;
+            try {
+                const valid = await this.$refs.deleteValid.validate();
+                if (valid) {
+                    this.token = await getToken();
+                    const response = await deletePlayer(this.token, this.currentDelete.id);
+                    if (response) {
+                        await this.getAllPlayers();
+                        this.snackbar = true;
+                        this.buttonLoading = false;
+                        this.dialogDelete = false;
+                        this.currentDelete = {
+                            name: '',
+                            id: ''
+                        };
+                    } else {
+                        this.snackbarError = true;
+                        this.buttonLoading = false;
+                    }
+                } else {
+                    this.snackbarError = true;
+                    this.buttonLoading = false;
+                }
+            } catch (error) {
+                console.error(error);
+                this.snackbarError = true;
+                this.buttonLoading = false;
+            }
         },
         addPlayer() {
             this.currentAdd = {
                 name: '',
                 position: {title: 'Bramkarz', value: 'BR'},
                 status: {title: 'Aktywny', value: 'aktywny'},
-                image: {},
                 number: '',
                 year: ''
             }
@@ -769,7 +871,32 @@ export default{
             this.currentAdd = {};
         },
         async addPlayerDialog() {
-            console.log(1)
+            this.buttonLoading = true;
+            this.$refs.addValid.validate().then(async valid => {
+                if (valid) {
+                    console.log(valid)
+                } else {
+                    this.snackbar = true;
+                    this.buttonLoading = false;
+                }
+            })
+            // console.log(this.currentAdd)
+            this.token = await getToken();
+            // console.log(this.token);
+            this.currentAdd.position = this.currentAdd.position.value;
+            this.currentAdd.status = this.currentAdd.status.value;
+            const response = await createPlayer(this.token, this.currentAdd)
+            console.log(response)
+            this.currentAdd = {
+                name: '',
+                position: {title: 'Bramkarz', value: 'BR'},
+                status: {title: 'Aktywny', value: 'aktywny'},
+                number: '',
+                year: ''
+            }
+            this.buttonLoading = false;
+            this.dialogAdd = false;
+            this.snackbarError = true;
         },
         filter() {
             this.dialogFilter = true;
@@ -943,6 +1070,12 @@ export default{
             this.croppedImage = null;
             this.imageIsCropped = null;
         },
+        changePlayersDirection() {
+            this.playersSorted = this.playersSorted.slice().reverse();
+            for (let i = 0; i < this.playersSorted.length; i++) {
+                this.playersSorted[i] = this.playersSorted[i].slice().reverse();
+            }
+        }
     }
 };
 </script>
@@ -957,7 +1090,6 @@ export default{
   }
 }
 
-// Spinner class
 .spinner {
   border: 4px solid white;
   border-top: 4px solid black;
