@@ -93,6 +93,7 @@ class ListPlayersView(ListAPIView):
     def get_queryset(self):
         referring_url = self.request.META.get('HTTP_REFERER')
 
+        # specific_url = 'https://crud-latarnik-choczewo.vercel.app'
         specific_url = 'http://localhost:3000/'
 
         if referring_url == specific_url:

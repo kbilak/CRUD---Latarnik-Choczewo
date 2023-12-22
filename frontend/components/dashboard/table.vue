@@ -1,9 +1,9 @@
 <template>
-    <section id="table" class="flex flex-col items-center justify-start w-full min-h-[calc(100vh-202px)] text-black bg-gray-50 h-auto">
+    <section id="table" class="flex flex-col items-center justify-start w-full min-h-[calc(100vh-202px)] text-black bg-[#f5f5f5] h-auto">
         <div v-if="authStore.loggedIn" class="xs:max-w-screen-[450px] sm:max-w-screen-sm md:max-w-screen-md lg:max-w-screen-lg xl:max-w-screen-xl 2xl:max-w-screen-xl w-full h-full flex flex-col justify-center items-center">
-            <div class="flex justify-between items-center w-full h-[70px] mt-2">
-                <div class="w-auto px-5 bg-white border-[1px] border-gray-300 rounded-md shadow-md">
-                    <div class="w-auto h-[60px] bg-white pt-1.5">
+            <div class="flex justify-between items-center w-full h-[70px] mt-5">
+                <div class="px-5 bg-white rounded-[0.5rem] w-[300px]">
+                    <div class="w-auto h-[60px] bg-white pt-1.5 font-inter">
                         <v-tabs v-if="this.authStore.user.user.user_type === 'admin'" v-model="tab">
                             <v-tab value="1" class="rounded-tl-lg">Zawodnicy</v-tab>
                             <v-tab value="2" class="rounded-tr-lg">Trenerzy</v-tab>
@@ -14,18 +14,18 @@
                     </div>
                 </div>
                 <div class="flex flex-col">
-                    <div class="flex flex-row justify-end items-center font-raleway">
-                        <span>
+                    <div class="flex flex-row justify-end items-center font-inter">
+                        <span class="text-[1rem] font-[400] tracking-[0.02em] leading-[1.333]">
                             Całkowita liczba zawodników: 
                         </span>
-                        <div v-if="loading" class="skeleton h-[24px] w-[24px] ml-2 rounded-md"></div>
+                        <div v-if="loading" class="skeleton h-[20px] w-[20px] ml-2 rounded-md"></div>
                         <span v-else class="ml-2 font-bold">{{this.players.length}}</span>
                     </div>
-                    <div v-if="this.authStore.user.user.user_type === 'admin'" class="flex flex-row justify-end items-center font-raleway">
-                        <span>
+                    <div v-if="this.authStore.user.user.user_type === 'admin'" class="flex flex-row justify-end items-center font-inter">
+                        <span class="text-[1rem] font-[400] tracking-[0.02em] leading-[1.333]">
                             Całkowita liczba trenerów: 
                         </span>
-                        <div v-if="loading" class="skeleton h-[24px] w-[24px] ml-2 rounded-md"></div>
+                        <div v-if="loading" class="skeleton h-[20px] w-[20px] ml-2 rounded-md"></div>
                         <span v-else class="ml-2 font-bold">{{this.players.length}}</span>
                     </div>
                 </div>
@@ -40,12 +40,15 @@
                     </div>
                     <div class="flex flex-row h-[70px] mb-2 justify-between w-full items-center">
                         <div class="w-full h-[48px] flex justify-between">
-                            <div class="bg-white w-[300px] h-[48px]">
+                            <div class="bg-white w-[300px] h-[48px] rounded-[0.5rem]">
                                 <div class="relative h-[48px]">
                                     <span class="absolute inset-y-0 left-0 flex items-center pl-3">
                                         <v-icon>mdi-magnify</v-icon>
                                     </span>
-                                    <input v-model="searchText" type="text" class="h-full pl-10 pr-4 py-2 rounded-[0.5rem] border border-gray-300 block w-full font-inter text-[1rem] leading-[1.5] tracking-[0.005em]" placeholder="Szukaj zawodnika...">
+                                    <input v-model="searchText" type="text" class="h-full pl-10 pr-4 py-2 rounded-[0.5rem] block w-full font-inter text-[1rem] leading-[1.5] tracking-[0.005em]" placeholder="Szukaj zawodnika...">
+                                    <span v-if="searchText.length > 0" @click="searchText = ''" class="absolute inset-y-0 right-0 flex items-center pr-3 cursor-pointer">
+                                        <v-icon>mdi-close</v-icon>
+                                    </span>
                                 </div>
                             </div>
                             <div class="flex">
@@ -53,7 +56,7 @@
                                     <span class="text-[1rem]">Filtrowanie:</span>
                                     <div class="flex flex-row">
                                         <span v-for="(key, i) in Object.keys(this.filterOptions)" :key="i" class="text-[0.825rem] text-gray-500 flex flex-row">
-                                            <span v-if="this.filterOptions[key] === true" class="flex ml-1"><v-icon @click="this.filterOptions[key] = false, updateFilter()" class="cursor-pointer">mdi-close</v-icon>{{ this.filterOptionsTranslations[i] }}</span>
+                                            <span v-if="this.filterOptions[key] === true" class="flex ml-1"><v-icon @click="this.filterOptions[key] = false, updateFilter(), this.searchText = ''" class="cursor-pointer">mdi-close</v-icon>{{ this.filterOptionsTranslations[i] }}</span>
                                         </span>
                                     </div>
                                 </div>
@@ -99,11 +102,11 @@
                             </div>
                         </div>
                     </div>
-                    <article class="w-full border-[1px] border-gray-300 bg-white h-auto min-h-[662px] rounded-[6px] shadow-md">
+                    <article class="w-full rounded-[1rem] bg-white h-auto">
                         <div v-if="loading" class="w-full min-h-[660px] h-full bg-gray-100 flex items-center justify-center">
                             <div class="spinner"></div>
                         </div>
-                        <div v-else class="w-full flex items-center justify-center flex-col">
+                        <div v-else class="w-full flex items-center justify-start flex-col min-h-[660px]">
                             <div class="w-full h-[60px] border-b-[1px] border-gray-200 flex items-center justify-between px-10 font-inter text-[#0f0f0f] text-[1rem] font-medium leading-6 tracking-[0.005em]">
                                 <div class="flex items-center justify-center">
                                     <span class="w-[70px] h-full">Photo</span>
@@ -132,7 +135,7 @@
                                     Nic nie znaleziono!
                                 </span>
                             </div>
-                            <div v-for="player in this.playersSorted[this.currentPagePlayers - 1]" :key="player.id" class="w-full h-[60px] border-b-[0.0625rem] border-[hsl(0 0% 92%)] flex items-center justify-between px-10 font-inter text-[#2b2b2b]">
+                            <div v-for="(player, index) in this.playersSorted[this.currentPagePlayers - 1]" :key="player.id" :class="{ 'border-b-[0.0625rem] border-[hsl(0 0% 92%)]': index !== this.playersSorted[this.currentPagePlayers - 1].length - 1 }" class="w-full h-[60px] flex items-center justify-between px-10 font-inter text-[#2b2b2b]">
                                 <div class="flex items-center justify-start w-[70px]">
                                     <img :src="player.image" :alt="player.name" class="w-[50px] h-[50px] rounded-md">
                                 </div>
@@ -163,9 +166,9 @@
                             </div>
                         </div>
                     </article>
-                    <div v-if="!loading && pagesPlayers > 0" class="w-full h-auto mt-5 flex text-black items-start justify-between font-inter mb-2">
-                        <div class="w-[230px] h-full border-[1px] border-gray-300 bg-white rounded-md flex items-center">
-                            <select @change="this.changeItemsPerPage(this.itemsPerPage)" v-model="this.itemsPerPage" class="py-3 px-4 block w-[88px] bg-white rounded-md text-sm h-[44px]">
+                    <div v-if="!loading && pagesPlayers > 0" class="w-full h-auto my-5 flex text-black items-center justify-between font-inter">
+                        <div class="w-[230px] h-full bg-white rounded-md flex items-center">
+                            <select @change="this.changeItemsPerPage(this.itemsPerPage)" v-model="this.itemsPerPage" class="py-3 px-4 block w-[88px] bg-white rounded-[0.5rem] text-sm h-[44px]">
                                 <option :value="10">10</option>
                                 <option :value="20">20</option>
                                 <option :value="50">50</option>
@@ -181,7 +184,7 @@
                                 <button @click="this.currentPagePlayers--" :disabled="this.currentPagePlayers === 1" class="text-black w-[35px] h-[35px]">
                                     <v-icon>mdi-chevron-left</v-icon>
                                 </button>
-                                <div v-for="pageNumber in displayedPages" @click="this.currentPagePlayers = pageNumber" :key="pageNumber" class="bg-white cursor-pointer border-gray-300 border-[1px] w-[35px] h-[35px] mx-1 flex items-center justify-center rounded-md" :class="{ 'current-page-div': this.currentPagePlayers === pageNumber }">
+                                <div v-for="pageNumber in displayedPages" @click="this.currentPagePlayers = pageNumber" :key="pageNumber" class="bg-white cursor-pointer w-[35px] h-[35px] mx-1 flex items-center justify-center rounded-md" :class="{ 'current-page-div': this.currentPagePlayers === pageNumber }">
                                     <button :class="{ 'current-page': this.currentPagePlayers === pageNumber }" class="bg-white text-black border-2">
                                         {{ pageNumber }}
                                     </button>
@@ -266,7 +269,7 @@
                 </v-window-item>
             </v-window>
             <v-dialog v-model="dialogUpdate" persistent transition="dialog-bottom-transition">
-                <v-form @submit.prevent ref="updateValid" v-model="updateValid" class="bg-white h-auto w-[500px] p-10 rounded-lg border-[1px] border-gray-300 shadow-md">
+                <v-form @submit.prevent ref="updateValid" v-model="updateValid" class="bg-white h-auto w-[500px] p-10 rounded-[1rem] border-[1px] border-gray-300 shadow-md">
                     <div class="flex flex-row justify-between items-start w-full mb-6">
                         <div class="bg-gray-300 h-[50px] w-[50px] rounded-full flex items-center justify-center">
                             <v-icon>mdi-pencil-plus</v-icon>
@@ -664,7 +667,9 @@ export default{
         if (!this.authStore.loggedIn) {
             this.$router.push('/auth/login?action=login');
         }
-        await this.getAllPlayers();
+        if (this.authStore.loggedIn) {
+            await this.getAllPlayers();
+        }
 
         this.nameRules = [
             (v) => !!v || this.languageStore.t.rules_email_not,
@@ -719,7 +724,29 @@ export default{
                 }
                 return false;
             });
-            this.players = filteredPlayers;
+            function filterPlayers(players, filterOptions) {
+                return players.filter(player => {
+                    const statusCondition =
+                    (!filterOptions.statusA || player.status === "aktywny") &&
+                    (!filterOptions.statusN || player.status === "nieaktywny");
+
+                    const positionCondition =
+                    (!filterOptions.positionB || player.position === "BR") &&
+                    (!filterOptions.positionO || player.position === "OB") &&
+                    (!filterOptions.positionP || player.position === "PO") &&
+                    (!filterOptions.positionN || player.position === "NA");
+
+                    const yearCondition =
+                    (!filterOptions.year1 || (parseInt(player.year) >= 1970 && parseInt(player.year) <= 1999)) &&
+                    (!filterOptions.year2 || (parseInt(player.year) >= 2000 && parseInt(player.year) <= 2005)) &&
+                    (!filterOptions.year3 || (parseInt(player.year) >= 2006 && parseInt(player.year) <= 2010)) &&
+                    (!filterOptions.year4 || (parseInt(player.year) >= 2010 && parseInt(player.year) <= 2019));
+
+                    return statusCondition && positionCondition && yearCondition;
+                });
+            }
+            const playersEnd = filterPlayers(filteredPlayers, this.filterOptions)
+            this.players = playersEnd;
             this.organizePlayers();
             this.updateSorting();
         }
