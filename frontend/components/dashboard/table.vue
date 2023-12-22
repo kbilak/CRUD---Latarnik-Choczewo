@@ -1,5 +1,5 @@
 <template>
-    <section id="table" class="flex flex-col items-center justify-start w-full min-h-[calc(100vh-202px)] text-black bg-[#f5f5f5] h-auto">
+    <section id="table" class="flex flex-col items-center justify-start w-full min-h-[calc(100vh-202px)] text-black bg-[#f5f5f5] dark:bg-slate-800 h-auto">
         <div v-if="authStore.loggedIn" class="xs:max-w-screen-[450px] sm:max-w-screen-sm md:max-w-screen-md lg:max-w-screen-lg xl:max-w-screen-xl 2xl:max-w-screen-xl w-full h-full flex flex-col justify-center items-center">
             <div class="flex justify-between items-center w-full h-[70px] mt-5">
                 <div class="px-5 bg-white rounded-[0.5rem] w-[300px]">

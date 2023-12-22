@@ -14,3 +14,18 @@ class PlayerAdmin(admin.ModelAdmin):
             'fields': ('id', 'name', 'position', 'status', 'image', 'number', 'year',)
         }),
     )
+
+
+@admin.register(Player)
+class PlayerAdmin(admin.ModelAdmin):
+    list_display = ('id', 'name', 'type', 'status', 'number', 'team')
+    search_fields = ('name',)
+    list_filter = ('type', 'status', 'team',)
+    readonly_fields = ('id',) 
+
+    fieldsets = (
+        (None, {
+            'fields': ('id', 'name', 'type', 'status', 'image', 'number', 'team',)
+        }),
+    )
+    

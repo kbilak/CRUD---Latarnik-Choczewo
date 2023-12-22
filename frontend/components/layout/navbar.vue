@@ -1,10 +1,10 @@
 <template>
-    <section id="login" class="flex flex-col items-center justify-center w-full text-black bg-white border-b-[1px] border-gray-300">
+    <section id="login" class="flex flex-col items-center justify-center w-full text-black bg-white">
         <div class="xs:max-w-screen-[450px] sm:max-w-screen-sm md:max-w-screen-md lg:max-w-screen-lg xl:max-w-screen-xl 2xl:max-w-screen-xl w-full h-full flex flex-col justify-between items-center">
-            <div class="flex items-center justify-between h-[100px] w-full 2xl:p-0 xl:p-0 lg:p-0 md:p-0 sm:p-0 xs:p-5">
+            <div class="flex items-center justify-between h-[55px] w-full 2xl:p-0 xl:p-0 lg:p-0 md:p-0 sm:p-0 xs:p-5">
                 <NuxtLink to="/" class="flex flex-row items-center justify-start">
-                    <img src="/logo/logo_latarnik.png" alt="Logo Latarnika Choczewo" class="h-[70px]">
-                    <span class="ml-5 2xl:text-xl xl:text-xl lg:text-xl md:text-xl sm:text-xl xs:text-md font-inter flex flex-col"><span class="text-dark text-[1.5rem] font-medium tracking-[0.02em] leading-[1.333]">Latarnik Choczewo</span><span class="text-[1rem]">Lista zawodników</span></span>
+                    <img src="/logo/logo_latarnik.png" alt="Logo Latarnika Choczewo" class="h-[45px]">
+                    <span class="ml-5 2xl:text-xl xl:text-xl lg:text-xl md:text-xl sm:text-xl xs:text-md font-inter flex flex-col"><span class="text-dark text-[1rem] font-medium tracking-[0.02em] leading-[1.333]">Latarnik Choczewo</span><span class="text-[0.825rem] leading-[1] tracking-[0.02em]">Lista zawodników</span></span>
                 </NuxtLink>
                 <div class="2xl:flex xl:flex lg:flex md:hidden sm:hidden xs:hidden flex-row items-center justify-end">
                     <div v-if="this.authStore.loggedIn" class="dropdown dropdown-bottom dropdown-end border-[1px] border-gray-300 rounded-full mr-5 p-1 h-[44px] w-[44px] flex items-center justify-center">

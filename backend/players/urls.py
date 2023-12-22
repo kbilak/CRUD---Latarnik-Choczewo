@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import CreatePlayerView, DeletePlayerView, UpdatePlayerView, ListPlayersView, image_upload_view
+from .views import *
 
 
 urlpatterns = [
@@ -8,4 +8,8 @@ urlpatterns = [
     path('<uuid:pk>/update/', UpdatePlayerView.as_view(), name='update-player'),
     path('players/', ListPlayersView.as_view(), name='players-list'),
     path('image/', image_upload_view, name='player-image'),
+    path('coaches/', ListCoachesView.as_view(), name='coaches-list'),
+    path('coach/create/', CreateCoachView.as_view(), name='create-coach'),
+    path('coach/<uuid:pk>/delete/', DeleteCoachView.as_view(), name='delete-coach'),
+    path('coach/<uuid:pk>/update/', UpdateCoachView.as_view(), name='update-coach'),
 ]
