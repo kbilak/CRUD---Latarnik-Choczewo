@@ -655,7 +655,9 @@ export default{
             yearRules: [],
             addValid: false,
             updateValid: false,
-            deleteValid: false
+            deleteValid: false,
+
+            socket: null,
         }
     },
     async created() {
@@ -676,6 +678,12 @@ export default{
             (v) => !isNaN(parseFloat(v)) && isFinite(v) && Number.isInteger(parseFloat(v)) && v >= 1970 && v <= 2019 || 'Year',
         ];
 
+        // this.socket = new WebSocket('ws://127.0.0.1:8000/ws/chat/'); // Your WebSocket URL
+        // this.socket.onopen = this.onSocketOpen;
+        // this.socket.onmessage = this.onSocketMessage;
+        // this.socket.onclose = this.onSocketClose;
+        // this.socket.onerror = this.onSocketError;
+        
     },
     watch: {
         async searchText(newVal) {
@@ -742,7 +750,33 @@ export default{
             return Object.values(this.filterOptions).some(value => value === true);
         }
     },
+    beforeDestroy() {
+    // Close the WebSocket connection when the component is destroyed
+        if (this.socket) {
+            this.socket.close();
+        }
+    },
     methods: {
+        websocketSend() {
+            this.socket.send(JSON.stringify({
+                'message': 'hello world'
+            }))
+        },
+        onSocketOpen() {
+            console.log('WebSocket connected');
+        },
+        onSocketMessage(event) {
+            // console.log(event)
+            const data = JSON.parse(event.data);
+            // // Handle the received data (e.g., update UI)
+            console.log('Received data:', data);
+        },
+        onSocketClose() {
+            console.log('WebSocket closed');
+        },
+        onSocketError(error) {
+            console.error('WebSocket error:', error);
+        },
         async getAllPlayers() {
             try {
                 this.loading = true;
@@ -1129,9 +1163,13 @@ export default{
             }
         },
         changePlayersDirection() {
+            this.itemsPerPage = 10;
             const flattened = this.playersSorted.flat();
             
             const reversed = flattened.reverse();
+
+            this.pagesPlayers = Math.ceil(reversed.length / this.itemsPerPage);
+            this.currentPagePlayers = 1;
             
             const packed = [];
             for (let i = 0; i < reversed.length; i += 10) {

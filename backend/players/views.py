@@ -91,17 +91,13 @@ class ListPlayersView(ListAPIView):
     serializer_class = PlayerSerializer
 
     def get_queryset(self):
-        # Get the referring URL from the request headers
         referring_url = self.request.META.get('HTTP_REFERER')
 
-        # Define the allowed URL
         specific_url = 'http://localhost:3000/'
 
         if referring_url == specific_url:
-            # Return queryset only if the request comes from the specific URL
             return Player.objects.all()
         else:
-            # Raise PermissionDenied if the request doesn't come from the specific URL
             raise PermissionDenied("Access denied for this URL")
 
 
