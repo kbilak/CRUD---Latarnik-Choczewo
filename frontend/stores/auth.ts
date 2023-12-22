@@ -34,7 +34,6 @@ export const useAuthStore = defineStore({
             }
         },
         async signUp(email: string, password: string) {
-            await this.fetchToken();
             const response = await signUp(email, password, this.token);
             this.token = '';
             if (response) {

@@ -23,9 +23,14 @@ def check_token(token_to_check):
 
 class CreateUserView(APIView):
     def post(self, request):
-        token_to_check = request.data.get('token', '')
+        token_to_check = None
+        auth_header = request.headers.get('Authorization')
 
-        if not check_token(token_to_check):
+        if auth_header and auth_header.startswith('Bearer '):
+            token_to_check = auth_header.split(' ')[1]
+
+        print(token_to_check)
+        if token_to_check and not check_token(token_to_check):
             return Response({'status': 1, 'error': 'Invalid or expired token'}, status=status.HTTP_403_FORBIDDEN)
 
         user_email = request.data.get('email')
@@ -47,10 +52,13 @@ class CreateUserView(APIView):
             return Response({'status': 1, 'error': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
 
 
-
 class LoginUserView(APIView):
     def post(self, request):
-        token_to_check = request.data.get('token', '')
+        token_to_check = None
+        auth_header = request.headers.get('Authorization')
+
+        if auth_header and auth_header.startswith('Bearer '):
+            token_to_check = auth_header.split(' ')[1]
 
         if token_to_check and not check_token(token_to_check):
             return Response({'status': 1, 'error': 'Invalid or expired token'}, status=status.HTTP_403_FORBIDDEN)

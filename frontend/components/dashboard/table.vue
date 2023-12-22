@@ -35,7 +35,7 @@
                     <div class="flex flex-row w-full justify-between items-center mt-2 h-[70px]">
                         <div class="flex flex-row justify-between items-center w-full">
                             <span class="text-[1.5rem] font-medium font-inter mr-10 leading-[1.333] tracking-[0.02em] text-[#0f0f0f]">Zawodnicy</span>
-                            <BlackButton :icon="false" mdi="mdi-icon-name" :click="addPlayer" buttonText="Dodaj zawodnika"/>
+                            <GreenButton :icon="false" mdi="mdi-icon-name" :click="addPlayer" buttonText="Dodaj zawodnika"/>
                         </div>
                     </div>
                     <div class="flex flex-row h-[70px] mb-2 justify-between w-full items-center">
@@ -123,7 +123,7 @@
                                 <div class="flex items-center justify-center text-center">
                                     <span class="w-[90px] h-full">Year</span>
                                 </div>
-                                <div class="flex items-center justify-center text-center">
+                                <div v-if="this.authStore.user.user.user_type === 'admin'" class="flex items-center justify-center text-center">
                                     <span class="w-[120px] h-full">Operacje</span>
                                 </div>
                             </div>
@@ -155,7 +155,7 @@
                                 <div class="flex items-center justify-center text-center">
                                     <span class="w-[90px] h-full">{{player.year}}</span>
                                 </div>
-                                <div class="flex items-center justify-center w-[120px]">
+                                <div v-if="this.authStore.user.user.user_type === 'admin'" class="flex items-center justify-center w-[120px]">
                                     <v-icon @click="this.updatePlayer(player.id, player.name, player.position, player.status, player.number, player.year)">mdi-pencil-plus</v-icon>
                                     <v-icon @click="this.imagePlayer(player.id, player.name, player.image)" class="mx-5">mdi-image-edit</v-icon>
                                     <v-icon @click="this.deletePlayer(player.id, player.name)">mdi-delete</v-icon>
@@ -873,33 +873,43 @@ export default{
             this.dialogAdd = false; 
             this.currentAdd = {};
         },
-        async addPlayerDialog() {
+        async addPlayerDialog(): Promise<void> {
             this.buttonLoading = true;
-            this.$refs.addValid.validate().then(async valid => {
+            try {
+                const valid: boolean = await this.$refs.addValid.validate();
+                
                 if (valid) {
-                    console.log(valid)
+                    this.token = await getToken();
+                    this.currentAdd.position = this.currentAdd.position.value;
+                    this.currentAdd.status = this.currentAdd.status.value;
+                    
+                    const response = await createPlayer(this.token, this.currentAdd);
+
+                    if (response.status === 0) {
+                        await this.getAllPlayers();
+                        this.snackbar = false;
+                        this.buttonLoading = false;
+                        this.dialogAdd = false;
+                        this.currentAdd = {
+                            name: '',
+                            position: { title: 'Bramkarz', value: 'BR' },
+                            status: { title: 'Aktywny', value: 'aktywny' },
+                            number: '',
+                            year: ''
+                        };
+                    } else {
+                        this.buttonLoading = false;
+                        this.snackbarError = true;
+                    }
                 } else {
                     this.snackbar = true;
                     this.buttonLoading = false;
                 }
-            })
-            // console.log(this.currentAdd)
-            this.token = await getToken();
-            // console.log(this.token);
-            this.currentAdd.position = this.currentAdd.position.value;
-            this.currentAdd.status = this.currentAdd.status.value;
-            const response = await createPlayer(this.token, this.currentAdd)
-            console.log(response)
-            this.currentAdd = {
-                name: '',
-                position: {title: 'Bramkarz', value: 'BR'},
-                status: {title: 'Aktywny', value: 'aktywny'},
-                number: '',
-                year: ''
+            } catch (error) {
+                console.error(error);
+                this.buttonLoading = false;
+                this.snackbarError = true;
             }
-            this.buttonLoading = false;
-            this.dialogAdd = false;
-            this.snackbarError = true;
         },
         filter() {
             this.dialogFilter = true;
@@ -1119,10 +1129,15 @@ export default{
             }
         },
         changePlayersDirection() {
-            this.playersSorted = this.playersSorted.slice().reverse();
-            for (let i = 0; i < this.playersSorted.length; i++) {
-                this.playersSorted[i] = this.playersSorted[i].slice().reverse();
-            }
+            const flattened = this.playersSorted.flat();
+            
+            const reversed = flattened.reverse();
+            
+            const packed = [];
+            for (let i = 0; i < reversed.length; i += 10) {
+                packed.push(reversed.slice(i, i + 10));
+            }            
+            this.playersSorted = packed;
         }
     }
 };

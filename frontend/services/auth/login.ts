@@ -16,11 +16,16 @@ export interface TokenCredentials {
 
 export async function login(email: string, password: string, token: string): Promise<AuthResponse | null> {
   try {
-    const data: LoginCredentials & TokenCredentials = { email, password, token };
+    const headers = {
+      Authorization: `Bearer ${token}`,
+    };
+
+    const data: LoginCredentials = { email, password };
 
     const response: AxiosResponse<AuthResponse> = await axios.post(
       'http://127.0.0.1:8000/auth/login/',
-      data
+      data,
+      { headers }
     );
 
     return response.data;

@@ -8,6 +8,8 @@ from tokens.models import Token
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import get_object_or_404
+from rest_framework.exceptions import PermissionDenied
+
 
 def check_token(token_to_check):
     try:
@@ -24,7 +26,11 @@ def check_token(token_to_check):
 
 class CreatePlayerView(APIView):
     def post(self, request):
-        token_to_check = request.data.get('token', '')
+        token_to_check = None
+        auth_header = request.headers.get('Authorization')
+
+        if auth_header and auth_header.startswith('Bearer '):
+            token_to_check = auth_header.split(' ')[1]
 
         if not check_token(token_to_check):
             return Response({'status': 1, 'error': 'Invalid or expired token'}, status=status.HTTP_403_FORBIDDEN)
@@ -37,9 +43,14 @@ class CreatePlayerView(APIView):
             return Response({'status': 1, 'error': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
 
 
+
 class DeletePlayerView(APIView):
     def delete(self, request, pk):
-        token_to_check = request.data.get('token', '')
+        token_to_check = None
+        auth_header = request.headers.get('Authorization')
+
+        if auth_header and auth_header.startswith('Bearer '):
+            token_to_check = auth_header.split(' ')[1]
 
         if not check_token(token_to_check):
             return Response({'status': 1, 'error': 'Invalid or expired token'}, status=status.HTTP_403_FORBIDDEN)
@@ -54,7 +65,11 @@ class DeletePlayerView(APIView):
 
 class UpdatePlayerView(APIView):
     def put(self, request, pk):
-        token_to_check = request.data.get('token', '')
+        token_to_check = None
+        auth_header = request.headers.get('Authorization')
+
+        if auth_header and auth_header.startswith('Bearer '):
+            token_to_check = auth_header.split(' ')[1]
 
         if not check_token(token_to_check):
             return Response({'status': 1, 'error': 'Invalid or expired token'}, status=status.HTTP_403_FORBIDDEN)
@@ -73,8 +88,21 @@ class UpdatePlayerView(APIView):
 
 
 class ListPlayersView(ListAPIView):
-    queryset = Player.objects.all()
     serializer_class = PlayerSerializer
+
+    def get_queryset(self):
+        # Get the referring URL from the request headers
+        referring_url = self.request.META.get('HTTP_REFERER')
+
+        # Define the allowed URL
+        specific_url = 'http://localhost:3000/'
+
+        if referring_url == specific_url:
+            # Return queryset only if the request comes from the specific URL
+            return Player.objects.all()
+        else:
+            # Raise PermissionDenied if the request doesn't come from the specific URL
+            raise PermissionDenied("Access denied for this URL")
 
 
 @csrf_exempt
