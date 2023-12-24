@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Player
+from .models import Player, Coach
 
 
 @admin.register(Player)
@@ -16,16 +16,16 @@ class PlayerAdmin(admin.ModelAdmin):
     )
 
 
-@admin.register(Player)
-class PlayerAdmin(admin.ModelAdmin):
-    list_display = ('id', 'name', 'type', 'status', 'number', 'team')
+@admin.register(Coach)
+class CoachAdmin(admin.ModelAdmin):
+    list_display = ('id', 'name', 'type', 'status', 'team')
     search_fields = ('name',)
     list_filter = ('type', 'status', 'team',)
     readonly_fields = ('id',) 
 
     fieldsets = (
         (None, {
-            'fields': ('id', 'name', 'type', 'status', 'image', 'number', 'team',)
+            'fields': ('id', 'name', 'type', 'status', 'image', 'team',)
         }),
     )
     

@@ -1,56 +1,35 @@
 <template>
-    <section id="table" class="flex flex-col items-center justify-start w-full min-h-[calc(100vh-202px)] text-black bg-[#f5f5f5] dark:bg-slate-800 h-auto">
+    <section id="table" class="flex flex-col items-center justify-start w-full min-h-[calc(100vh-110px)] text-black bg-[#f5f5f5] dark:bg-slate-800 h-auto">
         <div v-if="authStore.loggedIn" class="xs:max-w-screen-[450px] sm:max-w-screen-sm md:max-w-screen-md lg:max-w-screen-lg xl:max-w-screen-xl 2xl:max-w-screen-xl w-full h-full flex flex-col justify-center items-center">
             <div class="flex justify-between items-center w-full h-[70px] mt-5">
-                <div class="px-5 bg-white rounded-[0.5rem] w-[300px]">
-                    <div class="w-auto h-[60px] bg-white pt-1.5 font-inter">
-                        <v-tabs v-if="this.authStore.user.user.user_type === 'admin'" v-model="tab">
-                            <v-tab value="1" class="rounded-tl-lg">Zawodnicy</v-tab>
-                            <v-tab value="2" class="rounded-tr-lg">Trenerzy</v-tab>
+                <div class="rounded-[0.5rem] w-full flex justify-between">
+                    <div class="w-auto h-[48px] bg-white font-inter rounded-[0.5rem]">
+                        <v-tabs v-if="this.authStore.user.user.user_type === 'admin'" v-model="tab" class="flex items-center justify-center">
+                            <v-tab value="1" class="rounded-tl-lg ml-5 mt-[-3px]">Zawodnicy</v-tab>
+                            <v-tab value="2" class="rounded-tr-lg mr-5 mt-[-3px]">Trenerzy</v-tab>
                         </v-tabs>
                         <v-tabs v-else v-model="tab">
                             <v-tab value="1" class="rounded-t-lg">Zawodnicy</v-tab>
                         </v-tabs>
                     </div>
-                </div>
-                <div class="flex flex-col">
-                    <div class="flex flex-row justify-end items-center font-inter">
-                        <span class="text-[1rem] font-[400] tracking-[0.02em] leading-[1.333]">
-                            Całkowita liczba zawodników: 
-                        </span>
-                        <div v-if="loading" class="skeleton h-[20px] w-[20px] ml-2 rounded-md"></div>
-                        <span v-else class="ml-2 font-bold">{{this.players.length}}</span>
-                    </div>
-                    <div v-if="this.authStore.user.user.user_type === 'admin'" class="flex flex-row justify-end items-center font-inter">
-                        <span class="text-[1rem] font-[400] tracking-[0.02em] leading-[1.333]">
-                            Całkowita liczba trenerów: 
-                        </span>
-                        <div v-if="loading" class="skeleton h-[20px] w-[20px] ml-2 rounded-md"></div>
-                        <span v-else class="ml-2 font-bold">{{this.players.length}}</span>
+                    <div class="bg-white w-auto h-[48px] rounded-[0.5rem] ml-5">
+                        <div class="relative h-[48px] flex items-center justify-center">
+                            <span class="absolute inset-y-0 left-0 flex items-center pl-3">
+                                <v-icon>mdi-magnify</v-icon>
+                            </span>
+                            <input v-model="searchText" type="text" class="h-full pl-10 pr-4 py-2 rounded-[0.5rem] block w-full font-inter text-[1rem] leading-[1.5] tracking-[0.005em]" placeholder="Szukaj zawodnika...">
+                            <span v-if="searchText.length > 0" @click="searchText = ''" class="absolute inset-y-0 right-0 flex items-center pr-3 cursor-pointer">
+                                <v-icon>mdi-close</v-icon>
+                            </span>
+                        </div>
                     </div>
                 </div>
             </div>
             <v-window v-model="tab" class="w-full">
                 <v-window-item value="1" class="w-full flex flex-col items-center justify-center">
-                    <div class="flex flex-row w-full justify-between items-center mt-2 h-[70px]">
-                        <div class="flex flex-row justify-between items-center w-full">
-                            <span class="text-[1.5rem] font-medium font-inter mr-10 leading-[1.333] tracking-[0.02em] text-[#0f0f0f]">Zawodnicy</span>
-                            <GreenButton :icon="false" mdi="mdi-icon-name" :click="addPlayer" buttonText="Dodaj zawodnika"/>
-                        </div>
-                    </div>
                     <div class="flex flex-row h-[70px] mb-2 justify-between w-full items-center">
                         <div class="w-full h-[48px] flex justify-between">
-                            <div class="bg-white w-[300px] h-[48px] rounded-[0.5rem]">
-                                <div class="relative h-[48px]">
-                                    <span class="absolute inset-y-0 left-0 flex items-center pl-3">
-                                        <v-icon>mdi-magnify</v-icon>
-                                    </span>
-                                    <input v-model="searchText" type="text" class="h-full pl-10 pr-4 py-2 rounded-[0.5rem] block w-full font-inter text-[1rem] leading-[1.5] tracking-[0.005em]" placeholder="Szukaj zawodnika...">
-                                    <span v-if="searchText.length > 0" @click="searchText = ''" class="absolute inset-y-0 right-0 flex items-center pr-3 cursor-pointer">
-                                        <v-icon>mdi-close</v-icon>
-                                    </span>
-                                </div>
-                            </div>
+                            <MainButton :click="addPlayer" type="green" />
                             <div class="flex">
                                 <div v-if="shouldDisplayFilterDiv" class="flex flex-col font-inter mr-3 items-end justify-center">
                                     <span class="text-[1rem]">Filtrowanie:</span>
@@ -60,9 +39,9 @@
                                         </span>
                                     </div>
                                 </div>
-                                <BlackButton :icon="false" mdi="mdi-icon-name" :click="filter" buttonText="Filtruj..." class="mr-5"/>
+                                <MainButton :click="filter" type="black" buttonText="Filtruj..." class="mr-5" />
                                 <div class="dropdown dropdown-bottom dropdown-end">
-                                    <button tabindex="0" role="button" class="btn h-[40px] text-white font-inter bg-black hover:bg-[#101010] transition ease-in-out duration-300 font-medium rounded-[0.5rem] text-[1rem] px-4 py-1 w-auto flex items-center justify-center leading-[1.5] tracking-[0.005em]">Sortuj</button>
+                                    <MainButton tabindex="0" type="black" buttonText="Sortuj" />
                                     <ul class="dropdown-content z-[1] menu p-2 shadow bg-white border-[1px] border-gray-300 rounded-box w-[180px] mt-2">
                                         <li>
                                             <div class="form-control">
@@ -102,14 +81,14 @@
                             </div>
                         </div>
                     </div>
-                    <article class="w-full rounded-[1rem] bg-white h-auto">
-                        <div v-if="loading" class="w-full min-h-[660px] h-full bg-gray-100 flex items-center justify-center">
+                    <article class="w-full rounded-[0.5rem] bg-white h-auto">
+                        <div v-if="loading" class="w-full min-h-[660px] h-full flex items-center justify-center">
                             <div class="spinner"></div>
                         </div>
                         <div v-else class="w-full flex items-center justify-start flex-col min-h-[660px]">
                             <div class="w-full h-[60px] border-b-[1px] border-gray-200 flex items-center justify-between px-10 font-inter text-[#0f0f0f] text-[1rem] font-medium leading-6 tracking-[0.005em]">
                                 <div class="flex items-center justify-center">
-                                    <span class="w-[70px] h-full">Photo</span>
+                                    <span class="w-[60px] h-full">Photo</span>
                                 </div>
                                 <div class="flex items-center justify-center">
                                     <span class="w-[150px] h-full">Name</span>
@@ -136,7 +115,7 @@
                                 </span>
                             </div>
                             <div v-for="(player, index) in this.playersSorted[this.currentPagePlayers - 1]" :key="player.id" :class="{ 'border-b-[0.0625rem] border-[hsl(0 0% 92%)]': index !== this.playersSorted[this.currentPagePlayers - 1].length - 1 }" class="w-full h-[60px] flex items-center justify-between px-10 font-inter text-[#2b2b2b]">
-                                <div class="flex items-center justify-start w-[70px]">
+                                <div class="flex items-center justify-start w-[60px]">
                                     <img :src="player.image" :alt="player.name" class="w-[50px] h-[50px] rounded-md">
                                 </div>
                                 <div class="flex items-center justify-center">
@@ -177,22 +156,22 @@
                         </div>
                         <div class="pagination flex items-center justify-center flex-col">
                             <span v-if="this.pagesPlayers > 1" class="flex items-center">
-                                <button @click="this.currentPagePlayers = 1" class="text-black w-[35px] h-[35px]">
+                                <button @click="this.currentPagePlayers = 1" class="text-black w-[35px] h-[35px] cursor-pointer">
                                     <v-icon>mdi-chevron-left</v-icon>
                                     <v-icon class="ml-[-18px]">mdi-chevron-left</v-icon>
                                 </button>
-                                <button @click="this.currentPagePlayers--" :disabled="this.currentPagePlayers === 1" class="text-black w-[35px] h-[35px]">
+                                <button @click="this.currentPagePlayers--" :disabled="this.currentPagePlayers === 1" class="text-black w-[35px] h-[35px] cursor-pointer">
                                     <v-icon>mdi-chevron-left</v-icon>
                                 </button>
-                                <div v-for="pageNumber in displayedPages" @click="this.currentPagePlayers = pageNumber" :key="pageNumber" class="bg-white cursor-pointer w-[35px] h-[35px] mx-1 flex items-center justify-center rounded-md" :class="{ 'current-page-div': this.currentPagePlayers === pageNumber }">
+                                <div v-for="pageNumber in displayedPages" @click="this.currentPagePlayers = pageNumber" :key="pageNumber" class="bg-white w-[35px] h-[35px] mx-1 flex items-center justify-center rounded-md cursor-pointer" :class="{ 'current-page-div': this.currentPagePlayers === pageNumber }">
                                     <button :class="{ 'current-page': this.currentPagePlayers === pageNumber }" class="bg-white text-black border-2">
                                         {{ pageNumber }}
                                     </button>
                                 </div>
-                                <button @click="this.currentPagePlayers++" :disabled="this.currentPagePlayers === this.pagesPlayers" class="text-black w-[35px] h-[35px]">
+                                <button @click="this.currentPagePlayers++" :disabled="this.currentPagePlayers === this.pagesPlayers" class="text-black w-[35px] h-[35px] cursor-pointer">
                                     <v-icon>mdi-chevron-right</v-icon>
                                 </button>
-                                <button @click="this.currentPagePlayers = this.pagesPlayers" class="text-black w-[35px] h-[35px]">
+                                <button @click="this.currentPagePlayers = this.pagesPlayers" class="text-black w-[35px] h-[35px] cursor-pointer">
                                     <v-icon>mdi-chevron-right</v-icon>
                                     <v-icon class="ml-[-18px]">mdi-chevron-right</v-icon>
                                 </button>
@@ -292,8 +271,8 @@
                         </div>
                     </div>
                     <div class="flex flex-row w-full items-center justify-end font-poppins">
-                        <WhiteButton :icon="false" :click="updatePlayerClose" buttonText="Anuluj"/>
-                        <BlackButton :icon="false" :click="updatePlayerDialog" :loading="buttonLoading" :disabled="updateValid" buttonText="Zapisz" class="ml-5 min-w-[83px]"/>
+                        <MainButton :click="updatePlayerClose" type="white" buttonText="Anuluj" style="color: black !important;" />
+                        <MainButton :click="updatePlayerDialog" type="black" :loading="buttonLoading" :disabled="!updateValid" buttonText="Zapisz" class="ml-5" />
                     </div>
                 </v-form>
             </v-dialog>
@@ -326,16 +305,16 @@
 
                         <cropper v-if="!isObjectEmpty(selectedImage) && !this.imageIsCropped" class="cropper" :src="selectedImage.url" :stencil-props="{aspectRatio: 1 / 1, }" ref="cropper"/>
                         <div v-if="!isObjectEmpty(selectedImage) && !this.imageIsCropped" class="flex mt-5 w-full items-center justify-end">
-                            <WhiteButton :icon="false" :click="imagePlayerClose" buttonText="Anuluj"/>
-                            <RedButton :icon="false" :click="deleteImagePreview" buttonText="Usuń zdjęcie" class="ml-5" />
-                            <GreenButton :icon="false" :click="cropImage" buttonText="Wytnij" class="ml-5" />
+                            <MainButton :click="imagePlayerClose" type="white" buttonText="Anuluj" style="color: black !important;" />
+                            <MainButton :click="deleteImagePreview" type="red" buttonText="Usuń zdjęcie" class="ml-5" />
+                            <MainButton :click="cropImage" type="green" buttonText="Wytnij" class="ml-5" />
                         </div>
 
                         <canvas v-if="!isObjectEmpty(selectedImage) && this.imageIsCropped" ref="canvas" class="rounded-xl max-h-[600px] w-auto object-contain"></canvas>
                     </div>
 
                     <div v-if="isObjectEmpty(selectedImage)" class="flex flex-row w-full items-center justify-end font-poppins">
-                        <WhiteButton :icon="false" :click="imagePlayerClose" buttonText="Anuluj"/>
+                        <MainButton :click="imagePlayerClose" type="white" buttonText="Anuluj" style="color: black !important;" />
                         <label v-if="isObjectEmpty(selectedImage)" @click="this.loadingImage = true;" for="file-upload" class="btn h-[40px] text-white bg-blue-700 hover:bg-blue-800 transition ease-in-out duration-300 rounded-[0.5rem] text-[1rem] font-medium px-4 py-1 w-auto flex items-center justify-center font-inter leading-[1.5] tracking-[0.005em] ml-5">
                             Dodaj nowe zdjęcie
                         </label>
@@ -343,9 +322,9 @@
                     </div>
 
                     <div v-if="imageIsCropped && !isObjectEmpty(selectedImage)" class="flex flex-row items-center justify-end mt-10">
-                        <WhiteButton :icon="false" :click="imagePlayerClose" buttonText="Anuluj"/>
-                        <RedButton v-if="croppedImage !== null" :icon="false" :click="deleteCanvasImage" buttonText="Usuń zdjęcie" class="ml-5" />
-                        <BlueButton :icon="false" :click="imagePlayerDialog" buttonText="Zapisz zdjęcie" class="ml-5" />
+                        <MainButton :click="imagePlayerClose" type="white" buttonText="Anuluj" style="color: black !important;" />
+                        <MainButton v-if="croppedImage !== null" :click="deleteCanvasImage" type="red" buttonText="Usuń zdjęcie" class="ml-5" />
+                        <Input :icon="false" :click="imagePlayerDialog" buttonText="Zapisz zdjęcie" class="ml-5" />
                     </div>
                 </div>
             </v-dialog>
@@ -364,8 +343,8 @@
                         <span class="text-[1rem] text-red-700 leading-[1.5] tracking-[0.005em]">Ta akcja <b>nie może</b> być cofnięta.</span>
                     </div>
                     <div class="flex flex-row w-full items-center justify-end font-poppins">
-                        <WhiteButton :icon="false" mdi="mdi-icon-name" :click="deletePlayerClose" buttonText="Anuluj"/>
-                        <RedButton :icon="false" mdi="mdi-icon-name" :click="deletePlayerDialog" buttonText="Usuń zawodnika" class="ml-5"/>
+                        <MainButton :click="deletePlayerClose" type="white" buttonText="Anuluj" style="color: black !important;" />
+                        <MainButton :click="deletePlayerDialog" type="red" buttonText="Usuń zawodnika" class="ml-5" />
                     </div>
                 </v-form>
             </v-dialog>
@@ -393,8 +372,8 @@
                         </div>
                     </div>
                     <div class="flex flex-row w-full items-center justify-end font-inter">
-                        <WhiteButton :icon="false" mdi="mdi-icon-name" :click="addPlayerClose" buttonText="Anuluj"/>
-                        <GreenButton :icon="false" mdi="mdi-icon-name" :click="addPlayerDialog" :loading="buttonLoading" :disabled="addValid" buttonText="Dodaj zawodnika" class="ml-5 min-w-[164px]"/>
+                        <MainButton :click="addPlayerClose" type="white" buttonText="Anuluj" style="color: black !important;" />
+                        <MainButton :click="addPlayerDialog" :loading="buttonLoading" :disabled="!addValid" type="green" class="ml-5" />
                     </div>
                 </v-form>
             </v-dialog>
@@ -503,25 +482,28 @@
                         </div>
                     </div>
                     <div class="flex flex-row w-full items-center justify-end font-poppins">
-                        <WhiteButton :icon="false" mdi="mdi-icon-name" :click="filterClose" buttonText="Anuluj"/>
-                        <YellowButton :icon="false" mdi="mdi-icon-name" :click="updateFilter" buttonText="Filtruj" class="ml-5"/>
+                        <MainButton :click="filterClose" type="white" buttonText="Anuluj" style="color: black !important;" />
+                        <MainButton :click="updateFilter" type="yellow" buttonText="Filtruj" class="ml-5" style="color: white !important;" />
                     </div>
                 </div>
             </v-dialog>
         </div>
         <v-snackbar v-model="snackbar" :timeout="snackbarTimeout" variant="outlined" color="rgba(1, 1, 1, 0)">
-            <div class="p-4 my-4 w-[350px] text-sm text-green-600 border-[1px] border-green-900 rounded-lg bg-green-50 text-center" role="alert">
+            <div class="p-4 my-4 w-[350px] text-sm text-green-600 border-[1px] border-green-900 rounded-lg bg-green-50 text-center flex items-start justify-between" role="alert">
                 <span class="font-medium font-inter">{{ this.languageStore.t.auth_sign_up_mess_success }}</span> 
+                <v-icon @click="this.snackbar = false;">mdi-close</v-icon>
             </div>
         </v-snackbar>
         <v-snackbar v-model="snackbarError" :timeout="snackbarTimeout" variant="outlined" color="rgba(1, 1, 1, 0)">
             <div class="p-4 my-4 w-[350px] text-sm text-red-600 border-[1px] border-red-900 rounded-lg bg-red-50 text-center" role="alert">
                 <span class="font-medium font-inter">{{ this.languageStore.t.auth_login_mess_error }}</span> 
+                <v-icon @click="this.snackbarError = false;">mdi-close</v-icon>
             </div>
         </v-snackbar>
         <v-snackbar v-model="snackbarErrorPhoto" :timeout="snackbarTimeout" variant="outlined" color="rgba(1, 1, 1, 0)">
             <div class="p-4 my-4 w-[350px] text-sm text-red-600 border-[1px] border-red-900 rounded-lg bg-red-50 text-center" role="alert">
                 <span class="font-medium font-inter">{{ this.languageStore.t.auth_login_mess_error }}</span> 
+                <v-icon @click="this.snackbarErrorPhoto = false;">mdi-close</v-icon>
             </div>
         </v-snackbar>
     </section>
@@ -533,12 +515,8 @@ import { useLanguageStore } from '../../stores/translations';
 import { getToken } from '../../services/token/getToken';
 import { getPlayers, updatePlayer, createPlayer, deletePlayer } from '../../services/players/players';
 
-import BlackButton from '../elements/buttons/BlackButton.vue'
-import GreenButton from '../elements/buttons/GreenButton.vue'
-import WhiteButton from '../elements/buttons/WhiteButton.vue'
-import RedButton from '../elements/buttons/RedButton.vue'
-import BlueButton from '../elements/buttons/BlueButton.vue'
-import YellowButton from '../elements/buttons/YellowButton.vue'
+import MainButton from '../elements/MainButton.vue'
+import Input from '../elements/Input.vue'
 
 import { Cropper } from 'vue-advanced-cropper';
 import 'vue-advanced-cropper/dist/style.css'; 
@@ -566,13 +544,9 @@ interface ApiResponse {
 
 export default{
     components: {
-        BlackButton,
-        GreenButton,
-        WhiteButton,
-        RedButton,
-        BlueButton,
-        YellowButton,
-        Cropper
+        Cropper,
+        MainButton,
+        Input
     },
     data() {
         return {
@@ -808,6 +782,28 @@ export default{
             try {
                 this.loading = true;
                 this.players = await getPlayers(); 
+                function filterPlayers(players, filterOptions) {
+                    return players.filter(player => {
+                        const statusCondition =
+                        (!filterOptions.statusA || player.status === "aktywny") &&
+                        (!filterOptions.statusN || player.status === "nieaktywny");
+
+                        const positionCondition =
+                        (!filterOptions.positionB || player.position === "BR") &&
+                        (!filterOptions.positionO || player.position === "OB") &&
+                        (!filterOptions.positionP || player.position === "PO") &&
+                        (!filterOptions.positionN || player.position === "NA");
+
+                        const yearCondition =
+                        (!filterOptions.year1 || (parseInt(player.year) >= 1970 && parseInt(player.year) <= 1999)) &&
+                        (!filterOptions.year2 || (parseInt(player.year) >= 2000 && parseInt(player.year) <= 2005)) &&
+                        (!filterOptions.year3 || (parseInt(player.year) >= 2006 && parseInt(player.year) <= 2010)) &&
+                        (!filterOptions.year4 || (parseInt(player.year) >= 2010 && parseInt(player.year) <= 2019));
+
+                        return statusCondition && positionCondition && yearCondition;
+                    });
+                }
+                this.players = filterPlayers(this.players, this.filterOptions)
                 await this.organizePlayers(); 
                 this.loading = false;
             } catch (error) {
@@ -948,7 +944,7 @@ export default{
 
                     if (response.status === 0) {
                         await this.getAllPlayers();
-                        this.snackbar = false;
+                        this.snackbar = true;
                         this.buttonLoading = false;
                         this.dialogAdd = false;
                         this.currentAdd = {
@@ -1037,6 +1033,7 @@ export default{
         async changeItemsPerPage(number: Number) {
             this.itemsPerPage = number;
             await this.organizePlayers();
+            this.currentPagePlayers = 1;
             this.updateSorting();
         },
         async getTokenString() {

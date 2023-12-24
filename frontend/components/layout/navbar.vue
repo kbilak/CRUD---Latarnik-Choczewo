@@ -7,9 +7,9 @@
                     <span class="ml-5 2xl:text-xl xl:text-xl lg:text-xl md:text-xl sm:text-xl xs:text-md font-inter flex flex-col"><span class="text-dark text-[1rem] font-medium tracking-[0.02em] leading-[1.333]">Latarnik Choczewo</span><span class="text-[0.825rem] leading-[1] tracking-[0.02em]">Lista zawodników</span></span>
                 </NuxtLink>
                 <div class="2xl:flex xl:flex lg:flex md:hidden sm:hidden xs:hidden flex-row items-center justify-end">
-                    <div v-if="this.authStore.loggedIn" class="dropdown dropdown-bottom dropdown-end border-[1px] border-gray-300 rounded-full mr-5 p-1 h-[44px] w-[44px] flex items-center justify-center">
+                    <div v-if="this.authStore.loggedIn" class="dropdown dropdown-bottom dropdown-end rounded-full mr-5 p-1 h-[44px] w-[44px] flex items-center justify-center">
                         <v-icon tabindex="0" role="button" class="text-black" style="font-size: 30px !important;">mdi-account</v-icon>
-                        <ul class="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-[250px]">
+                        <ul class="dropdown-content z-[1] menu p-2 bg-white rounded-[0.5rem] w-[250px]">
                             <li v-if="this.authStore.user.user" class="text-left">
                                 <span class="flex flex-col text-left">Zalogowano jako <span class="font-bold">{{ this.authStore.user.user.email }}</span></span>
                             </li>
@@ -21,9 +21,9 @@
                     <NuxtLink v-if="!this.authStore.loggedIn" to="/auth/login" class="mr-5 cursor-pointer">
                         <BlackButton :icon="false" mdi="mdi-icon-name" :buttonText="this.languageStore.t.auth_login"/>
                     </NuxtLink>
-                    <div class="flex flex-row border-[1px] border-gray-300 rounded-md">
-                        <select @change="this.changeLanguage()" v-model="selectedLanguage" class="py-3 px-4 block w-full bg-white rounded-md text-sm h-[44px]">
-                            <option v-for="lang in this.languageStore.languages" :key="lang.code" :value="lang">{{ this.getFlagEmoji(lang.code) }} {{ lang.name }}</option>
+                    <div class="flex flex-row rounded-[0.5rem] items-center justify-center">
+                        <select @change="this.changeLanguage()" v-model="selectedLanguage" class="py-3 px-4 block w-full bg-[#f5f5f5] rounded-md text-sm h-[40px]">
+                            <option v-for="lang in this.languageStore.languages" :key="lang.code" :value="lang" class="font-inter">{{ this.getFlagEmoji(lang.code) }} {{ lang.name }}</option>
                         </select>
                     </div>
                 </div>
