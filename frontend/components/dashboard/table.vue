@@ -29,7 +29,7 @@
                 <v-window-item value="1" class="w-full flex flex-col items-center justify-center">
                     <div class="flex flex-row h-[70px] mb-2 justify-between w-full items-center">
                         <div class="w-full h-[48px] flex justify-between">
-                            <MainButton :click="addPlayer" type="green" />
+                            <MainButton :click="addPlayer" type="green" :disabled="false" />
                             <div class="flex">
                                 <div v-if="shouldDisplayFilterDiv" class="flex flex-col font-inter mr-3 items-end justify-center">
                                     <span class="text-[1rem]">Filtrowanie:</span>
@@ -191,7 +191,7 @@
                 <v-window-item value="2">
                     <div class="flex flex-row w-full justify-between items-center my-2 h-[70px]">
                         <div class="flex flex-row justify-start items-center">
-                            <span class="text-3xl font-bold font-raleway mr-10">Trenerzy</span>
+                            <span class="text-3xl font-bold font-inter mr-10">Trenerzy</span>
                             <button class="btn h-[40px] text-white bg-black hover:bg-[#101010] transition ease-in-out duration-300 font-medium rounded text-sm px-4 py-1 w-auto uppercase flex items-center justify-center">
                                 Dodaj trenera
                             </button> 
@@ -329,7 +329,6 @@
                 </div>
             </v-dialog>
             <v-dialog v-model="dialogDelete" persistent transition="dialog-bottom-transition">
-                {{ currentDelete.id }}
                 <v-form @submit.prevent ref="deleteValid" v-model="deleteValid"  class="bg-white h-auto w-[500px] p-10 rounded-lg border-[1px] border-gray-300 shadow-md">
                     <div class="flex flex-row justify-between items-start w-full mb-6">
                         <div class="bg-red-200 h-[50px] w-[50px] rounded-full flex items-center justify-center">
@@ -752,7 +751,6 @@ export default{
         }
     },
     beforeDestroy() {
-    // Close the WebSocket connection when the component is destroyed
         if (this.socket) {
             this.socket.close();
         }
@@ -767,9 +765,7 @@ export default{
             console.log('WebSocket connected');
         },
         onSocketMessage(event) {
-            // console.log(event)
             const data = JSON.parse(event.data);
-            // // Handle the received data (e.g., update UI)
             console.log('Received data:', data);
         },
         onSocketClose() {

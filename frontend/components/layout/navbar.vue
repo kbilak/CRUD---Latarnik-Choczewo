@@ -19,7 +19,7 @@
                         </ul>
                     </div>
                     <NuxtLink v-if="!this.authStore.loggedIn" to="/auth/login" class="mr-5 cursor-pointer">
-                        <BlackButton :icon="false" mdi="mdi-icon-name" :buttonText="this.languageStore.t.auth_login"/>
+                        <MainButton :buttonText="this.languageStore.t.auth_login" type="black" />
                     </NuxtLink>
                     <div class="flex flex-row rounded-[0.5rem] items-center justify-center">
                         <select @change="this.changeLanguage()" v-model="selectedLanguage" class="py-3 px-4 block w-full bg-[#f5f5f5] rounded-md text-sm h-[40px]">
@@ -39,12 +39,12 @@
 <script lang="ts">
 import { useLanguageStore } from '../../stores/translations';
 import { useAuthStore } from '../../stores/auth';
-import BlackButton from '../elements/buttons/BlackButton.vue'
 
+import MainButton from '../elements/MainButton.vue'
 
 export default {
     components: {
-        BlackButton,
+        MainButton
     },
     data() {
         return {
