@@ -34,6 +34,8 @@ Aplikacja stworzona w ramach zadania rekrutacyjnego. Wyświetlanie, dodawanie, e
 - Wielojęzykowość - zmiana wyświetlanego języka bez potrzeby przeładowania strony,
 - Operacje na zawodnikach lub trenerach tylko dla wybranego typu konta (admin/normalny); wyświetlanie danych trenerów tylko dla adminów,
 - Możliwość wylogowania się,
+- Walidacja formularzy,
+- Wyświetlanie powiadomień,
 - Meta tagi, przystosowanie do SEO.
 
 ## Funkcjonalności - backend
