@@ -56,8 +56,6 @@
 import { useLanguageStore } from '../../stores/translations';
 import { useAuthStore } from '../../stores/auth';
 
-import MainButton from '../elements/MainButton.vue'
-
 interface Language {
     name: string;
     code: string;
@@ -68,9 +66,6 @@ interface Flag {
 }
 
 export default {
-    components: {
-        MainButton
-    },
     computed: {
         isPlayersRoute() {
             return this.$route.path === '/players';

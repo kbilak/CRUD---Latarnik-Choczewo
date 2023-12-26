@@ -6,6 +6,7 @@
 
 <script>
 export default {
+    name: 'MainButton',
     props: {
         click: {
             type: Function,

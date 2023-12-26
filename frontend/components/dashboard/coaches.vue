@@ -1,208 +1,178 @@
 <template>
     <section id="table" class="flex flex-col items-center justify-start w-full min-h-[calc(100vh-110px)] text-black bg-[#f5f5f5] h-auto">
         <div v-if="authStore.loggedIn" class="xs:max-w-screen-[450px] sm:max-w-screen-sm md:max-w-screen-md lg:max-w-screen-lg xl:max-w-screen-xl 2xl:max-w-screen-xl w-full h-full flex flex-col justify-center items-center">
-            <!-- <div class="flex justify-between items-center w-full h-[70px] mt-5">
-                <div class="rounded-[0.5rem] w-full flex justify-between">
-                    <div class="w-auto h-[48px] font-inter rounded-[0.5rem] flex">
-                        <MainButton type="blue" buttonText="Zawodnicy" :disabled="false" />
-                        <MainButton type="blue" buttonText="Trenerzy" :disabled="false" class="ml-5" />
-                        <v-tabs v-if="this.authStore.user.user.user_type === 'admin'" v-model="tab" class="flex items-center justify-center">
-                            <v-tab value="one" class="rounded-tl-lg ml-5 mt-[-3px]">Zawodnicy</v-tab>
-                            <v-tab value="two" class="rounded-tr-lg mr-5 mt-[-3px]">Trenerzy</v-tab>
-                        </v-tabs>
-                        <v-tabs v-else-if="this.authStore.user.user.user_type === 'normal'" v-model="tab">
-                            <v-tab value="one" class="rounded-t-lg">Zawodnicy</v-tab>
-                        </v-tabs>
+            <div class="w-full flex flex-col items-center justify-center">
+                <div class="flex flex-row h-[70px] my-2 justify-end w-full items-center">
+                    <div class="w-full h-[48px] flex justify-between">
+                        <div class="flex">
+                            <MainButton :click="filter" type="black" buttonText="Filtruj" class="mr-5" />
+                            <div v-if="shouldDisplayFilterDiv" class="flex flex-col font-inter items-start justify-center pr-5">
+                                <span class="text-[1rem]">Filtrowanie:</span>
+                                <div class="flex flex-row ml-[-6px]">
+                                    <span v-for="(key, i) in Object.keys(this.filterOptions)" :key="i" class="text-[0.825rem] text-gray-500 flex flex-row items-start">
+                                        <span v-if="this.filterOptions[key] === true" class="flex ml-1 w-full"><v-icon @click="this.filterOptions[key] = false, updateFilter(), this.searchText = ''" class="cursor-pointer">mdi-close</v-icon>{{ this.filterOptionsTranslations[i] }}</span>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="dropdown dropdown-bottom dropdown-end">
+                                <MainButton tabindex="0" type="black" buttonText="Sortuj" />
+                                <ul class="dropdown-content z-[1] menu p-2 shadow bg-white border-[1px] border-gray-300 rounded-box w-[180px] mt-2">
+                                    <li>
+                                        <div class="form-control">
+                                            <label class="label cursor-pointer">
+                                                <input v-model="sortingOptions.position" @change="updateSorting" type="checkbox" class="checkbox checkbox-[#000000] bg-gray-300 border-[1px] border-gray-300 mr-2" />
+                                                <span class="label-text">Pozycja</span> 
+                                            </label>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="form-control">
+                                            <label class="label cursor-pointer">
+                                                <input v-model="sortingOptions.year" @change="updateSorting" type="checkbox" class="checkbox checkbox-[#000000] bg-gray-300 border-[1px] border-gray-300 mr-2" />
+                                                <span class="label-text">Rocznik</span> 
+                                            </label>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="form-control">
+                                            <label class="label cursor-pointer">
+                                                <input v-model="sortingOptions.number" @change="updateSorting" type="checkbox" class="checkbox checkbox-[#000000] bg-gray-300 border-[1px] border-gray-300 mr-2" />
+                                                <span class="label-text">Numer</span> 
+                                            </label>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="form-control">
+                                            <label class="label cursor-pointer">
+                                                <input v-model="sortingOptions.status" @change="updateSorting" type="checkbox" class="checkbox checkbox-[#000000] bg-gray-300 border-[1px] border-gray-300 mr-2" />
+                                                <span class="label-text">Status</span> 
+                                            </label>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                            <v-icon @click="changePlayersDirection()" class="text-white bg-black h-[48px] w-[48px] hover:bg-[#101010] transition ease-in-out duration-300 font-medium rounded-[0.5rem] text-[1rem] ml-5 flex items-center justify-center leading-[1.5] tracking-[0.005em] cursor-pointer">mdi-arrow-up-down</v-icon>
+                        </div>
                     </div>
-                    <div class="bg-white w-auto h-[48px] rounded-[0.5rem] ml-5">
+                    <div class="bg-white h-[48px] rounded-[0.5rem] ml-5 min-w-[220px]">
                         <div class="relative h-[48px] flex items-center justify-center">
                             <span class="absolute inset-y-0 left-0 flex items-center pl-3">
                                 <v-icon>mdi-magnify</v-icon>
                             </span>
-                            <input v-model="searchText" type="stext" class="h-full pl-10 pr-4 py-2 rounded-[0.5rem] block w-full font-inter text-[1rem] leading-[1.5] tracking-[0.005em]" placeholder="Szukaj zawodnika...">
+                            <input v-model="searchText" type="stext" class="h-full pl-10 pr-4 py-2 rounded-[0.5rem] block w-full font-inter text-[1rem] leading-[1.5] tracking-[0.005em]" placeholder="Szukaj trenera...">
                             <span v-if="searchText.length > 0" @click="searchText = ''" class="absolute inset-y-0 right-0 flex items-center pr-3 cursor-pointer">
                                 <v-icon>mdi-close</v-icon>
                             </span>
                         </div>
                     </div>
+                    <MainButton :click="addPlayer" type="green" class="bg-green-700 ml-5" buttonText="Dodaj trenera" :disabled="false" />
                 </div>
-            </div> -->
-            <v-window v-model="tab" class="w-full">
-                <v-window-item value="one" class="w-full flex flex-col items-center justify-center">
-                    <div class="flex flex-row h-[70px] my-2 justify-end w-full items-center">
-                        <div class="w-full h-[48px] flex justify-between">
-                            <div class="flex">
-                                <MainButton :click="filter" type="black" buttonText="Filtruj" class="mr-5" />
-                                <div v-if="shouldDisplayFilterDiv" class="flex flex-col font-inter items-start justify-center pr-5">
-                                    <span class="text-[1rem]">Filtrowanie:</span>
-                                    <div class="flex flex-row ml-[-6px]">
-                                        <span v-for="(key, i) in Object.keys(this.filterOptions)" :key="i" class="text-[0.825rem] text-gray-500 flex flex-row items-start">
-                                            <span v-if="this.filterOptions[key] === true" class="flex ml-1 w-full"><v-icon @click="this.filterOptions[key] = false, updateFilter(), this.searchText = ''" class="cursor-pointer">mdi-close</v-icon>{{ this.filterOptionsTranslations[i] }}</span>
-                                        </span>
-                                    </div>
-                                </div>
-                                <div class="dropdown dropdown-bottom dropdown-end">
-                                    <MainButton tabindex="0" type="black" buttonText="Sortuj" />
-                                    <ul class="dropdown-content z-[1] menu p-2 shadow bg-white border-[1px] border-gray-300 rounded-box w-[180px] mt-2">
-                                        <li>
-                                            <div class="form-control">
-                                                <label class="label cursor-pointer">
-                                                    <input v-model="sortingOptions.position" @change="updateSorting" type="checkbox" class="checkbox checkbox-[#000000] bg-gray-300 border-[1px] border-gray-300 mr-2" />
-                                                    <span class="label-text">Pozycja</span> 
-                                                </label>
-                                            </div>
-                                        </li>
-                                        <li>
-                                            <div class="form-control">
-                                                <label class="label cursor-pointer">
-                                                    <input v-model="sortingOptions.year" @change="updateSorting" type="checkbox" class="checkbox checkbox-[#000000] bg-gray-300 border-[1px] border-gray-300 mr-2" />
-                                                    <span class="label-text">Rocznik</span> 
-                                                </label>
-                                            </div>
-                                        </li>
-                                        <li>
-                                            <div class="form-control">
-                                                <label class="label cursor-pointer">
-                                                    <input v-model="sortingOptions.number" @change="updateSorting" type="checkbox" class="checkbox checkbox-[#000000] bg-gray-300 border-[1px] border-gray-300 mr-2" />
-                                                    <span class="label-text">Numer</span> 
-                                                </label>
-                                            </div>
-                                        </li>
-                                        <li>
-                                            <div class="form-control">
-                                                <label class="label cursor-pointer">
-                                                    <input v-model="sortingOptions.status" @change="updateSorting" type="checkbox" class="checkbox checkbox-[#000000] bg-gray-300 border-[1px] border-gray-300 mr-2" />
-                                                    <span class="label-text">Status</span> 
-                                                </label>
-                                            </div>
-                                        </li>
-                                    </ul>
-                                </div>
-                                <v-icon @click="changePlayersDirection()" class="text-white bg-black h-[48px] w-[48px] hover:bg-[#101010] transition ease-in-out duration-300 font-medium rounded-[0.5rem] text-[1rem] ml-5 flex items-center justify-center leading-[1.5] tracking-[0.005em] cursor-pointer">mdi-arrow-up-down</v-icon>
-                            </div>
-                        </div>
-                        <div class="bg-white h-[48px] rounded-[0.5rem] ml-5 min-w-[220px]">
-                            <div class="relative h-[48px] flex items-center justify-center">
-                                <span class="absolute inset-y-0 left-0 flex items-center pl-3">
-                                    <v-icon>mdi-magnify</v-icon>
-                                </span>
-                                <input v-model="searchText" type="stext" class="h-full pl-10 pr-4 py-2 rounded-[0.5rem] block w-full font-inter text-[1rem] leading-[1.5] tracking-[0.005em]" placeholder="Szukaj zawodnika...">
-                                <span v-if="searchText.length > 0" @click="searchText = ''" class="absolute inset-y-0 right-0 flex items-center pr-3 cursor-pointer">
-                                    <v-icon>mdi-close</v-icon>
-                                </span>
-                            </div>
-                        </div>
-                        <MainButton :click="addPlayer" type="green" class="bg-green-700 ml-5" :disabled="false" />
+                <article class="w-full rounded-[0.5rem] bg-white h-auto">
+                    <div v-if="loading" class="w-full min-h-[660px] h-full flex items-center justify-center">
+                        <div class="spinner"></div>
                     </div>
-                    <article class="w-full rounded-[0.5rem] bg-white h-auto">
-                        <div v-if="loading" class="w-full min-h-[660px] h-full flex items-center justify-center">
-                            <div class="spinner"></div>
-                        </div>
-                        <div v-else class="w-full flex items-center justify-start flex-col min-h-[660px]">
-                            <div class="w-full h-[60px] border-b-[1px] border-gray-200 flex items-center justify-between px-10 font-inter text-[#0f0f0f] text-[1rem] font-medium leading-6 tracking-[0.005em]">
-                                <div class="flex items-center justify-center">
-                                    <span class="w-[60px] h-full">Photo</span>
-                                </div>
-                                <div class="flex items-center justify-center">
-                                    <span class="w-[150px] h-full">Name</span>
-                                </div>
-                                <div class="flex items-center justify-center">
-                                    <span class="w-[90px] h-full">Pozycja</span>
-                                </div>
-                                <div class="flex items-center justify-center">
-                                    <span class="w-[120px] h-full">Status</span>
-                                </div>
-                                <div class="flex items-center justify-center text-center">
-                                    <span class="w-[70px] h-full">Number</span>
-                                </div>
-                                <div class="flex items-center justify-center text-center">
-                                    <span class="w-[90px] h-full">Year</span>
-                                </div>
-                                <div v-if="this.authStore.user.user.user_type === 'admin'" class="flex items-center justify-center text-center">
-                                    <span class="w-[120px] h-full">Operacje</span>
-                                </div>
+                    <div v-else class="w-full flex items-center justify-start flex-col min-h-[660px]">
+                        <div class="w-full h-[60px] border-b-[1px] border-gray-200 flex items-center justify-between px-10 font-inter text-[#0f0f0f] text-[1rem] font-medium leading-6 tracking-[0.005em]">
+                            <div class="flex items-center justify-center">
+                                <span class="w-[60px] h-full">Photo</span>
                             </div>
-                            <div v-if="this.playersSorted.length === 0" class="w-full h-[599px] border-b-[0.0625rem] border-[hsl(0 0% 92%)] flex items-center justify-center px-10 font-inter text-[#2b2b2b]">
-                                <span class="font-inter text-[3rem]">
-                                    Nic nie znaleziono!
-                                </span>
+                            <div class="flex items-center justify-center">
+                                <span class="w-[150px] h-full">Name</span>
                             </div>
-                            <div v-for="(player, index) in this.playersSorted[this.currentPagePlayers - 1]" :key="player.id" :class="{ 'border-b-[0.0625rem] border-[hsl(0 0% 92%)]': index !== this.playersSorted[this.currentPagePlayers - 1].length - 1 }" class="w-full h-[60px] flex items-center justify-between px-10 font-inter text-[#2b2b2b]">
-                                <div class="flex items-center justify-start w-[60px]">
-                                    <img :src="player.image" :alt="player.name" class="w-[50px] h-[50px] rounded-md">
-                                </div>
-                                <div class="flex items-center justify-center">
-                                    <span class="w-[150px] h-full font-[500]">{{player.name}}</span>
-                                </div>
-                                <div class="flex items-center justify-center">
-                                    <span v-if="player.position.value === 'BR'" class="w-[90px] h-full">Bramkarz</span>
-                                    <span v-if="player.position.value === 'OB'" class="w-[90px] h-full">Obrońca</span>
-                                    <span v-if="player.position.value === 'PO'" class="w-[90px] h-full">Pomocnik</span>
-                                    <span v-if="player.position.value === 'NA'" class="w-[90px] h-full">Napastnik</span>
-                                </div>
-                                <div class="flex items-center justify-center text-center">
-                                    <span v-if="player.status.value === 'nieaktywny'" class="h-full border-[1px] border-red-600 bg-red-50 text-red text-sm rounded-full w-[120px] py-1">Nieaktywny</span>
-                                    <span v-else class="h-full border-[1px] border-green-600 bg-green-50 text-green text-sm rounded-full w-[120px] py-1">Aktywny</span>
-                                </div>
-                                <div class="flex items-center justify-center text-center">
-                                    <span class="w-[70px] h-full">{{player.number}}</span>
-                                </div>
-                                <div class="flex items-center justify-center text-center">
-                                    <span class="w-[90px] h-full">{{player.year}}</span>
-                                </div>
-                                <div v-if="this.authStore.user.user.user_type === 'admin'" class="flex items-center justify-center w-[120px]">
-                                    <v-icon @click="this.updatePlayer(player.id, player.name, player.position, player.status, player.number, player.year)">mdi-pencil-plus</v-icon>
-                                    <v-icon @click="this.imagePlayer(player.id, player.name, player.image)" class="mx-5">mdi-image-edit</v-icon>
-                                    <v-icon @click="this.deletePlayer(player.id, player.name)">mdi-delete</v-icon>
-                                </div>
+                            <div class="flex items-center justify-center">
+                                <span class="w-[90px] h-full">Pozycja</span>
+                            </div>
+                            <div class="flex items-center justify-center">
+                                <span class="w-[120px] h-full">Status</span>
+                            </div>
+                            <div class="flex items-center justify-center text-center">
+                                <span class="w-[70px] h-full">Number</span>
+                            </div>
+                            <div class="flex items-center justify-center text-center">
+                                <span class="w-[90px] h-full">Year</span>
+                            </div>
+                            <div v-if="this.authStore.user.user.user_type === 'admin'" class="flex items-center justify-center text-center">
+                                <span class="w-[120px] h-full">Operacje</span>
                             </div>
                         </div>
-                    </article>
-                    <div v-if="!loading && pagesPlayers > 0" class="w-full h-auto my-5 flex text-black items-center justify-between font-inter">
-                        <div class="w-[230px] h-full bg-white rounded-md flex items-center">
-                            <select @change="this.changeItemsPerPage(this.itemsPerPage)" v-model="this.itemsPerPage" class="py-3 px-4 block w-[88px] bg-white rounded-[0.5rem] text-sm h-[44px]">
-                                <option :value="10">10</option>
-                                <option :value="20">20</option>
-                                <option :value="50">50</option>
-                            </select>
-                            <span class="text-sm border-l-[1px] h-full pl-2">Wyniki na stronie</span>
-                        </div>
-                        <div class="pagination flex items-center justify-center flex-col">
-                            <span v-if="this.pagesPlayers > 1" class="flex items-center">
-                                <button @click="this.currentPagePlayers = 1" class="text-black w-[35px] h-[35px] cursor-pointer">
-                                    <v-icon>mdi-chevron-left</v-icon>
-                                    <v-icon class="ml-[-18px]">mdi-chevron-left</v-icon>
-                                </button>
-                                <button @click="this.currentPagePlayers--" :disabled="this.currentPagePlayers === 1" class="text-black w-[35px] h-[35px] cursor-pointer">
-                                    <v-icon>mdi-chevron-left</v-icon>
-                                </button>
-                                <div v-for="pageNumber in displayedPages" @click="this.currentPagePlayers = pageNumber" :key="pageNumber" class="bg-white w-[35px] h-[35px] mx-1 flex items-center justify-center rounded-md cursor-pointer" :class="{ 'current-page-div': this.currentPagePlayers === pageNumber }">
-                                    <button :class="{ 'current-page': this.currentPagePlayers === pageNumber }" class="bg-white text-black border-2">
-                                        {{ pageNumber }}
-                                    </button>
-                                </div>
-                                <button @click="this.currentPagePlayers++" :disabled="this.currentPagePlayers === this.pagesPlayers" class="text-black w-[35px] h-[35px] cursor-pointer">
-                                    <v-icon>mdi-chevron-right</v-icon>
-                                </button>
-                                <button @click="this.currentPagePlayers = this.pagesPlayers" class="text-black w-[35px] h-[35px] cursor-pointer">
-                                    <v-icon>mdi-chevron-right</v-icon>
-                                    <v-icon class="ml-[-18px]">mdi-chevron-right</v-icon>
-                                </button>
-                            </span>
-                            <span class="mt-2">
-                                Strona <b>{{ this.currentPagePlayers }}</b> z <b>{{ this.pagesPlayers }}</b>
+                        <div v-if="this.playersSorted.length === 0" class="w-full h-[599px] border-b-[0.0625rem] border-[hsl(0 0% 92%)] flex items-center justify-center px-10 font-inter text-[#2b2b2b]">
+                            <span class="font-inter text-[3rem]">
+                                Nic nie znaleziono!
                             </span>
                         </div>
-                        <div class="w-[230px] h-full flex items-center justify-end">
-                            <span class="font-bold">{{ this.playersSorted[this.currentPagePlayers - 1].length }}</span>
-                            <span class="mx-1">z</span>
-                            <span class="font-bold">{{ this.players.length }}</span>
+                        <div v-for="(player, index) in this.playersSorted[this.currentPagePlayers - 1]" :key="player.id" :class="{ 'border-b-[0.0625rem] border-[hsl(0 0% 92%)]': index !== this.playersSorted[this.currentPagePlayers - 1].length - 1 }" class="w-full h-[60px] flex items-center justify-between px-10 font-inter text-[#2b2b2b]">
+                            <div class="flex items-center justify-start w-[60px]">
+                                <img :src="player.image" :alt="player.name" class="w-[50px] h-[50px] rounded-md">
+                            </div>
+                            <div class="flex items-center justify-center">
+                                <span class="w-[150px] h-full font-[500]">{{player.name}}</span>
+                            </div>
+                            <div class="flex items-center justify-center">
+                                <span v-if="player.position.value === 'BR'" class="w-[90px] h-full">Bramkarz</span>
+                                <span v-if="player.position.value === 'OB'" class="w-[90px] h-full">Obrońca</span>
+                                <span v-if="player.position.value === 'PO'" class="w-[90px] h-full">Pomocnik</span>
+                                <span v-if="player.position.value === 'NA'" class="w-[90px] h-full">Napastnik</span>
+                            </div>
+                            <div class="flex items-center justify-center text-center">
+                                <span v-if="player.status.value === 'nieaktywny'" class="h-full border-[1px] border-red-600 bg-red-50 text-red text-sm rounded-full w-[120px] py-1">Nieaktywny</span>
+                                <span v-else class="h-full border-[1px] border-green-600 bg-green-50 text-green text-sm rounded-full w-[120px] py-1">Aktywny</span>
+                            </div>
+                            <div class="flex items-center justify-center text-center">
+                                <span class="w-[70px] h-full">{{player.number}}</span>
+                            </div>
+                            <div class="flex items-center justify-center text-center">
+                                <span class="w-[90px] h-full">{{player.year}}</span>
+                            </div>
+                            <div v-if="this.authStore.user.user.user_type === 'admin'" class="flex items-center justify-center w-[120px]">
+                                <v-icon @click="this.updatePlayer(player.id, player.name, player.position, player.status, player.number, player.year)">mdi-pencil-plus</v-icon>
+                                <v-icon @click="this.imagePlayer(player.id, player.name, player.image)" class="mx-5">mdi-image-edit</v-icon>
+                                <v-icon @click="this.deletePlayer(player.id, player.name)">mdi-delete</v-icon>
+                            </div>
                         </div>
                     </div>
-                </v-window-item>
-                <v-window-item value="two">dsds</v-window-item>
-                
-            </v-window>
+                </article>
+                <div v-if="!loading && pagesPlayers > 0" class="w-full h-auto my-5 flex text-black items-center justify-between font-inter">
+                    <div class="w-[230px] h-full bg-white rounded-md flex items-center">
+                        <select @change="this.changeItemsPerPage(this.itemsPerPage)" v-model="this.itemsPerPage" class="py-3 px-4 block w-[88px] bg-white rounded-[0.5rem] text-sm h-[44px]">
+                            <option :value="10">10</option>
+                            <option :value="20">20</option>
+                            <option :value="50">50</option>
+                        </select>
+                        <span class="text-sm border-l-[1px] h-full pl-2">Wyniki na stronie</span>
+                    </div>
+                    <div class="pagination flex items-center justify-center flex-col">
+                        <span v-if="this.pagesPlayers > 1" class="flex items-center">
+                            <button @click="this.currentPagePlayers = 1" class="text-black w-[35px] h-[35px] cursor-pointer">
+                                <v-icon>mdi-chevron-left</v-icon>
+                                <v-icon class="ml-[-18px]">mdi-chevron-left</v-icon>
+                            </button>
+                            <button @click="this.currentPagePlayers--" :disabled="this.currentPagePlayers === 1" class="text-black w-[35px] h-[35px] cursor-pointer">
+                                <v-icon>mdi-chevron-left</v-icon>
+                            </button>
+                            <div v-for="pageNumber in displayedPages" @click="this.currentPagePlayers = pageNumber" :key="pageNumber" class="bg-white w-[35px] h-[35px] mx-1 flex items-center justify-center rounded-md cursor-pointer" :class="{ 'current-page-div': this.currentPagePlayers === pageNumber }">
+                                <button :class="{ 'current-page': this.currentPagePlayers === pageNumber }" class="bg-white text-black border-2">
+                                    {{ pageNumber }}
+                                </button>
+                            </div>
+                            <button @click="this.currentPagePlayers++" :disabled="this.currentPagePlayers === this.pagesPlayers" class="text-black w-[35px] h-[35px] cursor-pointer">
+                                <v-icon>mdi-chevron-right</v-icon>
+                            </button>
+                            <button @click="this.currentPagePlayers = this.pagesPlayers" class="text-black w-[35px] h-[35px] cursor-pointer">
+                                <v-icon>mdi-chevron-right</v-icon>
+                                <v-icon class="ml-[-18px]">mdi-chevron-right</v-icon>
+                            </button>
+                        </span>
+                        <span class="mt-2">
+                            Strona <b>{{ this.currentPagePlayers }}</b> z <b>{{ this.pagesPlayers }}</b>
+                        </span>
+                    </div>
+                    <div class="w-[230px] h-full flex items-center justify-end">
+                        <span class="font-bold">{{ this.playersSorted[this.currentPagePlayers - 1].length }}</span>
+                        <span class="mx-1">z</span>
+                        <span class="font-bold">{{ this.players.length }}</span>
+                    </div>
+                </div>
+            </div>
             <v-dialog v-model="dialogUpdate" persistent transition="dialog-bottom-transition">
                 <v-form @submit.prevent ref="updateValid" v-model="updateValid" class="bg-white h-auto w-[500px] p-10 rounded-[1rem] border-[1px] border-gray-300 shadow-md">
                     <div class="flex flex-row justify-between items-start w-full mb-6">
@@ -470,8 +440,8 @@ import { useLanguageStore } from '../../stores/translations';
 import { getToken } from '../../services/token/getToken';
 import { getPlayers, updatePlayer, createPlayer, deletePlayer } from '../../services/players/players';
 
-import MainButton from '../elements/MainButton.vue'
-import Input from '../elements/Input.vue'
+import Input from '../elements/Input.vue';
+import MainButton from '../elements/MainButton.vue';
 
 import { Cropper } from 'vue-advanced-cropper';
 import 'vue-advanced-cropper/dist/style.css'; 
@@ -497,7 +467,7 @@ export default{
     components: {
         Cropper,
         MainButton,
-        Input
+        Input,
     },
     data() {
         return {
