@@ -9,10 +9,6 @@ interface Player {
   number: number | null;
 }
 
-interface TokenCredentials {
-  token: string;
-}
-
 export async function getPlayers(): Promise<Player[] | null> {
   try {
     const response: AxiosResponse<Player[]> = await axios.get('http://127.0.0.1:8000/players/players/');

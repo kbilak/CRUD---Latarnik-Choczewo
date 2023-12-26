@@ -12,7 +12,7 @@ export default{
     },
     created() {
         if (this.authStore.loggedIn) {
-            this.$router.push('/app');
+            this.$router.push('/players');
         } else {
             this.$router.push('/auth/login');
         }

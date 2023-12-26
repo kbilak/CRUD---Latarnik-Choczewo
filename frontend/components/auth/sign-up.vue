@@ -55,7 +55,7 @@ export default {
     },
     created() {
         if (this.authStore.loggedIn) {
-            this.$router.push('/app');
+            this.$router.push('/players');
         }
         this.emailRules = [
             (v) => !!v || this.languageStore.t.rules_email_not,

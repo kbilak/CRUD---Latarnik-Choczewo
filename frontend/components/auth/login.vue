@@ -71,7 +71,7 @@ export default {
     },
     created() {
         if (this.authStore.loggedIn) {
-            this.$router.push('/app');
+            this.$router.push('/players');
         }
 
         if (this.$route.query.action === 'signup') {
@@ -112,7 +112,7 @@ export default {
                 if (valid) {
                     let response = await this.authStore.login(this.email, this.password);
                     if (response) {
-                        this.$router.push('/app');
+                        this.$router.push('/players');
                         this.loading = false;
                     } else {
                         this.snackbar = true;

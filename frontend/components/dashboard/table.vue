@@ -1,15 +1,17 @@
 <template>
-    <section id="table" class="flex flex-col items-center justify-start w-full min-h-[calc(100vh-110px)] text-black bg-[#f5f5f5] dark:bg-slate-800 h-auto">
+    <section id="table" class="flex flex-col items-center justify-start w-full min-h-[calc(100vh-110px)] text-black bg-[#f5f5f5] h-auto">
         <div v-if="authStore.loggedIn" class="xs:max-w-screen-[450px] sm:max-w-screen-sm md:max-w-screen-md lg:max-w-screen-lg xl:max-w-screen-xl 2xl:max-w-screen-xl w-full h-full flex flex-col justify-center items-center">
-            <div class="flex justify-between items-center w-full h-[70px] mt-5">
+            <!-- <div class="flex justify-between items-center w-full h-[70px] mt-5">
                 <div class="rounded-[0.5rem] w-full flex justify-between">
-                    <div class="w-auto h-[48px] bg-white font-inter rounded-[0.5rem]">
+                    <div class="w-auto h-[48px] font-inter rounded-[0.5rem] flex">
+                        <MainButton type="blue" buttonText="Zawodnicy" :disabled="false" />
+                        <MainButton type="blue" buttonText="Trenerzy" :disabled="false" class="ml-5" />
                         <v-tabs v-if="this.authStore.user.user.user_type === 'admin'" v-model="tab" class="flex items-center justify-center">
-                            <v-tab value="1" class="rounded-tl-lg ml-5 mt-[-3px]">Zawodnicy</v-tab>
-                            <v-tab value="2" class="rounded-tr-lg mr-5 mt-[-3px]">Trenerzy</v-tab>
+                            <v-tab value="one" class="rounded-tl-lg ml-5 mt-[-3px]">Zawodnicy</v-tab>
+                            <v-tab value="two" class="rounded-tr-lg mr-5 mt-[-3px]">Trenerzy</v-tab>
                         </v-tabs>
-                        <v-tabs v-else v-model="tab">
-                            <v-tab value="1" class="rounded-t-lg">Zawodnicy</v-tab>
+                        <v-tabs v-else-if="this.authStore.user.user.user_type === 'normal'" v-model="tab">
+                            <v-tab value="one" class="rounded-t-lg">Zawodnicy</v-tab>
                         </v-tabs>
                     </div>
                     <div class="bg-white w-auto h-[48px] rounded-[0.5rem] ml-5">
@@ -17,29 +19,28 @@
                             <span class="absolute inset-y-0 left-0 flex items-center pl-3">
                                 <v-icon>mdi-magnify</v-icon>
                             </span>
-                            <input v-model="searchText" type="text" class="h-full pl-10 pr-4 py-2 rounded-[0.5rem] block w-full font-inter text-[1rem] leading-[1.5] tracking-[0.005em]" placeholder="Szukaj zawodnika...">
+                            <input v-model="searchText" type="stext" class="h-full pl-10 pr-4 py-2 rounded-[0.5rem] block w-full font-inter text-[1rem] leading-[1.5] tracking-[0.005em]" placeholder="Szukaj zawodnika...">
                             <span v-if="searchText.length > 0" @click="searchText = ''" class="absolute inset-y-0 right-0 flex items-center pr-3 cursor-pointer">
                                 <v-icon>mdi-close</v-icon>
                             </span>
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> -->
             <v-window v-model="tab" class="w-full">
-                <v-window-item value="1" class="w-full flex flex-col items-center justify-center">
-                    <div class="flex flex-row h-[70px] mb-2 justify-between w-full items-center">
+                <v-window-item value="one" class="w-full flex flex-col items-center justify-center">
+                    <div class="flex flex-row h-[70px] my-2 justify-end w-full items-center">
                         <div class="w-full h-[48px] flex justify-between">
-                            <MainButton :click="addPlayer" type="green" :disabled="false" />
                             <div class="flex">
-                                <div v-if="shouldDisplayFilterDiv" class="flex flex-col font-inter mr-3 items-end justify-center">
+                                <MainButton :click="filter" type="black" buttonText="Filtruj" class="mr-5" />
+                                <div v-if="shouldDisplayFilterDiv" class="flex flex-col font-inter items-start justify-center pr-5">
                                     <span class="text-[1rem]">Filtrowanie:</span>
-                                    <div class="flex flex-row">
-                                        <span v-for="(key, i) in Object.keys(this.filterOptions)" :key="i" class="text-[0.825rem] text-gray-500 flex flex-row">
-                                            <span v-if="this.filterOptions[key] === true" class="flex ml-1"><v-icon @click="this.filterOptions[key] = false, updateFilter(), this.searchText = ''" class="cursor-pointer">mdi-close</v-icon>{{ this.filterOptionsTranslations[i] }}</span>
+                                    <div class="flex flex-row ml-[-6px]">
+                                        <span v-for="(key, i) in Object.keys(this.filterOptions)" :key="i" class="text-[0.825rem] text-gray-500 flex flex-row items-start">
+                                            <span v-if="this.filterOptions[key] === true" class="flex ml-1 w-full"><v-icon @click="this.filterOptions[key] = false, updateFilter(), this.searchText = ''" class="cursor-pointer">mdi-close</v-icon>{{ this.filterOptionsTranslations[i] }}</span>
                                         </span>
                                     </div>
                                 </div>
-                                <MainButton :click="filter" type="black" buttonText="Filtruj..." class="mr-5" />
                                 <div class="dropdown dropdown-bottom dropdown-end">
                                     <MainButton tabindex="0" type="black" buttonText="Sortuj" />
                                     <ul class="dropdown-content z-[1] menu p-2 shadow bg-white border-[1px] border-gray-300 rounded-box w-[180px] mt-2">
@@ -80,6 +81,18 @@
                                 <v-icon @click="changePlayersDirection()" class="text-white bg-black h-[48px] w-[48px] hover:bg-[#101010] transition ease-in-out duration-300 font-medium rounded-[0.5rem] text-[1rem] ml-5 flex items-center justify-center leading-[1.5] tracking-[0.005em] cursor-pointer">mdi-arrow-up-down</v-icon>
                             </div>
                         </div>
+                        <div class="bg-white h-[48px] rounded-[0.5rem] ml-5 min-w-[220px]">
+                            <div class="relative h-[48px] flex items-center justify-center">
+                                <span class="absolute inset-y-0 left-0 flex items-center pl-3">
+                                    <v-icon>mdi-magnify</v-icon>
+                                </span>
+                                <input v-model="searchText" type="stext" class="h-full pl-10 pr-4 py-2 rounded-[0.5rem] block w-full font-inter text-[1rem] leading-[1.5] tracking-[0.005em]" placeholder="Szukaj zawodnika...">
+                                <span v-if="searchText.length > 0" @click="searchText = ''" class="absolute inset-y-0 right-0 flex items-center pr-3 cursor-pointer">
+                                    <v-icon>mdi-close</v-icon>
+                                </span>
+                            </div>
+                        </div>
+                        <MainButton :click="addPlayer" type="green" class="bg-green-700 ml-5" :disabled="false" />
                     </div>
                     <article class="w-full rounded-[0.5rem] bg-white h-auto">
                         <div v-if="loading" class="w-full min-h-[660px] h-full flex items-center justify-center">
@@ -119,7 +132,7 @@
                                     <img :src="player.image" :alt="player.name" class="w-[50px] h-[50px] rounded-md">
                                 </div>
                                 <div class="flex items-center justify-center">
-                                    <span class="w-[150px] h-full">{{player.name}}</span>
+                                    <span class="w-[150px] h-full font-[500]">{{player.name}}</span>
                                 </div>
                                 <div class="flex items-center justify-center">
                                     <span v-if="player.position.value === 'BR'" class="w-[90px] h-full">Bramkarz</span>
@@ -187,65 +200,8 @@
                         </div>
                     </div>
                 </v-window-item>
+                <v-window-item value="two">dsds</v-window-item>
                 
-                <v-window-item value="2">
-                    <div class="flex flex-row w-full justify-between items-center my-2 h-[70px]">
-                        <div class="flex flex-row justify-start items-center">
-                            <span class="text-3xl font-bold font-inter mr-10">Trenerzy</span>
-                            <button class="btn h-[40px] text-white bg-black hover:bg-[#101010] transition ease-in-out duration-300 font-medium rounded text-sm px-4 py-1 w-auto uppercase flex items-center justify-center">
-                                Dodaj trenera
-                            </button> 
-                        </div>
-                        <div>
-                            <div class="dropdown dropdown-bottom dropdown-end">
-                                <button tabindex="0" role="button" class="btn h-[40px] text-white bg-black hover:bg-[#101010] transition ease-in-out duration-300 font-medium rounded text-sm px-4 py-1 w-auto uppercase flex items-center justify-center">Sortuj <v-icon>mdi-arrow-down</v-icon></button>
-                                <ul class="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-[180px]">
-                                    <li>
-                                        <div class="form-control">
-                                            <label class="label cursor-pointer">
-                                                <input v-model="sortingOptions.position" @change="updateSorting" type="checkbox" class="checkbox checkbox-[#000000] bg-gray-300 border-[1px] border-gray-300 mr-2" />
-                                                <span class="label-text">Pozycja</span> 
-                                            </label>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="form-control">
-                                            <label class="label cursor-pointer">
-                                                <input v-model="sortingOptions.year" @change="updateSorting" type="checkbox" class="checkbox checkbox-[#000000] bg-gray-300 border-[1px] border-gray-300 mr-2" />
-                                                <span class="label-text">Rocznik</span> 
-                                            </label>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="form-control">
-                                            <label class="label cursor-pointer">
-                                                <input v-model="sortingOptions.number" @change="updateSorting" type="checkbox" class="checkbox checkbox-[#000000] bg-gray-300 border-[1px] border-gray-300 mr-2" />
-                                                <span class="label-text">Numer</span> 
-                                            </label>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="form-control">
-                                            <label class="label cursor-pointer">
-                                                <input v-model="sortingOptions.status" @change="updateSorting" type="checkbox" class="checkbox checkbox-[#000000] bg-gray-300 border-[1px] border-gray-300 mr-2" />
-                                                <span class="label-text">Status</span> 
-                                            </label>
-                                        </div>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                    <article class="w-full border-[1px] border-gray-300 bg-white h-[500px] rounded-sm">
-                        <div v-if="loading" class="w-full h-full bg-gray-200 flex items-center justify-center">
-                            <div class="spinner"></div>
-                        </div>
-                        <div v-else class="py-5 px-8">
-                            {{ this.players }}
-                            <span>Lorem ipsum dolor sit amet consectetur adipisicing elit. Veniam at corrupti quibusdam quaerat dolorum consectetur sed itaque nobis expedita libero dolor numquam nesciunt repellendus in mollitia eos excepturi deleniti quas, sunt sapiente commodi nihil doloremque perferendis rerum! A recusandae tempore libero eligendi, facere cupiditate quis consequuntur pariatur odio ex minima esse quidem veniam eius, perspiciatis quos, blanditiis fuga itaque quo aperiam illo? Facilis eveniet commodi officiis soluta natus est consectetur eum dolore, ratione adipisci, rerum a nobis quis quaerat maxime, expedita porro odit ea nesciunt esse explicabo harum ipsa assumenda. Adipisci aperiam at itaque. Soluta accusantium necessitatibus officiis inventore laboriosam quasi impedit illum numquam quam perspiciatis incidunt sequi provident neque, qui repellat quas unde autem temporibus voluptatem eligendi culpa, voluptatum eius nobis ut?</span>
-                        </div>
-                    </article>
-                </v-window-item>
             </v-window>
             <v-dialog v-model="dialogUpdate" persistent transition="dialog-bottom-transition">
                 <v-form @submit.prevent ref="updateValid" v-model="updateValid" class="bg-white h-auto w-[500px] p-10 rounded-[1rem] border-[1px] border-gray-300 shadow-md">
@@ -257,7 +213,7 @@
                     </div>
                     <div class="flex flex-col mb-10 font-poppins">
                         <span class="font-medium mb-1 text-[1.5rem] leading-[1.5] tracking-[0.005em]">Edycja danych zawodnika.</span>
-                        <span class="text-[1rem] text-gray-500 leading-[1.5] tracking-[0.005em] mb-3">Historię edycji tego zawodnika możesz sprawdzić w <NuxtLink :to="`/app/user-history?id=${this.currentUpdate.id}`" class="font-bold text-black">Jego historii</NuxtLink>.</span>
+                        <span class="text-[1rem] text-gray-500 leading-[1.5] tracking-[0.005em] mb-3">Historię edycji tego zawodnika możesz sprawdzić w <NuxtLink :to="`/players/user-history?id=${this.currentUpdate.id}`" class="font-bold text-black">Jego historii</NuxtLink>.</span>
                     </div>
                     <div class="flex flex-col mt-3 mb-8 font-poppins">
                         <v-text-field v-model="this.currentUpdate.name" :rules="this.nameRules" variant="outlined" class="max-h-[56px] w-full mb-8" placeholder="Name" label="Name"></v-text-field>
@@ -523,22 +479,18 @@ import 'vue-advanced-cropper/dist/style.css';
 import axios from 'axios';
 
 interface Player {
-    id: string;
-    name: string;
-    position: { title: string; value: string };
-    status: { title: string; value: string };
+    age: number;
+    position: { value: string };
+    year: number;
+    number: number;
     image: string;
-    number: string;
-    year: string;
+    status: { value: string };
+    name: string;
 }
 
 interface SelectedImage {
     name: string;
     url: string;
-}
-
-interface ApiResponse {
-    status: number;
 }
 
 export default{
@@ -844,23 +796,18 @@ export default{
                     this.token = await getToken();
                     this.currentUpdate.position = this.currentUpdate.position.value;
                     this.currentUpdate.status = this.currentUpdate.status.value;
-                    const response = await updatePlayer(this.token, this.currentUpdate);
-                    if (response.status === 0) {
-                        await this.getAllPlayers();
-                        this.snackbar = true;
-                        this.buttonLoading = false;
-                        this.dialogUpdate = false;
-                        this.currentUpdate = {
-                            name: '',
-                            position: { title: 'Bramkarz', value: 'BR' },
-                            status: { title: 'Aktywny', value: 'aktywny' },
-                            number: '',
-                            year: ''
-                        };
-                    } else {
-                        this.snackbarError = true;
-                        this.buttonLoading = false;
-                    }
+                    await updatePlayer(this.token, this.currentUpdate);
+                    await this.getAllPlayers();
+                    this.snackbar = true;
+                    this.buttonLoading = false;
+                    this.dialogUpdate = false;
+                    this.currentUpdate = {
+                        name: '',
+                        position: { title: 'Bramkarz', value: 'BR' },
+                        status: { title: 'Aktywny', value: 'aktywny' },
+                        number: '',
+                        year: ''
+                    };
                 } else {
                     this.snackbarError = true;
                     this.buttonLoading = false;
@@ -936,24 +883,18 @@ export default{
                     this.currentAdd.position = this.currentAdd.position.value;
                     this.currentAdd.status = this.currentAdd.status.value;
                     
-                    const response = await createPlayer(this.token, this.currentAdd);
-
-                    if (response.status === 0) {
-                        await this.getAllPlayers();
-                        this.snackbar = true;
-                        this.buttonLoading = false;
-                        this.dialogAdd = false;
-                        this.currentAdd = {
-                            name: '',
-                            position: { title: 'Bramkarz', value: 'BR' },
-                            status: { title: 'Aktywny', value: 'aktywny' },
-                            number: '',
-                            year: ''
-                        };
-                    } else {
-                        this.buttonLoading = false;
-                        this.snackbarError = true;
-                    }
+                    await createPlayer(this.token, this.currentAdd);
+                    await this.getAllPlayers();
+                    this.snackbar = true;
+                    this.buttonLoading = false;
+                    this.dialogAdd = false;
+                    this.currentAdd = {
+                        name: '',
+                        position: { title: 'Bramkarz', value: 'BR' },
+                        status: { title: 'Aktywny', value: 'aktywny' },
+                        number: '',
+                        year: ''
+                    };
                 } else {
                     this.snackbar = true;
                     this.buttonLoading = false;
@@ -964,45 +905,75 @@ export default{
                 this.snackbarError = true;
             }
         },
-        filter() {
+        filter(): void {
             this.dialogFilter = true;
         },
-        filterClose() {
+
+        filterClose(): void {
             this.dialogFilter = false;
         },
-        async updateFilter() {
+        async updateFilter(): Promise<void> {
+            interface PlayerFilter {
+                status: string;
+                position: string;
+                year: string;
+            }
+    
+            interface FilterOptions {
+                statusA: boolean;
+                statusN: boolean;
+                positionB: boolean;
+                positionO: boolean;
+                positionP: boolean;
+                positionN: boolean;
+                year1: boolean;
+                year2: boolean;
+                year3: boolean;
+                year4: boolean;
+            }
             this.loading = true;
             this.dialogFilter = false;
             this.players = await getPlayers();
+            this.sortingOptions = {
+                age: false,
+                position: false,
+                year: false,
+                number: false,
+                status: false,
+            };
 
-            function filterPlayers(players, filterOptions) {
+            const filterPlayers = (players: PlayerFilter[], filterOptions: FilterOptions): PlayerFilter[] => {
                 return players.filter(player => {
                     const statusCondition =
-                    (!filterOptions.statusA || player.status === "aktywny") &&
-                    (!filterOptions.statusN || player.status === "nieaktywny");
+                        (!filterOptions.statusA || player.status === "aktywny") &&
+                        (!filterOptions.statusN || player.status === "nieaktywny");
 
                     const positionCondition =
-                    (!filterOptions.positionB || player.position === "BR") &&
-                    (!filterOptions.positionO || player.position === "OB") &&
-                    (!filterOptions.positionP || player.position === "PO") &&
-                    (!filterOptions.positionN || player.position === "NA");
+                        (!filterOptions.positionB || player.position === "BR") &&
+                        (!filterOptions.positionO || player.position === "OB") &&
+                        (!filterOptions.positionP || player.position === "PO") &&
+                        (!filterOptions.positionN || player.position === "NA");
 
                     const yearCondition =
-                    (!filterOptions.year1 || (parseInt(player.year) >= 1970 && parseInt(player.year) <= 1999)) &&
-                    (!filterOptions.year2 || (parseInt(player.year) >= 2000 && parseInt(player.year) <= 2005)) &&
-                    (!filterOptions.year3 || (parseInt(player.year) >= 2006 && parseInt(player.year) <= 2010)) &&
-                    (!filterOptions.year4 || (parseInt(player.year) >= 2010 && parseInt(player.year) <= 2019));
+                        (!filterOptions.year1 || (parseInt(player.year) >= 1970 && parseInt(player.year) <= 1999)) &&
+                        (!filterOptions.year2 || (parseInt(player.year) >= 2000 && parseInt(player.year) <= 2005)) &&
+                        (!filterOptions.year3 || (parseInt(player.year) >= 2006 && parseInt(player.year) <= 2010)) &&
+                        (!filterOptions.year4 || (parseInt(player.year) >= 2010 && parseInt(player.year) <= 2019));
 
                     return statusCondition && positionCondition && yearCondition;
                 });
             }
 
             this.players = filterPlayers(this.players, this.filterOptions);
-            this.organizePlayers();
+            await this.organizePlayers();
             this.loading = false;
         },
-        async organizePlayers() {
-            let playersToSort = [...this.players];
+        async organizePlayers(): Promise<void> {
+            interface PlayerOrganize {
+                status: string | { title: string; value: string };
+                position: string | { title: string; value: string };
+            }
+            let playersToSort: PlayerOrganize[] = [...this.players];
             for (let i = 0; i < playersToSort.length; i++) {
                 if (playersToSort[i].status === 'nieaktywny') {
                     playersToSort[i].status = {title: 'Nieaktywny', value: 'nieaktywny'};
@@ -1026,7 +997,7 @@ export default{
                 this.playersSorted.push(playersToSort.splice(0, this.itemsPerPage));
             }
         },
-        async changeItemsPerPage(number: Number) {
+        async changeItemsPerPage(number: number): Promise<void> {
             this.itemsPerPage = number;
             await this.organizePlayers();
             this.currentPagePlayers = 1;
@@ -1035,14 +1006,14 @@ export default{
         async getTokenString() {
             return await getToken()
         },
-        updateSorting() {
-            const selectedOptions = Object.keys(this.sortingOptions).filter(
-                option => this.sortingOptions[option]
+        updateSorting(): void {
+            const selectedOptions: string[] = Object.keys(this.sortingOptions).filter(
+                (option: string) => this.sortingOptions[option]
             );
-            const sortedData = this.sortData(selectedOptions);
+            this.sortData(selectedOptions);
         },
-        sortData(sortingOptions) {
-            const sortingFunctions = {
+        sortData(sortingOptions: string[]): void {
+            const sortingFunctions: { [key: string]: (a: Player, b: Player) => number } = {
                 age: (a, b) => a.age - b.age,
                 position: (a, b) => {
                     const positionsOrder = { BR: 0, OB: 1, PO: 2, NA: 3 };
@@ -1055,7 +1026,8 @@ export default{
                     return statusOrder[a.status.value] - statusOrder[b.status.value];
                 }
             };
-            const sortFunction = (a, b) => {
+
+            const sortFunction = (a: Player, b: Player): number => {
                 for (const option of sortingOptions) {
                     const result = sortingFunctions[option](a, b);
                     if (result !== 0) {
@@ -1064,11 +1036,12 @@ export default{
                 }
                 return 0;
             };
-            const sortedArray = [...this.players].sort(sortFunction);
+
+            const sortedArray: Player[] = [...this.players].sort(sortFunction);
             this.players = sortedArray;
             this.organizePlayers();
         },
-        previewImage(event) {
+        previewImage(event): void {
             this.loadingImage = true;
             this.imageIsCropped = false;
             const file = event.target.files[0];
@@ -1097,22 +1070,22 @@ export default{
 
             this.loadingImage = false;
         },
-        isObjectEmpty(obj) {
+        isObjectEmpty(obj: Record<string, unknown>): boolean {
             return Object.keys(obj).length === 0;
         },
-        deleteImagePreview() {
+        deleteImagePreview(): void {
             this.selectedImage = {};
             this.imageIsCropped = null;
         },
-        cropImage() {
-            const { canvas } = this.$refs.cropper.getResult();
+        cropImage(): void {
+            const { canvas } = (this.$refs.cropper as any).getResult();
             this.croppedImage = canvas.toDataURL();
-            const img = new Image()
+            const img = new Image();
             img.onload = () => {
                 this.image = img;
 
-                const aspectRatio = img.height / img.width;
-                const viewportWidth = window.innerWidth;
+                const aspectRatio: number = img.height / img.width;
+                const viewportWidth: number = window.innerWidth;
 
                 img.width = viewportWidth * 0.9;
                 img.height = aspectRatio * viewportWidth;
@@ -1122,34 +1095,39 @@ export default{
                     img.height = aspectRatio * img.width;
                 }
 
-                this.$refs.canvas.width = img.width;
-                this.$refs.canvas.height = img.height;
+                (this.$refs.canvas as HTMLCanvasElement).width = img.width;
+                (this.$refs.canvas as HTMLCanvasElement).height = img.height;
 
-                this.ctx = this.$refs.canvas.getContext("2d");
-                this.ctx.clearRect(0, 0, this.$refs.canvas.width, this.$refs.canvas.height);
-                this.ctx.drawImage(img, 0, 0, img.width, img.height);
+                this.ctx = (this.$refs.canvas as HTMLCanvasElement).getContext("2d");
+                if (this.ctx) {
+                    this.ctx.clearRect(0, 0, (this.$refs.canvas as HTMLCanvasElement).width, (this.$refs.canvas as HTMLCanvasElement).height);
+                    this.ctx.drawImage(img, 0, 0, img.width, img.height);
+                }
             }
             img.src = this.croppedImage;
             this.imageIsCropped = true;
         },
-        deleteCanvasImage() {
-            const canvas = this.$refs.canvas;
+        deleteCanvasImage(): void {
+            const canvas = this.$refs.canvas as HTMLCanvasElement;
             const ctx = canvas.getContext('2d');
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            if (ctx) {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+            }
             this.selectedImage = {};
             this.croppedImage = null;
             this.imageIsCropped = null;
         },
-        async imagePlayerDialog() {
-            const resultDataURL = this.$refs.canvas.toDataURL('image/webp');
+        async imagePlayerDialog(): Promise<void> {
+            const resultDataURL: string = (this.$refs.canvas as HTMLCanvasElement).toDataURL('image/webp');
             this.buttonLoading = true;
             this.token = await getToken();
 
-            const formData = new FormData();
+            const formData: FormData = new FormData();
             formData.append("playerId", this.currentImage.id);
             formData.append("token", this.token);
 
-            const blob = await fetch(resultDataURL).then(res => res.blob());
+            const response = await fetch(resultDataURL);
+            const blob: Blob = await response.blob();
 
             formData.append('image', blob, `${this.currentImage.id}${new Date()}.webp`);
 
@@ -1182,18 +1160,18 @@ export default{
                 this.buttonLoading = false;
             }
         },
-        changePlayersDirection() {
+        changePlayersDirection(): void {
             this.itemsPerPage = 10;
-            const flattened = this.playersSorted.flat();
+            const flattened: any[] = this.playersSorted.flat();
             
-            const reversed = flattened.reverse();
+            const reversed: any[] = flattened.reverse();
 
             this.pagesPlayers = Math.ceil(reversed.length / this.itemsPerPage);
             this.currentPagePlayers = 1;
             
-            const packed = [];
-            for (let i = 0; i < reversed.length; i += 10) {
-                packed.push(reversed.slice(i, i + 10));
+            const packed: any[][] = [];
+            for (let i = 0; i < reversed.length; i += this.itemsPerPage) {
+                packed.push(reversed.slice(i, i + this.itemsPerPage));
             }            
             this.playersSorted = packed;
         }
