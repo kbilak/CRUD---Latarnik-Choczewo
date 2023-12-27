@@ -54,7 +54,7 @@
                             <v-icon @click="changePlayersDirection()" class="text-white bg-black h-[48px] w-[48px] hover:bg-[#101010] transition ease-in-out duration-300 font-medium rounded-[0.5rem] text-[1rem] ml-5 flex items-center justify-center leading-[1.5] tracking-[0.005em] cursor-pointer">mdi-arrow-up-down</v-icon>
                         </div>
                     </div>
-                    <div class="flex 2xl:flex-row xl:flex-row lg:flex-row md:flex-row sm:flex-row xs:flex-col xs:w-[400px]">
+                    <div class="flex 2xl:flex-row xl:flex-row lg:flex-row md:flex-row sm:flex-row xs:flex-col 2xl:w-auto xl:w-auto lg:w-auto md:w-auto sm:w-auto xs:w-[400px]">
                         <div class="bg-white h-[48px] rounded-[0.5rem] 2xl:ml-5 xl:ml-5 lg:ml-5 md:ml-5 sm:ml-5 xs:ml-0 min-w-[220px] 2xl:mb-0 xl:mb-0 lg:mb-0 md:mb-0 sm:mb-0 xs:mb-3">
                             <div class="relative h-[48px] flex items-center justify-center">
                                 <span class="absolute inset-y-0 left-0 flex items-center pl-3">
