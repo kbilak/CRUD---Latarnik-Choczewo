@@ -20,24 +20,8 @@
                                     <li>
                                         <div class="form-control">
                                             <label class="label cursor-pointer">
-                                                <input v-model="sortingOptions.position" @change="updateSorting" type="checkbox" class="checkbox checkbox-[#000000] bg-gray-300 border-[1px] border-gray-300 mr-2" />
-                                                <span class="label-text">Pozycja</span> 
-                                            </label>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="form-control">
-                                            <label class="label cursor-pointer">
-                                                <input v-model="sortingOptions.year" @change="updateSorting" type="checkbox" class="checkbox checkbox-[#000000] bg-gray-300 border-[1px] border-gray-300 mr-2" />
-                                                <span class="label-text">Rocznik</span> 
-                                            </label>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="form-control">
-                                            <label class="label cursor-pointer">
-                                                <input v-model="sortingOptions.number" @change="updateSorting" type="checkbox" class="checkbox checkbox-[#000000] bg-gray-300 border-[1px] border-gray-300 mr-2" />
-                                                <span class="label-text">Numer</span> 
+                                                <input v-model="sortingOptions.type" @change="updateSorting" type="checkbox" class="checkbox checkbox-[#000000] bg-gray-300 border-[1px] border-gray-300 mr-2" />
+                                                <span class="label-text">Rola</span> 
                                             </label>
                                         </div>
                                     </li>
@@ -51,7 +35,7 @@
                                     </li>
                                 </ul>
                             </div>
-                            <v-icon @click="changePlayersDirection()" class="text-white bg-black h-[48px] w-[48px] hover:bg-[#101010] transition ease-in-out duration-300 font-medium rounded-[0.5rem] text-[1rem] ml-5 flex items-center justify-center leading-[1.5] tracking-[0.005em] cursor-pointer">mdi-arrow-up-down</v-icon>
+                            <v-icon @click="changeCoachesDirection()" class="text-white bg-black h-[48px] w-[48px] hover:bg-[#101010] transition ease-in-out duration-300 font-medium rounded-[0.5rem] text-[1rem] ml-5 flex items-center justify-center leading-[1.5] tracking-[0.005em] cursor-pointer">mdi-arrow-up-down</v-icon>
                         </div>
                     </div>
                     <div class="bg-white h-[48px] rounded-[0.5rem] ml-5 min-w-[220px]">
@@ -65,7 +49,7 @@
                             </span>
                         </div>
                     </div>
-                    <MainButton :click="addPlayer" type="green" class="bg-green-700 ml-5" buttonText="Dodaj trenera" :disabled="false" />
+                    <MainButton :click="addCoach" type="green" class="bg-green-700 hover:bg-green-800 ml-5" buttonText="Dodaj trenera" :disabled="false" />
                 </div>
                 <article class="w-full rounded-[0.5rem] bg-white h-auto">
                     <div v-if="loading" class="w-full min-h-[660px] h-full flex items-center justify-center">
@@ -80,58 +64,51 @@
                                 <span class="w-[150px] h-full">Name</span>
                             </div>
                             <div class="flex items-center justify-center">
-                                <span class="w-[90px] h-full">Pozycja</span>
+                                <span class="w-[150px] h-full">Rola</span>
                             </div>
                             <div class="flex items-center justify-center">
                                 <span class="w-[120px] h-full">Status</span>
                             </div>
-                            <div class="flex items-center justify-center text-center">
-                                <span class="w-[70px] h-full">Number</span>
-                            </div>
-                            <div class="flex items-center justify-center text-center">
-                                <span class="w-[90px] h-full">Year</span>
+                            <div class="flex items-center justify-center">
+                                <span class="w-[150px] h-full">Team</span>
                             </div>
                             <div v-if="this.authStore.user.user.user_type === 'admin'" class="flex items-center justify-center text-center">
                                 <span class="w-[120px] h-full">Operacje</span>
                             </div>
                         </div>
-                        <div v-if="this.playersSorted.length === 0" class="w-full h-[599px] border-b-[0.0625rem] border-[hsl(0 0% 92%)] flex items-center justify-center px-10 font-inter text-[#2b2b2b]">
+                        <div v-if="this.coachesSorted.length === 0" class="w-full h-[599px] border-b-[0.0625rem] border-[hsl(0 0% 92%)] flex items-center justify-center px-10 font-inter text-[#2b2b2b]">
                             <span class="font-inter text-[3rem]">
                                 Nic nie znaleziono!
                             </span>
                         </div>
-                        <div v-for="(player, index) in this.playersSorted[this.currentPagePlayers - 1]" :key="player.id" :class="{ 'border-b-[0.0625rem] border-[hsl(0 0% 92%)]': index !== this.playersSorted[this.currentPagePlayers - 1].length - 1 }" class="w-full h-[60px] flex items-center justify-between px-10 font-inter text-[#2b2b2b]">
+                        <div v-for="(coach, index) in this.coachesSorted[this.currentPageCoaches - 1]" :key="coach.id" :class="{ 'border-b-[0.0625rem] border-[hsl(0 0% 92%)]': index !== this.coachesSorted[this.currentPageCoaches - 1].length - 1 }" class="w-full h-[60px] flex items-center justify-between px-10 font-inter text-[#2b2b2b]">
                             <div class="flex items-center justify-start w-[60px]">
-                                <img :src="player.image" :alt="player.name" class="w-[50px] h-[50px] rounded-md">
+                                <img v-if="coach.image !== null" :src="coach.image" :alt="coach.name" class="w-[50px] h-[50px] rounded-md">
+                                <img v-else src="https://st3.depositphotos.com/6672868/13701/v/450/depositphotos_137014128-stock-illustration-user-profile-icon.jpg" alt="placeholder" class="w-[50px] h-[50px] rounded-md">
                             </div>
                             <div class="flex items-center justify-center">
-                                <span class="w-[150px] h-full font-[500]">{{player.name}}</span>
+                                <span class="w-[150px] h-full font-[500]">{{coach.name}}</span>
                             </div>
                             <div class="flex items-center justify-center">
-                                <span v-if="player.position.value === 'BR'" class="w-[90px] h-full">Bramkarz</span>
-                                <span v-if="player.position.value === 'OB'" class="w-[90px] h-full">Obrońca</span>
-                                <span v-if="player.position.value === 'PO'" class="w-[90px] h-full">Pomocnik</span>
-                                <span v-if="player.position.value === 'NA'" class="w-[90px] h-full">Napastnik</span>
+                                <span v-if="coach.type.value === 'GW'" class="w-[150px] h-full">Trener główny</span>
+                                <span v-if="coach.type.value === 'AS'" class="w-[150px] h-full">Asystent</span>
                             </div>
                             <div class="flex items-center justify-center text-center">
-                                <span v-if="player.status.value === 'nieaktywny'" class="h-full border-[1px] border-red-600 bg-red-50 text-red text-sm rounded-full w-[120px] py-1">Nieaktywny</span>
+                                <span v-if="coach.status.value === 'nieaktywny'" class="h-full border-[1px] border-red-600 bg-red-50 text-red text-sm rounded-full w-[120px] py-1">Nieaktywny</span>
                                 <span v-else class="h-full border-[1px] border-green-600 bg-green-50 text-green text-sm rounded-full w-[120px] py-1">Aktywny</span>
                             </div>
-                            <div class="flex items-center justify-center text-center">
-                                <span class="w-[70px] h-full">{{player.number}}</span>
-                            </div>
-                            <div class="flex items-center justify-center text-center">
-                                <span class="w-[90px] h-full">{{player.year}}</span>
+                            <div class="flex items-center justify-center">
+                                <span class="w-[150px] h-full">{{coach.team}}</span>
                             </div>
                             <div v-if="this.authStore.user.user.user_type === 'admin'" class="flex items-center justify-center w-[120px]">
-                                <v-icon @click="this.updatePlayer(player.id, player.name, player.position, player.status, player.number, player.year)">mdi-pencil-plus</v-icon>
-                                <v-icon @click="this.imagePlayer(player.id, player.name, player.image)" class="mx-5">mdi-image-edit</v-icon>
-                                <v-icon @click="this.deletePlayer(player.id, player.name)">mdi-delete</v-icon>
+                                <v-icon @click="this.updateCoach(coach.id, coach.name, coach.type, coach.status, coach.team)">mdi-pencil-plus</v-icon>
+                                <v-icon @click="this.imageCoach(coach.id, coach.name, coach.image)" class="mx-5">mdi-image-edit</v-icon>
+                                <v-icon @click="this.deleteCoach(coach.id, coach.name)">mdi-delete</v-icon>
                             </div>
                         </div>
                     </div>
                 </article>
-                <div v-if="!loading && pagesPlayers > 0" class="w-full h-auto my-5 flex text-black items-center justify-between font-inter">
+                <div v-if="!loading && pagesCoaches > 0" class="w-full h-auto my-5 flex text-black items-center justify-between font-inter">
                     <div class="w-[230px] h-full bg-white rounded-md flex items-center">
                         <select @change="this.changeItemsPerPage(this.itemsPerPage)" v-model="this.itemsPerPage" class="py-3 px-4 block w-[88px] bg-white rounded-[0.5rem] text-sm h-[44px]">
                             <option :value="10">10</option>
@@ -141,35 +118,35 @@
                         <span class="text-sm border-l-[1px] h-full pl-2">Wyniki na stronie</span>
                     </div>
                     <div class="pagination flex items-center justify-center flex-col">
-                        <span v-if="this.pagesPlayers > 1" class="flex items-center">
-                            <button @click="this.currentPagePlayers = 1" class="text-black w-[35px] h-[35px] cursor-pointer">
+                        <span v-if="this.pagesCoaches > 1" class="flex items-center">
+                            <button @click="this.currentPageCoaches = 1" class="text-black w-[35px] h-[35px] cursor-pointer">
                                 <v-icon>mdi-chevron-left</v-icon>
                                 <v-icon class="ml-[-18px]">mdi-chevron-left</v-icon>
                             </button>
-                            <button @click="this.currentPagePlayers--" :disabled="this.currentPagePlayers === 1" class="text-black w-[35px] h-[35px] cursor-pointer">
+                            <button @click="this.currentPageCoaches--" :disabled="this.currentPageCoaches === 1" class="text-black w-[35px] h-[35px] cursor-pointer">
                                 <v-icon>mdi-chevron-left</v-icon>
                             </button>
-                            <div v-for="pageNumber in displayedPages" @click="this.currentPagePlayers = pageNumber" :key="pageNumber" class="bg-white w-[35px] h-[35px] mx-1 flex items-center justify-center rounded-md cursor-pointer" :class="{ 'current-page-div': this.currentPagePlayers === pageNumber }">
-                                <button :class="{ 'current-page': this.currentPagePlayers === pageNumber }" class="bg-white text-black border-2">
+                            <div v-for="pageNumber in displayedPages" @click="this.currentPageCoaches = pageNumber" :key="pageNumber" class="bg-white w-[35px] h-[35px] mx-1 flex items-center justify-center rounded-md cursor-pointer" :class="{ 'current-page-div': this.currentPageCoaches === pageNumber }">
+                                <button :class="{ 'current-page': this.currentPageCoaches === pageNumber }" class="bg-white text-black border-2">
                                     {{ pageNumber }}
                                 </button>
                             </div>
-                            <button @click="this.currentPagePlayers++" :disabled="this.currentPagePlayers === this.pagesPlayers" class="text-black w-[35px] h-[35px] cursor-pointer">
+                            <button @click="this.currentPageCoaches++" :disabled="this.currentPageCoaches === this.pagesCoaches" class="text-black w-[35px] h-[35px] cursor-pointer">
                                 <v-icon>mdi-chevron-right</v-icon>
                             </button>
-                            <button @click="this.currentPagePlayers = this.pagesPlayers" class="text-black w-[35px] h-[35px] cursor-pointer">
+                            <button @click="this.currentPageCoaches = this.pagesCoaches" class="text-black w-[35px] h-[35px] cursor-pointer">
                                 <v-icon>mdi-chevron-right</v-icon>
                                 <v-icon class="ml-[-18px]">mdi-chevron-right</v-icon>
                             </button>
                         </span>
                         <span class="mt-2">
-                            Strona <b>{{ this.currentPagePlayers }}</b> z <b>{{ this.pagesPlayers }}</b>
+                            Strona <b>{{ this.currentPageCoaches }}</b> z <b>{{ this.pagesCoaches }}</b>
                         </span>
                     </div>
                     <div class="w-[230px] h-full flex items-center justify-end">
-                        <span class="font-bold">{{ this.playersSorted[this.currentPagePlayers - 1].length }}</span>
+                        <span class="font-bold">{{ this.coachesSorted[this.currentPageCoaches - 1].length }}</span>
                         <span class="mx-1">z</span>
-                        <span class="font-bold">{{ this.players.length }}</span>
+                        <span class="font-bold">{{ this.coaches.length }}</span>
                     </div>
                 </div>
             </div>
@@ -181,24 +158,22 @@
                         </div>
                         <v-icon @click="this.dialogUpdate = false; this.currentUpdate = {};" class="cursor-pointer text-gray-500 transition ease-in-out duration-300" style="font-size:28px !important;">mdi-close</v-icon>
                     </div>
-                    <div class="flex flex-col mb-10 font-poppins">
-                        <span class="font-medium mb-1 text-[1.5rem] leading-[1.5] tracking-[0.005em]">Edycja danych zawodnika.</span>
-                        <span class="text-[1rem] text-gray-500 leading-[1.5] tracking-[0.005em] mb-3">Historię edycji tego zawodnika możesz sprawdzić w <NuxtLink :to="`/players/user-history?id=${this.currentUpdate.id}`" class="font-bold text-black">Jego historii</NuxtLink>.</span>
+                    <div class="flex flex-col mb-7 font-inter">
+                        <span class="font-medium mb-5 text-[1.5rem] leading-[1.5] tracking-[0.005em]">Edytowanie trenera.</span>
+                        <span class="text-[1rem] text-gray-500 leading-[1.5] tracking-[0.005em] mb-3">Edytujesz dane trenera <b>{{ currentUpdate.name }}</b>.</span>
+                        <span class="text-[1rem] text-red-700 leading-[1.5] tracking-[0.005em]">Ta akcja <b>nie może</b> być cofnięta.</span>
                     </div>
-                    <div class="flex flex-col mt-3 mb-8 font-poppins">
+                    <div class="flex flex-col mt-3 mb-8 font-inter">
                         <v-text-field v-model="this.currentUpdate.name" :rules="this.nameRules" variant="outlined" class="max-h-[56px] w-full mb-8" placeholder="Name" label="Name"></v-text-field>
-                        <div class="flex flex-row justify-between mb-8">
-                            <v-text-field v-model="this.currentUpdate.number" :rules="this.numberRules" variant="outlined" class="max-h-[56px] max-w-[48%]" placeholder="Number" label="Number"></v-text-field>
-                            <v-text-field v-model="this.currentUpdate.year" :rules="this.yearRules" variant="outlined" class="max-h-[56px] max-w-[48%]" placeholder="Birth year" label="Birth year"></v-text-field>
-                        </div>
+                        <v-text-field v-model="this.currentUpdate.team" :rules="this.teamRules" variant="outlined" class="max-h-[56px] w-full mb-8" placeholder="Trenowana drużyna" label="Trenowana drużyna"></v-text-field>
                         <div class="flex flex-row justify-between">
                             <v-select v-model="this.currentUpdate.status" variant="outlined" class="max-h-[56px] max-w-[48%]" :items="statuses" item-title="title" item-value="value" return-object placeholder="Status" label="Status"></v-select>
-                            <v-select v-model="this.currentUpdate.position" variant="outlined" class="max-h-[56px] max-w-[48%]" :items="positions" item-title="title" item-value="value" return-object placeholder="Position" label="Position"></v-select>
+                            <v-select v-model="this.currentUpdate.type" variant="outlined" class="max-h-[56px] max-w-[48%]" :items="types" item-title="title" item-value="value" return-object placeholder="Position" label="Position"></v-select>
                         </div>
                     </div>
-                    <div class="flex flex-row w-full items-center justify-end font-poppins">
-                        <MainButton :click="updatePlayerClose" type="white" buttonText="Anuluj" style="color: black !important;" />
-                        <MainButton :click="updatePlayerDialog" type="black" :loading="buttonLoading" :disabled="!updateValid" buttonText="Zapisz" class="ml-5" />
+                    <div class="flex flex-row w-full items-center justify-end font-inter">
+                        <MainButton :click="updateCoachClose" type="white" buttonText="Anuluj" style="color: black !important;" />
+                        <MainButton :click="updateCoachDialog" type="black" :loading="buttonLoading" :disabled="!updateValid" buttonText="Zapisz" class="ml-5" />
                     </div>
                 </v-form>
             </v-dialog>
@@ -210,8 +185,8 @@
                         </div>
                         <v-icon @click="this.dialogImage = false; this.currentImage = {}; this.selectedImage = {};" class="cursor-pointer text-gray-500 transition ease-in-out duration-300" style="font-size:28px !important;">mdi-close</v-icon>
                     </div>
-                    <div class="flex flex-col mb-10 font-poppins">
-                        <span class="font-medium mb-1 text-[1.5rem] leading-[1.5] tracking-[0.005em]">Edycja zdjęcia zawodnika.</span>
+                    <div class="flex flex-col mb-7 font-inter">
+                        <span class="font-medium mb-5 text-[1.5rem] leading-[1.5] tracking-[0.005em]">Edycja zdjęcia zawodnika.</span>
                         <span class="text-[1rem] text-gray-500 leading-[1.5] tracking-[0.005em] mb-3">Dodajesz nowe zdjęcie zawodnika <b>{{ this.currentImage.name }}</b>.</span>
                         <span class="text-[1rem] text-red-700 leading-[1.5] tracking-[0.005em]">Ta akcja <b>nie może</b> być cofnięta.</span>
                     </div>
@@ -231,16 +206,16 @@
 
                         <cropper v-if="!isObjectEmpty(selectedImage) && !this.imageIsCropped" class="cropper" :src="selectedImage.url" :stencil-props="{aspectRatio: 1 / 1, }" ref="cropper"/>
                         <div v-if="!isObjectEmpty(selectedImage) && !this.imageIsCropped" class="flex mt-5 w-full items-center justify-end">
-                            <MainButton :click="imagePlayerClose" type="white" buttonText="Anuluj" style="color: black !important;" />
-                            <MainButton :click="deleteImagePreview" type="red" buttonText="Usuń zdjęcie" class="ml-5" />
-                            <MainButton :click="cropImage" type="green" buttonText="Wytnij" class="ml-5" />
+                            <MainButton :click="imageCoachClose" type="white" buttonText="Anuluj" style="color: black !important;" />
+                            <MainButton :click="deleteImagePreview" type="red" buttonText="Usuń zdjęcie" class="bg-red-700 hover:bg-red-800 ml-5" />
+                            <MainButton :click="cropImage" type="green" buttonText="Wytnij" class="bg-green-700 hover:bg-green-800 ml-5" />
                         </div>
 
                         <canvas v-if="!isObjectEmpty(selectedImage) && this.imageIsCropped" ref="canvas" class="rounded-xl max-h-[600px] w-auto object-contain"></canvas>
                     </div>
 
-                    <div v-if="isObjectEmpty(selectedImage)" class="flex flex-row w-full items-center justify-end font-poppins">
-                        <MainButton :click="imagePlayerClose" type="white" buttonText="Anuluj" style="color: black !important;" />
+                    <div v-if="isObjectEmpty(selectedImage)" class="flex flex-row w-full items-center justify-end font-inter">
+                        <MainButton :click="imageCoachClose" type="white" buttonText="Anuluj" style="color: black !important;" />
                         <label v-if="isObjectEmpty(selectedImage)" @click="this.loadingImage = true;" for="file-upload" class="btn h-[40px] text-white bg-blue-700 hover:bg-blue-800 transition ease-in-out duration-300 rounded-[0.5rem] text-[1rem] font-medium px-4 py-1 w-auto flex items-center justify-center font-inter leading-[1.5] tracking-[0.005em] ml-5">
                             Dodaj nowe zdjęcie
                         </label>
@@ -248,9 +223,9 @@
                     </div>
 
                     <div v-if="imageIsCropped && !isObjectEmpty(selectedImage)" class="flex flex-row items-center justify-end mt-10">
-                        <MainButton :click="imagePlayerClose" type="white" buttonText="Anuluj" style="color: black !important;" />
-                        <MainButton v-if="croppedImage !== null" :click="deleteCanvasImage" type="red" buttonText="Usuń zdjęcie" class="ml-5" />
-                        <Input :icon="false" :click="imagePlayerDialog" buttonText="Zapisz zdjęcie" class="ml-5" />
+                        <MainButton :click="imageCoachClose" type="white" buttonText="Anuluj" style="color: black !important;" />
+                        <MainButton v-if="croppedImage !== null" :click="deleteCanvasImage" type="red" buttonText="Usuń zdjęcie" class="bg-red-700 hover:bg-red-800 ml-5" />
+                        <Input :icon="false" :click="imageCoachDialog" buttonText="Zapisz zdjęcie" class="ml-5" />
                     </div>
                 </div>
             </v-dialog>
@@ -262,14 +237,14 @@
                         </div>
                         <v-icon @click="this.dialogDelete = false; this.currentDelete = {};" class="cursor-pointer text-gray-500 transition ease-in-out duration-300" style="font-size:28px !important;">mdi-close</v-icon>
                     </div>
-                    <div class="flex flex-col mb-10 font-poppins">
-                        <span class="font-medium mb-1 text-[1.5rem] leading-[1.5] tracking-[0.005em]">Usuwanie zawodnika.</span>
+                    <div class="flex flex-col mb-7 font-inter">
+                        <span class="font-medium mb-5 text-[1.5rem] leading-[1.5] tracking-[0.005em]">Usuwanie zawodnika.</span>
                         <span class="text-[1rem] text-gray-500 leading-[1.5] tracking-[0.005em] mb-3">Czy na pewno chcesz usunąć zawdonika <b>{{ this.currentDelete.name }}</b> z bazy danych?</span>
-                        <span class="text-[1rem] text-red-700 leading-[1.5] tracking-[0.005em]">Ta akcja <b>nie może</b> być cofnięta.</span>
+                        <span class="text-[1rem] text-red-700 leading-[1.5] tracking-[0.005em] mb-3">Ta akcja <b>nie może</b> być cofnięta.</span>
                     </div>
-                    <div class="flex flex-row w-full items-center justify-end font-poppins">
-                        <MainButton :click="deletePlayerClose" type="white" buttonText="Anuluj" style="color: black !important;" />
-                        <MainButton :click="deletePlayerDialog" type="red" buttonText="Usuń zawodnika" class="ml-5" />
+                    <div class="flex flex-row w-full items-center justify-end font-inter">
+                        <MainButton :click="deleteCoachClose" type="white" buttonText="Anuluj" style="color: black !important;" />
+                        <MainButton :click="deleteCoachDialog" type="red" buttonText="Usuń zawodnika" class="bg-red-700 hover:bg-red-800ml-5" />
                     </div>
                 </v-form>
             </v-dialog>
@@ -281,24 +256,21 @@
                         </div>
                         <v-icon @click="this.dialogAdd = false; this.currentAdd = {};" class="cursor-pointer text-gray-500 transition ease-in-out duration-300" style="font-size:28px !important;">mdi-close</v-icon>
                     </div>
-                    <div class="flex flex-col mb-10 font-poppins">
-                        <span class="font-medium mb-1 text-[1.5rem] leading-[1.5] tracking-[0.005em]">Dodawanie zawodnika.</span>
-                        <span class="text-[1rem] text-gray-500 leading-[1.5] tracking-[0.005em]">Dodajesz zawodnika do bazy danych <b>Latarnika Choczewo</b>.</span>
+                    <div class="flex flex-col mb-7 font-inter">
+                        <span class="font-medium mb-5 text-[1.5rem] leading-[1.5] tracking-[0.005em]">Dodawanie trenera.</span>
+                        <span class="text-[1rem] text-gray-500 leading-[1.5] tracking-[0.005em]">Dodajesz trenera do bazy danych <b>Latarnika Choczewo</b>.</span>
                     </div>
-                    <div class="flex flex-col mt-3 mb-8 font-poppins">
+                    <div class="flex flex-col mt-3 mb-8 font-inter">
                         <v-text-field v-model="this.currentAdd.name" :rules="this.nameRules" variant="outlined" class="max-h-[56px] w-full mb-8" placeholder="Name" label="Name"></v-text-field>
-                        <div class="flex flex-row justify-between mb-8">
-                            <v-text-field v-model="this.currentAdd.number" :rules="this.numberRules" variant="outlined" class="max-h-[56px] max-w-[48%]" placeholder="Number" label="Number"></v-text-field>
-                            <v-text-field v-model="this.currentAdd.year" :rules="this.yearRules" variant="outlined" class="max-h-[56px] max-w-[48%]" placeholder="Birth year" label="Birth year"></v-text-field>
-                        </div>
+                        <v-text-field v-model="this.currentAdd.team" :rules="this.teamRules" variant="outlined" class="max-h-[56px] w-full mb-8" placeholder="Trenowana drużyna" label="Trenowana drużyna"></v-text-field>
                         <div class="flex flex-row justify-between">
                             <v-select v-model="this.currentAdd.status" variant="outlined" class="max-h-[56px] max-w-[48%]" :items="statuses" item-title="title" item-value="value" return-object placeholder="Status" label="Status"></v-select>
-                            <v-select v-model="this.currentAdd.position" variant="outlined" class="max-h-[56px] max-w-[48%]" :items="positions" item-title="title" item-value="value" return-object placeholder="Position" label="Position"></v-select>
+                            <v-select v-model="this.currentAdd.type" variant="outlined" class="max-h-[56px] max-w-[48%]" :items="types" item-title="title" item-value="value" return-object placeholder="Rola" label="Rola"></v-select>
                         </div>
                     </div>
                     <div class="flex flex-row w-full items-center justify-end font-inter">
-                        <MainButton :click="addPlayerClose" type="white" buttonText="Anuluj" style="color: black !important;" />
-                        <MainButton :click="addPlayerDialog" :loading="buttonLoading" :disabled="!addValid" type="green" class="ml-5" />
+                        <MainButton :click="addCoachClose" type="white" buttonText="Anuluj" style="color: black !important;" />
+                        <MainButton :click="addCoachDialog" :loading="buttonLoading" buttonText="Dodaj trenera" :disabled="!addValid" type="green" class="ml-5" />
                     </div>
                 </v-form>
             </v-dialog>
@@ -314,7 +286,7 @@
                         <span class="font-medium mb-1 text-[1.5rem] leading-[1.5] tracking-[0.005em]">Filtrowanie zawodników.</span>
                         <span class="text-[1rem] text-gray-500 leading-[1.5] tracking-[0.005em]">Wybierz opcje, według których mają być zwróceni zawodnicy.</span>
                     </div>
-                    <div class="flex flex-col mt-3 mb-8 font-poppins">
+                    <div class="flex flex-col mt-3 mb-8 font-inter">
                         <div class="w-full flex items-center">
                             <v-icon class="mr-3">mdi-account-badge</v-icon>
                             <span class="text-[1rem]">Status</span>
@@ -337,96 +309,47 @@
                         </div>
                         <hr class="w-full h-[0.0625rem] bg-[hsl(0 0% 92%)] my-2">
                         <div class="w-full flex items-center">
-                            <v-icon class="mr-3">mdi-soccer-field</v-icon>
-                            <span class="text-[1rem]">Pozycja</span>
+                            <v-icon class="mr-3">mdi-soccer</v-icon>
+                            <span class="text-[1rem]">Typ trenera</span>
                         </div>
                         <div class="flex flex-wrap ml-5 mt-2 font-inter text-black">
                             <div class="form-control w-1/2">
                                 <label class="label cursor-pointer flex justify-start">
-                                    <input v-if="this.filterOptions.positionO || this.filterOptions.positionP || this.filterOptions.positionN" v-model="filterOptions.positionB" disabled type="checkbox" class="checkbox checkbox-[#000000] bg-gray-300 border-[1px] border-gray-300 mr-2" />
-                                    <input v-else v-model="filterOptions.positionB" type="checkbox" class="checkbox checkbox-[#000000] bg-gray-300 border-[1px] border-gray-300 mr-2" />
-                                    <span class="label-text">Bramkarz</span> 
+                                    <input v-if="this.filterOptions.typeAS" v-model="filterOptions.typeGW" disabled type="checkbox" class="checkbox checkbox-[#000000] bg-gray-300 border-[1px] border-gray-300 mr-2" />
+                                    <input v-else v-model="filterOptions.typeGW" type="checkbox" class="checkbox checkbox-[#000000] bg-gray-300 border-[1px] border-gray-300 mr-2" />
+                                    <span class="label-text">Trener główny</span> 
                                 </label>
                             </div>
                             <div class="form-control w-1/2">
                                 <label class="label cursor-pointer flex justify-start">
-                                    <input v-if="this.filterOptions.positionB || this.filterOptions.positionP || this.filterOptions.positionN" v-model="filterOptions.positionO" disabled type="checkbox" class="checkbox checkbox-[#000000] bg-gray-300 border-[1px] border-gray-300 mr-2" />
-                                    <input v-else v-model="filterOptions.positionO" type="checkbox" class="checkbox checkbox-[#000000] bg-gray-300 border-[1px] border-gray-300 mr-2" />
-                                    <span class="label-text">Obrońca</span> 
-                                </label>
-                            </div>
-                            <div class="form-control w-1/2">
-                                <label class="label cursor-pointer flex justify-start">
-                                    <input v-if="this.filterOptions.positionO || this.filterOptions.positionB || this.filterOptions.positionN" v-model="filterOptions.positionP" disabled type="checkbox" class="checkbox checkbox-[#000000] bg-gray-300 border-[1px] border-gray-300 mr-2" />
-                                    <input v-else v-model="filterOptions.positionP" type="checkbox" class="checkbox checkbox-[#000000] bg-gray-300 border-[1px] border-gray-300 mr-2" />
-                                    <span class="label-text">Pomocnik</span> 
-                                </label>
-                            </div>
-                            <div class="form-control w-1/2">
-                                <label class="label cursor-pointer flex justify-start">
-                                    <input v-if="this.filterOptions.positionO || this.filterOptions.positionP || this.filterOptions.positionB" v-model="filterOptions.positionB" disabled type="checkbox" class="checkbox checkbox-[#000000] bg-gray-300 border-[1px] border-gray-300 mr-2" />
-                                    <input v-else v-model="filterOptions.positionN" type="checkbox" class="checkbox checkbox-[#000000] bg-gray-300 border-[1px] border-gray-300 mr-2" />
-                                    <span class="label-text">Napastnik</span> 
-                                </label>
-                            </div>
-                        </div>
-                        <hr class="w-full h-[0.0625rem] bg-[hsl(0 0% 92%)] my-2">
-                        <div class="w-full flex items-center">
-                            <v-icon class="mr-3">mdi-cake</v-icon>
-                            <span class="text-[1rem]">Rocznik</span>
-                        </div>
-                        <div class="flex flex-wrap ml-5 mt-2 font-inter text-black">
-                            <div class="form-control w-1/2">
-                                <label class="label cursor-pointer flex justify-start">
-                                    <input v-if="this.filterOptions.year2 || this.filterOptions.year3 || this.filterOptions.year4" v-model="filterOptions.year1" type="checkbox" disabled class="checkbox checkbox-[#000000] bg-gray-300 border-[1px] border-gray-300 mr-2" />
-                                    <input v-else v-model="filterOptions.year1" type="checkbox" class="checkbox checkbox-[#000000] bg-gray-300 border-[1px] border-gray-300 mr-2" />
-                                    <span class="label-text">1970-1999</span> 
-                                </label>
-                            </div>
-                            <div class="form-control w-1/2">
-                                <label class="label cursor-pointer flex justify-start">
-                                    <input v-if="this.filterOptions.year1 || this.filterOptions.year3 || this.filterOptions.year4" v-model="filterOptions.year2" type="checkbox" disabled class="checkbox checkbox-[#000000] bg-gray-300 border-[1px] border-gray-300 mr-2" />
-                                    <input v-else v-model="filterOptions.year2" type="checkbox" class="checkbox checkbox-[#000000] bg-gray-300 border-[1px] border-gray-300 mr-2" />
-                                    <span class="label-text">2000-2005</span> 
-                                </label>
-                            </div>
-                            <div class="form-control w-1/2">
-                                <label class="label cursor-pointer flex justify-start">
-                                    <input v-if="this.filterOptions.year2 || this.filterOptions.year1 || this.filterOptions.year4" v-model="filterOptions.year3" type="checkbox" disabled class="checkbox checkbox-[#000000] bg-gray-300 border-[1px] border-gray-300 mr-2" />
-                                    <input v-else v-model="filterOptions.year3" type="checkbox" class="checkbox checkbox-[#000000] bg-gray-300 border-[1px] border-gray-300 mr-2" />
-                                    <span class="label-text">2006-2010</span> 
-                                </label>
-                            </div>
-                            <div class="form-control w-1/2">
-                                <label class="label cursor-pointer flex justify-start">
-                                    <input v-if="this.filterOptions.year2 || this.filterOptions.year3 || this.filterOptions.year1" v-model="filterOptions.year4" type="checkbox" disabled class="checkbox checkbox-[#000000] bg-gray-300 border-[1px] border-gray-300 mr-2" />
-                                    <input v-else v-model="filterOptions.year4" type="checkbox" class="checkbox checkbox-[#000000] bg-gray-300 border-[1px] border-gray-300 mr-2" />
-                                    <span class="label-text">2010-2019</span> 
+                                    <input v-if="this.filterOptions.typeGW" v-model="filterOptions.typeAS" disabled type="checkbox" class="checkbox checkbox-[#000000] bg-gray-300 border-[1px] border-gray-300 mr-2" />
+                                    <input v-else v-model="filterOptions.typeAS" type="checkbox" class="checkbox checkbox-[#000000] bg-gray-300 border-[1px] border-gray-300 mr-2" />
+                                    <span class="label-text">Asystent</span> 
                                 </label>
                             </div>
                         </div>
                     </div>
-                    <div class="flex flex-row w-full items-center justify-end font-poppins">
+                    <div class="flex flex-row w-full items-center justify-end font-inter">
                         <MainButton :click="filterClose" type="white" buttonText="Anuluj" style="color: black !important;" />
-                        <MainButton :click="updateFilter" type="yellow" buttonText="Filtruj" class="ml-5" style="color: white !important;" />
+                        <MainButton :click="updateFilter" type="yellow" buttonText="Filtruj" class="bg-yellow-700 hover:bg-yellow-800 ml-5" style="color: white !important;" />
                     </div>
                 </div>
             </v-dialog>
         </div>
         <v-snackbar v-model="snackbar" :timeout="snackbarTimeout" variant="outlined" color="rgba(1, 1, 1, 0)">
-            <div class="p-4 my-4 w-[350px] text-sm text-green-600 border-[1px] border-green-900 rounded-lg bg-green-50 text-center flex items-start justify-between" role="alert">
+            <div class="p-4 my-4 w-[350px] text-sm text-green-600 border-[1px] border-green-900 rounded-lg bg-green-50 text-center flex items-start justify-between" type="alert">
                 <span class="font-medium font-inter">{{ this.languageStore.t.auth_sign_up_mess_success }}</span> 
                 <v-icon @click="this.snackbar = false;">mdi-close</v-icon>
             </div>
         </v-snackbar>
         <v-snackbar v-model="snackbarError" :timeout="snackbarTimeout" variant="outlined" color="rgba(1, 1, 1, 0)">
-            <div class="p-4 my-4 w-[350px] text-sm text-red-600 border-[1px] border-red-900 rounded-lg bg-red-50 text-center" role="alert">
+            <div class="p-4 my-4 w-[350px] text-sm text-red-600 border-[1px] border-red-900 rounded-lg bg-red-50 text-center" type="alert">
                 <span class="font-medium font-inter">{{ this.languageStore.t.auth_login_mess_error }}</span> 
                 <v-icon @click="this.snackbarError = false;">mdi-close</v-icon>
             </div>
         </v-snackbar>
         <v-snackbar v-model="snackbarErrorPhoto" :timeout="snackbarTimeout" variant="outlined" color="rgba(1, 1, 1, 0)">
-            <div class="p-4 my-4 w-[350px] text-sm text-red-600 border-[1px] border-red-900 rounded-lg bg-red-50 text-center" role="alert">
+            <div class="p-4 my-4 w-[350px] text-sm text-red-600 border-[1px] border-red-900 rounded-lg bg-red-50 text-center" type="alert">
                 <span class="font-medium font-inter">{{ this.languageStore.t.auth_login_mess_error }}</span> 
                 <v-icon @click="this.snackbarErrorPhoto = false;">mdi-close</v-icon>
             </div>
@@ -438,7 +361,7 @@
 import { useAuthStore } from '../../stores/auth';
 import { useLanguageStore } from '../../stores/translations';
 import { getToken } from '../../services/token/getToken';
-import { getPlayers, updatePlayer, createPlayer, deletePlayer } from '../../services/players/players';
+import { getCoaches, updateCoach, createCoach, deleteCoach } from '../../services/coaches/coaches';
 
 import Input from '../elements/Input.vue';
 import MainButton from '../elements/MainButton.vue';
@@ -448,9 +371,9 @@ import 'vue-advanced-cropper/dist/style.css';
 
 import axios from 'axios';
 
-interface Player {
+interface coach {
     age: number;
-    position: { value: string };
+    type: { value: string };
     year: number;
     number: number;
     image: string;
@@ -479,40 +402,27 @@ export default{
             buttonLoading: false,
 
             sortingOptions: {
-                age: false,
-                position: false,
-                year: false,
-                number: false,
+                type: false,
                 status: false,
             },
 
             filterOptions: {
                 statusA: false,
                 statusN: false,
-                positionB: false,
-                positionO: false,
-                positionP: false,
-                positionN: false,
-                year1: false,
-                year2: false,
-                year3: false,
-                year4: false,
+                typeGW: false,
+                typeAS: false,
             },
             filterOptionsTranslations: [
-                'Aktywny', 'Nieaktywny', 'Bramkarz', 'Obrońca', 'Pomocnik', 'Napastnik', '1970-1999', '2000-2005', '2006-2010', '2010-2019'
+                'Aktywny', 'Nieaktywny', 'Trener główny', 'Asystent',
             ],
 
-            players: [],
+            coaches: [],
             tab: null,
             itemsPerPage: 10,
 
-            pagesPlayers: 0,
-            currentPagePlayers: 1,
-            playersSorted: [],
-
-            pagesTrainers: 0,
-            currentPageTrainers: 1,
-            trainersSorted: [],
+            pagesCoaches: 0,
+            currentPageCoaches: 1,
+            coachesSorted: [],
 
             dialogUpdate: false,
             dialogImage: false,
@@ -520,10 +430,10 @@ export default{
             dialogAdd: false,
             dialogFilter: false,
             
-            currentUpdate: {} as Player,
-            currentDelete: {} as Player,
-            currentAdd: {} as Player,
-            currentImage: {} as Player,
+            currentUpdate: {} as coach,
+            currentDelete: {} as coach,
+            currentAdd: {} as coach,
+            currentImage: {} as coach,
 
             selectedImage: {} as SelectedImage,
             allowedExtensions: ["png", "jpg", "jpeg", "webp"],
@@ -534,11 +444,9 @@ export default{
                 { title: 'Nieaktywny', value: 'nieaktywny' },
                 { title: 'Aktywny', value: 'aktywny' },
             ],
-            positions: [
-                { title: 'Bramkarz', value: 'BR' },
-                { title: 'Obrońca', value: 'OB' },
-                { title: 'Pomocnik', value: 'PO' },
-                { title: 'Napastnik', value: 'NA' },
+            types: [
+                { title: 'Trener Główny', value: 'GW' },
+                { title: 'Asystent', value: 'AS' },
             ],
 
             searchText: '',
@@ -549,7 +457,7 @@ export default{
             snackbarTimeout: 5000,
 
             nameRules: [],
-            numberRules: [],
+            teamRules: [],
             yearRules: [],
             addValid: false,
             updateValid: false,
@@ -563,7 +471,7 @@ export default{
             this.$router.push('/auth/login?action=login');
         }
         if (this.authStore.loggedIn) {
-            await this.getAllPlayers();
+            await this.getAllCoaches();
         }
 
         this.nameRules = [
@@ -588,30 +496,30 @@ export default{
     watch: {
         async searchText(newVal) {
             if (newVal === '') {
-                await this.getAllPlayers();
+                await this.getAllCoaches();
                 return;
             }
-            this.players = await getPlayers(); 
-            const filteredPlayers = this.players.filter(player => {
-                for (const key in player) {
+            this.coaches = await getCoaches(); 
+            const filteredCoaches = this.coaches.filter(coach => {
+                for (const key in coach) {
                     if (key !== 'id') {
-                        if (typeof player[key] === 'object') {
-                            for (const prop in player[key]) {
+                        if (typeof coach[key] === 'object') {
+                            for (const prop in coach[key]) {
                                 if (
-                                    typeof player[key][prop] === 'string' &&
-                                    player[key][prop].toLowerCase().includes(newVal.toLowerCase())
+                                    typeof coach[key][prop] === 'string' &&
+                                    coach[key][prop].toLowerCase().includes(newVal.toLowerCase())
                                 ) {
                                     return true;
                                 }
                             }
                         } else if (
-                            typeof player[key] === 'string' &&
-                            player[key].toLowerCase().includes(newVal.toLowerCase())
+                            typeof coach[key] === 'string' &&
+                            coach[key].toLowerCase().includes(newVal.toLowerCase())
                         ) {
                             return true;
                         } else if (
-                            typeof player[key] === 'number' &&
-                            player[key].toString().toLowerCase().includes(newVal.toLowerCase())
+                            typeof coach[key] === 'number' &&
+                            coach[key].toString().toLowerCase().includes(newVal.toLowerCase())
                         ) {
                             return true;
                         }
@@ -619,30 +527,28 @@ export default{
                 }
                 return false;
             });
-            function filterPlayers(players, filterOptions) {
-                return players.filter(player => {
+            function filterCoaches(coaches, filterOptions) {
+                return coaches.filter(coach => {
                     const statusCondition =
-                    (!filterOptions.statusA || player.status === "aktywny") &&
-                    (!filterOptions.statusN || player.status === "nieaktywny");
+                    (!filterOptions.statusA || coach.status === "aktywny") &&
+                    (!filterOptions.statusN || coach.status === "nieaktywny");
 
-                    const positionCondition =
-                    (!filterOptions.positionB || player.position === "BR") &&
-                    (!filterOptions.positionO || player.position === "OB") &&
-                    (!filterOptions.positionP || player.position === "PO") &&
-                    (!filterOptions.positionN || player.position === "NA");
+                    const typeCondition =
+                    (!filterOptions.typeGW || coach.type === "GW") &&
+                    (!filterOptions.typeAS || coach.type === "AS")
 
                     const yearCondition =
-                    (!filterOptions.year1 || (parseInt(player.year) >= 1970 && parseInt(player.year) <= 1999)) &&
-                    (!filterOptions.year2 || (parseInt(player.year) >= 2000 && parseInt(player.year) <= 2005)) &&
-                    (!filterOptions.year3 || (parseInt(player.year) >= 2006 && parseInt(player.year) <= 2010)) &&
-                    (!filterOptions.year4 || (parseInt(player.year) >= 2010 && parseInt(player.year) <= 2019));
+                    (!filterOptions.year1 || (parseInt(coach.year) >= 1970 && parseInt(coach.year) <= 1999)) &&
+                    (!filterOptions.year2 || (parseInt(coach.year) >= 2000 && parseInt(coach.year) <= 2005)) &&
+                    (!filterOptions.year3 || (parseInt(coach.year) >= 2006 && parseInt(coach.year) <= 2010)) &&
+                    (!filterOptions.year4 || (parseInt(coach.year) >= 2010 && parseInt(coach.year) <= 2019));
 
-                    return statusCondition && positionCondition && yearCondition;
+                    return statusCondition && typeCondition && yearCondition;
                 });
             }
-            const playersEnd = filterPlayers(filteredPlayers, this.filterOptions)
-            this.players = playersEnd;
-            this.organizePlayers();
+            const coachesEnd = filterCoaches(filteredCoaches, this.filterOptions)
+            this.coaches = coachesEnd;
+            this.organizeCoaches();
             this.updateSorting();
         }
     },
@@ -652,17 +558,17 @@ export default{
             let start;
             let end;
 
-            if (this.pagesPlayers <= maxDisplayed) {
+            if (this.pagesCoaches <= maxDisplayed) {
                 start = 1;
-                end = this.pagesPlayers;
-            } else if (this.currentPagePlayers <= Math.floor(maxDisplayed / 2) + 1) {
+                end = this.pagesCoaches;
+            } else if (this.currentPageCoaches <= Math.floor(maxDisplayed / 2) + 1) {
                 start = 1;
                 end = maxDisplayed;
-            } else if (this.currentPagePlayers >= this.pagesPlayers - Math.floor(maxDisplayed / 2)) {
-                start = this.pagesPlayers - maxDisplayed + 1;
-                end = this.pagesPlayers;
+            } else if (this.currentPageCoaches >= this.pagesCoaches - Math.floor(maxDisplayed / 2)) {
+                start = this.pagesCoaches - maxDisplayed + 1;
+                end = this.pagesCoaches;
             } else {
-                start = this.currentPagePlayers - Math.floor(maxDisplayed / 2);
+                start = this.currentPageCoaches - Math.floor(maxDisplayed / 2);
                 end = start + maxDisplayed - 1;
             }
 
@@ -696,61 +602,58 @@ export default{
         onSocketError(error) {
             console.error('WebSocket error:', error);
         },
-        async getAllPlayers() {
+        async getAllCoaches() {
             try {
                 this.loading = true;
-                this.players = await getPlayers(); 
-                function filterPlayers(players, filterOptions) {
-                    return players.filter(player => {
+                this.coaches = await getCoaches(); 
+                function filterCoaches(coaches, filterOptions) {
+                    return coaches.filter(coach => {
                         const statusCondition =
-                        (!filterOptions.statusA || player.status === "aktywny") &&
-                        (!filterOptions.statusN || player.status === "nieaktywny");
+                        (!filterOptions.statusA || coach.status === "aktywny") &&
+                        (!filterOptions.statusN || coach.status === "nieaktywny");
 
-                        const positionCondition =
-                        (!filterOptions.positionB || player.position === "BR") &&
-                        (!filterOptions.positionO || player.position === "OB") &&
-                        (!filterOptions.positionP || player.position === "PO") &&
-                        (!filterOptions.positionN || player.position === "NA");
+                        const typeCondition =
+                        (!filterOptions.typeGW || coach.type === "GW") &&
+                        (!filterOptions.typeAS || coach.type === "AS");
 
                         const yearCondition =
-                        (!filterOptions.year1 || (parseInt(player.year) >= 1970 && parseInt(player.year) <= 1999)) &&
-                        (!filterOptions.year2 || (parseInt(player.year) >= 2000 && parseInt(player.year) <= 2005)) &&
-                        (!filterOptions.year3 || (parseInt(player.year) >= 2006 && parseInt(player.year) <= 2010)) &&
-                        (!filterOptions.year4 || (parseInt(player.year) >= 2010 && parseInt(player.year) <= 2019));
+                        (!filterOptions.year1 || (parseInt(coach.year) >= 1970 && parseInt(coach.year) <= 1999)) &&
+                        (!filterOptions.year2 || (parseInt(coach.year) >= 2000 && parseInt(coach.year) <= 2005)) &&
+                        (!filterOptions.year3 || (parseInt(coach.year) >= 2006 && parseInt(coach.year) <= 2010)) &&
+                        (!filterOptions.year4 || (parseInt(coach.year) >= 2010 && parseInt(coach.year) <= 2019));
 
-                        return statusCondition && positionCondition && yearCondition;
+                        return statusCondition && typeCondition && yearCondition;
                     });
                 }
-                this.players = filterPlayers(this.players, this.filterOptions)
-                await this.organizePlayers(); 
+                this.coaches = filterCoaches(this.coaches, this.filterOptions)
+                await this.organizeCoaches(); 
                 this.loading = false;
             } catch (error) {
                 console.error(error);
                 this.loading = false;
             }
         },
-        updatePlayer(id: String, name: String, position: Object, status: Object, number: String, year: String) {
+        updateCoach(id: String, name: String, type: Object, status: Object, team: String) {
             this.currentUpdate = {
                 id: id,
                 name: name,
-                position: position,
+                type: type,
                 status: status,
-                number: number,
-                year: year
+                team: team
             };
             this.dialogUpdate = true;
         },
-        updatePlayerClose() {
+        updateCoachClose() {
             this.dialogUpdate = false;
             this.currentUpdate = {};
         },
-        imagePlayerClose() {
+        imageCoachClose() {
             this.dialogImage = false;
             this.currentImage = {};
             this.selectedImage = {};
             this.imageIsCropped = null;
         },
-        imagePlayer(id: String, name: String, image: String) {
+        imageCoach(id: String, name: String, image: String) {
             this.currentImage = {
                 id: id,
                 name: name,
@@ -758,22 +661,22 @@ export default{
             }
             this.dialogImage = true;
         },
-        async updatePlayerDialog(): Promise<void> {
+        async updateCoachDialog(): Promise<void> {
             this.buttonLoading = true;
             try {
                 const valid = await this.$refs.updateValid.validate();
                 if (valid) {
                     this.token = await getToken();
-                    this.currentUpdate.position = this.currentUpdate.position.value;
+                    this.currentUpdate.type = this.currentUpdate.type.value;
                     this.currentUpdate.status = this.currentUpdate.status.value;
-                    await updatePlayer(this.token, this.currentUpdate);
-                    await this.getAllPlayers();
+                    await updateCoach(this.token, this.currentUpdate);
+                    await this.getAllCoaches();
                     this.snackbar = true;
                     this.buttonLoading = false;
                     this.dialogUpdate = false;
                     this.currentUpdate = {
                         name: '',
-                        position: { title: 'Bramkarz', value: 'BR' },
+                        type: {title: 'Asystent', value: 'AS'},
                         status: { title: 'Aktywny', value: 'aktywny' },
                         number: '',
                         year: ''
@@ -788,26 +691,26 @@ export default{
                 this.buttonLoading = false;
             }
         },
-        deletePlayer(id: String, name: String) {
+        deleteCoach(id: String, name: String) {
             this.currentDelete = {
                 id: id,
                 name: name,
             };
             this.dialogDelete = true;
         },
-        deletePlayerClose() {
+        deleteCoachClose() {
             this.dialogDelete = false;
             this.currentDelete = {};
         },
-        async deletePlayerDialog(): Promise<void> {
+        async deleteCoachDialog(): Promise<void> {
             this.buttonLoading = true;
             try {
                 const valid = await this.$refs.deleteValid.validate();
                 if (valid) {
                     this.token = await getToken();
-                    const response = await deletePlayer(this.token, this.currentDelete.id);
+                    const response = await deleteCoach(this.token, this.currentDelete.id);
                     if (response) {
-                        await this.getAllPlayers();
+                        await this.getAllCoaches();
                         this.snackbar = true;
                         this.buttonLoading = false;
                         this.dialogDelete = false;
@@ -829,41 +732,39 @@ export default{
                 this.buttonLoading = false;
             }
         },
-        addPlayer() {
+        addCoach() {
             this.currentAdd = {
                 name: '',
-                position: {title: 'Bramkarz', value: 'BR'},
+                type: {title: 'Asystent', value: 'AS'},
                 status: {title: 'Aktywny', value: 'aktywny'},
-                number: '',
-                year: ''
+                team: '',
             }
             this.dialogAdd = true;
         },
-        addPlayerClose() {
+        addCoachClose() {
             this.dialogAdd = false; 
             this.currentAdd = {};
         },
-        async addPlayerDialog(): Promise<void> {
+        async addCoachDialog(): Promise<void> {
             this.buttonLoading = true;
             try {
                 const valid: boolean = await this.$refs.addValid.validate();
                 
                 if (valid) {
                     this.token = await getToken();
-                    this.currentAdd.position = this.currentAdd.position.value;
+                    this.currentAdd.type = this.currentAdd.type.value;
                     this.currentAdd.status = this.currentAdd.status.value;
                     
-                    await createPlayer(this.token, this.currentAdd);
-                    await this.getAllPlayers();
+                    await createCoach(this.token, this.currentAdd);
+                    await this.getAllCoaches();
                     this.snackbar = true;
                     this.buttonLoading = false;
                     this.dialogAdd = false;
                     this.currentAdd = {
                         name: '',
-                        position: { title: 'Bramkarz', value: 'BR' },
+                        type: {title: 'Asystent', value: 'AS'},
                         status: { title: 'Aktywny', value: 'aktywny' },
-                        number: '',
-                        year: ''
+                        team: '',
                     };
                 } else {
                     this.snackbar = true;
@@ -883,94 +784,78 @@ export default{
             this.dialogFilter = false;
         },
         async updateFilter(): Promise<void> {
-            interface PlayerFilter {
+            interface CoachFilter {
                 status: string;
-                position: string;
+                type: string;
                 year: string;
             }
     
             interface FilterOptions {
                 statusA: boolean;
                 statusN: boolean;
-                positionB: boolean;
-                positionO: boolean;
-                positionP: boolean;
-                positionN: boolean;
-                year1: boolean;
-                year2: boolean;
-                year3: boolean;
-                year4: boolean;
+                typeGW: boolean;
+                typeAS: boolean;
             }
             this.loading = true;
             this.dialogFilter = false;
-            this.players = await getPlayers();
+            this.coaches = await getCoaches();
             this.sortingOptions = {
-                age: false,
-                position: false,
-                year: false,
-                number: false,
+                type: false,
                 status: false,
             };
 
-            const filterPlayers = (players: PlayerFilter[], filterOptions: FilterOptions): PlayerFilter[] => {
-                return players.filter(player => {
+            const filterCoaches = (coaches: CoachFilter[], filterOptions: FilterOptions): CoachFilter[] => {
+                return coaches.filter(coach => {
                     const statusCondition =
-                        (!filterOptions.statusA || player.status === "aktywny") &&
-                        (!filterOptions.statusN || player.status === "nieaktywny");
+                        (!filterOptions.statusA || coach.status === "aktywny") &&
+                        (!filterOptions.statusN || coach.status === "nieaktywny");
 
-                    const positionCondition =
-                        (!filterOptions.positionB || player.position === "BR") &&
-                        (!filterOptions.positionO || player.position === "OB") &&
-                        (!filterOptions.positionP || player.position === "PO") &&
-                        (!filterOptions.positionN || player.position === "NA");
-
+                    const typeCondition =
+                        (!filterOptions.typeGW || coach.type === "GW") &&
+                        (!filterOptions.typeAS || coach.type === "AS");
                     const yearCondition =
-                        (!filterOptions.year1 || (parseInt(player.year) >= 1970 && parseInt(player.year) <= 1999)) &&
-                        (!filterOptions.year2 || (parseInt(player.year) >= 2000 && parseInt(player.year) <= 2005)) &&
-                        (!filterOptions.year3 || (parseInt(player.year) >= 2006 && parseInt(player.year) <= 2010)) &&
-                        (!filterOptions.year4 || (parseInt(player.year) >= 2010 && parseInt(player.year) <= 2019));
+                        (!filterOptions.year1 || (parseInt(coach.year) >= 1970 && parseInt(coach.year) <= 1999)) &&
+                        (!filterOptions.year2 || (parseInt(coach.year) >= 2000 && parseInt(coach.year) <= 2005)) &&
+                        (!filterOptions.year3 || (parseInt(coach.year) >= 2006 && parseInt(coach.year) <= 2010)) &&
+                        (!filterOptions.year4 || (parseInt(coach.year) >= 2010 && parseInt(coach.year) <= 2019));
 
-                    return statusCondition && positionCondition && yearCondition;
+                    return statusCondition && typeCondition && yearCondition;
                 });
             }
 
-            this.players = filterPlayers(this.players, this.filterOptions);
-            await this.organizePlayers();
+            this.coaches = filterCoaches(this.coaches, this.filterOptions);
+            await this.organizeCoaches();
             this.loading = false;
         },
-        async organizePlayers(): Promise<void> {
-            interface PlayerOrganize {
+        async organizeCoaches(): Promise<void> {
+            interface CoachOrganize {
                 status: string | { title: string; value: string };
-                position: string | { title: string; value: string };
+                type: string | { title: string; value: string };
             }
-            let playersToSort: PlayerOrganize[] = [...this.players];
-            for (let i = 0; i < playersToSort.length; i++) {
-                if (playersToSort[i].status === 'nieaktywny') {
-                    playersToSort[i].status = {title: 'Nieaktywny', value: 'nieaktywny'};
-                } else if (playersToSort[i].status === 'aktywny') {
-                    playersToSort[i].status = {title: 'Aktywny', value: 'aktywny'};
+            let coachesToSort: CoachOrganize[] = [...this.coaches];
+            for (let i = 0; i < coachesToSort.length; i++) {
+                if (coachesToSort[i].status === 'nieaktywny') {
+                    coachesToSort[i].status = {title: 'Nieaktywny', value: 'nieaktywny'};
+                } else if (coachesToSort[i].status === 'aktywny') {
+                    coachesToSort[i].status = {title: 'Aktywny', value: 'aktywny'};
                 }
 
-                if (playersToSort[i].position === 'BR') {
-                    playersToSort[i].position = {title: 'Bramkarz', value: 'BR'};
-                } else if (playersToSort[i].position === 'OB') {
-                    playersToSort[i].position = {title: 'Obrońca', value: 'OB'};
-                } else if (playersToSort[i].position === 'PO') {
-                    playersToSort[i].position = {title: 'Pomocnik', value: 'PO'};
-                } else if (playersToSort[i].position === 'NA') {
-                    playersToSort[i].position = {title: 'Napastnik', value: 'NA'};
+                if (coachesToSort[i].type === 'GW') {
+                    coachesToSort[i].type = {title: 'Trener Główny', value: 'GW'};
+                } else if (coachesToSort[i].type === 'AS') {
+                    coachesToSort[i].type = {title: 'Asystent', value: 'AS'};
                 }
             }
-            this.pagesPlayers = Math.ceil(playersToSort.length / this.itemsPerPage);
-            this.playersSorted = [];
-            while (playersToSort.length > 0) {
-                this.playersSorted.push(playersToSort.splice(0, this.itemsPerPage));
+            this.pagesCoaches = Math.ceil(coachesToSort.length / this.itemsPerPage);
+            this.coachesSorted = [];
+            while (coachesToSort.length > 0) {
+                this.coachesSorted.push(coachesToSort.splice(0, this.itemsPerPage));
             }
         },
         async changeItemsPerPage(number: number): Promise<void> {
             this.itemsPerPage = number;
-            await this.organizePlayers();
-            this.currentPagePlayers = 1;
+            await this.organizeCoaches();
+            this.currentPageCoaches = 1;
             this.updateSorting();
         },
         async getTokenString() {
@@ -983,21 +868,18 @@ export default{
             this.sortData(selectedOptions);
         },
         sortData(sortingOptions: string[]): void {
-            const sortingFunctions: { [key: string]: (a: Player, b: Player) => number } = {
-                age: (a, b) => a.age - b.age,
-                position: (a, b) => {
-                    const positionsOrder = { BR: 0, OB: 1, PO: 2, NA: 3 };
-                    return positionsOrder[a.position.value] - positionsOrder[b.position.value];
+            const sortingFunctions: { [key: string]: (a: coach, b: coach) => number } = {
+                type: (a, b) => {
+                    const typesOrder = { GW: 0, AS: 1 };
+                    return typesOrder[a.type.value] - typesOrder[b.type.value];
                 },
-                year: (a, b) => a.year - b.year,
-                number: (a, b) => a.number - b.number,
                 status: (a, b) => {
                     const statusOrder = { aktywny: 0, nieaktywny: 1 };
                     return statusOrder[a.status.value] - statusOrder[b.status.value];
                 }
             };
 
-            const sortFunction = (a: Player, b: Player): number => {
+            const sortFunction = (a: coach, b: coach): number => {
                 for (const option of sortingOptions) {
                     const result = sortingFunctions[option](a, b);
                     if (result !== 0) {
@@ -1007,9 +889,9 @@ export default{
                 return 0;
             };
 
-            const sortedArray: Player[] = [...this.players].sort(sortFunction);
-            this.players = sortedArray;
-            this.organizePlayers();
+            const sortedArray: coach[] = [...this.coaches].sort(sortFunction);
+            this.coaches = sortedArray;
+            this.organizeCoaches();
         },
         previewImage(event): void {
             this.loadingImage = true;
@@ -1087,13 +969,13 @@ export default{
             this.croppedImage = null;
             this.imageIsCropped = null;
         },
-        async imagePlayerDialog(): Promise<void> {
+        async imageCoachDialog(): Promise<void> {
             const resultDataURL: string = (this.$refs.canvas as HTMLCanvasElement).toDataURL('image/webp');
             this.buttonLoading = true;
             this.token = await getToken();
 
             const formData: FormData = new FormData();
-            formData.append("playerId", this.currentImage.id);
+            formData.append("coachId", this.currentImage.id);
             formData.append("token", this.token);
 
             const response = await fetch(resultDataURL);
@@ -1102,14 +984,14 @@ export default{
             formData.append('image', blob, `${this.currentImage.id}${new Date()}.webp`);
 
             try {
-                const response = await axios.post(`http://127.0.0.1:8000/players/image/`, formData, {
+                const response = await axios.post(`http://127.0.0.1:8000/players/coach/image/`, formData, {
                     headers: {
                         'Content-Type': 'multipart/form-data',
                     },
                 });
 
                 if (response.data && response.data.status === 0) {
-                    await this.getAllPlayers();
+                    await this.getAllCoaches();
                     this.snackbar = true;
                     this.buttonLoading = false;
                     this.dialogImage = false;
@@ -1130,20 +1012,20 @@ export default{
                 this.buttonLoading = false;
             }
         },
-        changePlayersDirection(): void {
+        changeCoachesDirection(): void {
             this.itemsPerPage = 10;
-            const flattened: any[] = this.playersSorted.flat();
+            const flattened: any[] = this.coachesSorted.flat();
             
             const reversed: any[] = flattened.reverse();
 
-            this.pagesPlayers = Math.ceil(reversed.length / this.itemsPerPage);
-            this.currentPagePlayers = 1;
+            this.pagesCoaches = Math.ceil(reversed.length / this.itemsPerPage);
+            this.currentPageCoaches = 1;
             
             const packed: any[][] = [];
             for (let i = 0; i < reversed.length; i += this.itemsPerPage) {
                 packed.push(reversed.slice(i, i + this.itemsPerPage));
             }            
-            this.playersSorted = packed;
+            this.coachesSorted = packed;
         }
     }
 };

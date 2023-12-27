@@ -136,6 +136,26 @@ def image_upload_view(request):
     return JsonResponse({'status': 1, 'error': 'Invalid request'}, status=400)
 
 
+@csrf_exempt
+def image_upload_view_coach(request):
+    if request.method == 'POST':
+        token = request.POST.get('token')
+        if not check_token(token):
+            return JsonResponse({'status': 1, 'error': 'Invalid or expired token'}, status=403)
+        
+        coach_id = request.POST.get('coachId')
+        coach = get_object_or_404(Coach, id=coach_id)
+        image_file = request.FILES.get('image')
+
+        if image_file:
+            coach.image = image_file
+            coach.save()
+
+            return JsonResponse({'status': 0, 'message': 'Image saved successfully'})
+
+    return JsonResponse({'status': 1, 'error': 'Invalid request'}, status=400)
+
+
 class CreateCoachView(APIView):
     def post(self, request):
         token_to_check = None

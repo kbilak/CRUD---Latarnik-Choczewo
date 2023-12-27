@@ -40,10 +40,10 @@ class Coach(models.Model):
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=True)
     name = models.CharField(max_length=100, verbose_name='Imię i nazwisko')
-    type = models.CharField(max_length=2, choices=TYPE_CHOICES, verbose_name='Pozycja')
+    type = models.CharField(max_length=2, choices=TYPE_CHOICES, verbose_name='Rola')
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, verbose_name='Status')
     image = models.ImageField(upload_to='players/', blank=True, null=True, verbose_name='Zdjęcie')
-    team = models.CharField(max_length=4, verbose_name='Drużyna', blank=True, null=True)
+    team = models.CharField(max_length=64, verbose_name='Drużyna', blank=True, null=True)
 
     def __str__(self):
         return self.name
