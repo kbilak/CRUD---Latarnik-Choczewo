@@ -1,10 +1,11 @@
 <template>
     <section id="login" class="flex flex-col items-center justify-center w-full h-[100vh] min-h-[700px] text-black bg-white">
-        <div class="xs:max-w-screen-[450px] sm:max-w-screen-sm md:max-w-screen-md lg:max-w-screen-lg xl:max-w-screen-xl 2xl:max-w-screen-xl w-full h-full flex flex-col justify-center items-center">
+        <div class="xs:max-w-screen-[450px] sm:max-w-screen-sm md:max-w-screen-md lg:max-w-screen-lg xl:max-w-screen-xl 2xl:max-w-screen-xl w-full h-full flex flex-col justify-between items-center">
+            <div class="mt-[44px]"></div>
             <v-form @submit.prevent ref="form" v-model="valid" class="bg-white h-[500px] 2xl:w-[450px] xl:w-[450px] lg:w-[450px] md:w-[450px] sm:w-[450px] xs:w-[350px] rounded-lg flex flex-col items-center justify-center 2xl:p-10 xl:p-10 lg:p-10 md:p-8 sm:p-8 xs:p-5 font-inter">
                 <img src="/logo/logo_latarnik.png" alt="Logo Latarnika Choczewo" class="h-[120px] mb-[1rem]">
                 <span class="text-dark text-[1.5rem] font-medium tracking-[0.02em] leading-[1.333]">Latarnik Choczewo</span>
-                <span class="mb-[3rem]">Lista zawodników</span>
+                <span class="mb-[3rem]">{{this.languageStore.t.nav_list}}</span>
                 <div class="w-full text-right">
                     <v-text-field v-model="this.email" :rules="this.emailRules" variant="outlined" class="max-h-[56px] w-full" :placeholder="this.languageStore.t.placeholder_email" :label="this.languageStore.t.placeholder_email" type="email"></v-text-field>
                     <v-text-field v-model="this.password" :rules="this.passwordRules" variant="outlined" class="max-h-[56px] w-full mt-8 mb-6" :placeholder="this.languageStore.t.placeholder_password" :label="this.languageStore.t.placeholder_password" type="password"></v-text-field>
@@ -21,6 +22,10 @@
                     </div>
                 </div>
             </v-form>
+            <div class="mb-5">
+                <span @click="this.changeLanguage('Polski', 'PL')" class="mr-5 cursor-pointer">🇵🇱 PL</span>
+                <span @click="this.changeLanguage('English', 'EN')" class="cursor-pointer">🇬🇧 EN</span>
+            </div>
             <ClientOnly>
                 <v-snackbar v-model="snackbar" :timeout="snackbarTimeout" variant="outlined" color="rgba(1, 1, 1, 0)">
                     <div class="p-4 my-4 w-[350px] text-sm text-red-600 border-[1px] border-red-900 rounded-lg bg-red-50 text-center" role="alert">
@@ -106,6 +111,9 @@ export default {
         ]
     },
     methods: {
+        changeLanguage(lang: string, code: string) {
+            return this.languageStore.changeLanguage(lang, code);
+        },
         async login() {
             this.loading = true;
             this.$refs.form.validate().then(async valid => {

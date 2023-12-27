@@ -1,7 +1,6 @@
 <template>
     <div>
         <ClientOnly v-if="loading || this.languageStore.translationLoading === true">
-            <NuxtLayout class="hidden"></NuxtLayout>
             <v-overlay v-model="loading" class="flex items-center justify-center">
                 <v-progress-circular indeterminate size="64"></v-progress-circular>
             </v-overlay>
