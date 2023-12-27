@@ -6,17 +6,17 @@
                     <img src="/logo/logo_latarnik.png" alt="Logo Latarnika Choczewo" class="h-[45px]">
                     <span class="ml-5 2xl:text-xl xl:text-xl lg:text-xl md:text-xl sm:text-xl xs:text-md font-inter flex flex-col"><span class="text-dark text-[1rem] font-medium tracking-[0.02em] leading-[1.333]">Latarnik Choczewo</span><span class="text-[0.825rem] leading-[1] tracking-[0.02em]">{{this.languageStore.t.nav_list}}</span></span>
                 </NuxtLink>
-                <div class="flex items-center justify-evenly w-1/3 font-inter uppercase">
+                <div class="flex items-center justify-evenly w-1/4 font-inter uppercase">
                     <NuxtLink v-if="!this.isPlayersRoute" to="/players" class="px-5 py-2">
                         <button class="text-[1rem] leading-[1.5] tracking-[0.005em]">{{this.languageStore.t.nav_players}}</button>
                     </NuxtLink>
                     <NuxtLink v-else class="bg-[#f5f5f5] px-5 py-2 rounded-[0.5rem]">
                         <button class="text-[1rem] leading-[1.5] tracking-[0.005em]">{{this.languageStore.t.nav_players}}</button>
                     </NuxtLink>
-                    <NuxtLink v-if="!this.isCoachesRoute" to="/coaches" class="px-5 py-2">
+                    <NuxtLink v-if="!this.isCoachesRoute && this.authStore.user !== null && this.authStore.user.user.user_type === 'admin'" to="/coaches" class="px-5 py-2">
                         <button class="text-[1rem] leading-[1.5] tracking-[0.005em]">Trenerzy</button>
                     </NuxtLink>
-                    <NuxtLink v-else class="bg-[#f5f5f5] px-5 py-2 rounded-[0.5rem]">
+                    <NuxtLink v-else-if="this.isCoachesRoute && this.authStore.user !== null && this.authStore.user.user.user_type === 'admin'" class="bg-[#f5f5f5] px-5 py-2 rounded-[0.5rem]">
                         <button class="text-[1rem] leading-[1.5] tracking-[0.005em]">Trenerzy</button>
                     </NuxtLink>
                 </div>
