@@ -2,8 +2,8 @@
     <section id="table" class="flex flex-col items-center justify-start w-full min-h-[calc(100vh-110px)] text-black bg-[#f5f5f5] h-auto">
         <div v-if="authStore.loggedIn" class="xs:max-w-screen-[450px] sm:max-w-screen-sm md:max-w-screen-md lg:max-w-screen-lg xl:max-w-screen-xl 2xl:max-w-screen-xl w-full h-full flex flex-col justify-center items-center">
             <div class="w-full flex flex-col items-center justify-center">
-                <div class="flex flex-row h-[70px] my-2 justify-end w-full items-center">
-                    <div class="w-full h-[48px] flex justify-between">
+                <div class="flex 2xl:flex-row xl:flex-row lg:flex-row md:flex-col sm:flex-col xs:flex-col 2xl:h-[70px] xl:h-[70px] lg:h-[70px] md:h-[104px] sm:h-[104px] xs:h-[168px] my-2 justify-between w-full items-center">
+                    <div class="w-auto h-[48px] flex justify-between">
                         <div class="flex">
                             <MainButton :click="filter" type="black" buttonText="Filtruj" class="mr-5" />
                             <div v-if="shouldDisplayFilterDiv" class="flex flex-col font-inter items-start justify-center pr-5">
@@ -54,45 +54,56 @@
                             <v-icon @click="changePlayersDirection()" class="text-white bg-black h-[48px] w-[48px] hover:bg-[#101010] transition ease-in-out duration-300 font-medium rounded-[0.5rem] text-[1rem] ml-5 flex items-center justify-center leading-[1.5] tracking-[0.005em] cursor-pointer">mdi-arrow-up-down</v-icon>
                         </div>
                     </div>
-                    <div class="bg-white h-[48px] rounded-[0.5rem] ml-5 min-w-[220px]">
-                        <div class="relative h-[48px] flex items-center justify-center">
-                            <span class="absolute inset-y-0 left-0 flex items-center pl-3">
-                                <v-icon>mdi-magnify</v-icon>
-                            </span>
-                            <input v-model="searchText" type="stext" class="h-full pl-10 pr-4 py-2 rounded-[0.5rem] block w-full font-inter text-[1rem] leading-[1.5] tracking-[0.005em]" placeholder="Szukaj zawodnika...">
-                            <span v-if="searchText.length > 0" @click="searchText = ''" class="absolute inset-y-0 right-0 flex items-center pr-3 cursor-pointer">
-                                <v-icon>mdi-close</v-icon>
-                            </span>
+                    <div class="flex 2xl:flex-row xl:flex-row lg:flex-row md:flex-row sm:flex-row xs:flex-col xs:w-[400px]">
+                        <div class="bg-white h-[48px] rounded-[0.5rem] 2xl:ml-5 xl:ml-5 lg:ml-5 md:ml-5 sm:ml-5 xs:ml-0 min-w-[220px] 2xl:mb-0 xl:mb-0 lg:mb-0 md:mb-0 sm:mb-0 xs:mb-3">
+                            <div class="relative h-[48px] flex items-center justify-center">
+                                <span class="absolute inset-y-0 left-0 flex items-center pl-3">
+                                    <v-icon>mdi-magnify</v-icon>
+                                </span>
+                                <input v-model="searchText" type="stext" class="h-full pl-10 pr-4 py-2 rounded-[0.5rem] block w-full font-inter text-[1rem] leading-[1.5] tracking-[0.005em]" placeholder="Szukaj zawodnika...">
+                                <span v-if="searchText.length > 0" @click="searchText = ''" class="absolute inset-y-0 right-0 flex items-center pr-3 cursor-pointer">
+                                    <v-icon>mdi-close</v-icon>
+                                </span>
+                            </div>
                         </div>
+                        <MainButton :click="addPlayer" type="green" class="bg-green-700 2xl:ml-5 xl:ml-5 lg:ml-5 md:ml-5 sm:ml-5 xs:ml-0" :disabled="false" />
                     </div>
-                    <MainButton :click="addPlayer" type="green" class="bg-green-700 ml-5" :disabled="false" />
                 </div>
-                <article class="w-full rounded-[0.5rem] bg-white h-auto">
+                <article class="2xl:w-[1280px] xl:w-[1280px] lg:w-[1024px] md:w-[768px] sm:w-[640px] xs:w-[400px] rounded-[0.5rem] bg-white h-auto">
                     <div v-if="loading" class="w-full min-h-[660px] h-full flex items-center justify-center">
                         <div class="spinner"></div>
                     </div>
                     <div v-else class="w-full flex items-center justify-start flex-col min-h-[660px]">
-                        <div class="w-full h-[60px] border-b-[1px] border-gray-200 flex items-center justify-between px-10 font-inter text-[#0f0f0f] text-[1rem] font-medium leading-6 tracking-[0.005em]">
+                        <div class="2xl:w-[1280px] xl:w-[1280px] lg:w-[1024px] md:w-[768px] sm:w-[640px] xs:w-[400px] h-[60px] border-b-[1px] border-gray-200 flex items-center justify-between 2xl:px-10 xl:px-10 lg:px-10 md:px-8 sm:px-3 xs:px-2 font-inter text-[#0f0f0f] 2xl:text-sm xl:text-sm lg:text-sm md:text-[0.85rem] sm:text-[0.85rem] xs:text-[0.75rem] font-medium leading-6 tracking-[0.005em]">
                             <div class="flex items-center justify-center">
-                                <span class="w-[60px] h-full">Photo</span>
+                                <span class="2xl:w-[60px] xl:w-[60px] lg:w-[60px] md:w-[60px] sm:w-[50px] xs:w-[50px] h-full">Photo</span>
                             </div>
                             <div class="flex items-center justify-center">
-                                <span class="w-[150px] h-full">Name</span>
+                                <span class="2xl:w-[150px] xl:w-[150px] lg:w-[150px] md:w-[130px] sm:w-[120px] xs:w-[70px] h-full">Name</span>
                             </div>
-                            <div class="flex items-center justify-center">
-                                <span class="w-[90px] h-full">Pozycja</span>
+                            <div class="2xl:flex xl:flex lg:flex md:hidden sm:hidden xs:hidden items-center justify-center 2xl:text-left xl:text-left lg:text-left md:text-center sm:text-center xs:text-center">
+                                <span class="2xl:w-[90px] xl:w-[90px] lg:w-[90px] md:w-[60px] sm:w-[60px] xs:w-[50px] h-full">Pozycja</span>
                             </div>
-                            <div class="flex items-center justify-center">
-                                <span class="w-[120px] h-full">Status</span>
+                            <div class="2xl:hidden xl:hidden lg:hidden md:flex sm:flex xs:flex items-center justify-center 2xl:text-left xl:text-left lg:text-left md:text-center sm:text-center xs:text-center">
+                                <span class="2xl:w-[90px] xl:w-[90px] lg:w-[90px] md:w-[60px] sm:w-[60px] xs:w-[40px] h-full">POZ</span>
+                            </div>
+                            <div class="2xl:flex xl:flex lg:flex md:hidden sm:hidden xs:hidden items-center justify-center 2xl:text-left xl:text-left lg:text-left md:text-center sm:text-center xs:text-center">
+                                <span class=" 2xl:w-[120px] xl:w-[120px] lg:w-[120px] md:w-[100px] sm:w-[100px] xs:w-[40px] h-full">Status</span>
+                            </div>
+                            <div class="2xl:hidden xl:hidden lg:hidden md:flex sm:flex xs:flex items-center justify-center 2xl:text-left xl:text-left lg:text-left md:text-center sm:text-center xs:text-center">
+                                <span class=" 2xl:w-[120px] xl:w-[120px] lg:w-[120px] md:w-[100px] sm:w-[100px] xs:w-[40px] h-full">STA</span>
+                            </div>
+                            <div class="2xl:flex xl:flex lg:flex md:hidden sm:hidden xs:hidden items-center justify-center text-center">
+                                <span class="2xl:w-[70px] xl:w-[70px] lg:w-[70px] md:w-[60px] sm:w-[60px] xs:w-[60px] h-full">Number</span>
+                            </div>
+                            <div class="2xl:hidden xl:hidden lg:hidden md:flex sm:flex xs:flex items-center justify-center text-center">
+                                <span class="2xl:w-[70px] xl:w-[70px] lg:w-[70px] md:w-[60px] sm:w-[60px] xs:w-[40px] h-full">NUM</span>
                             </div>
                             <div class="flex items-center justify-center text-center">
-                                <span class="w-[70px] h-full">Number</span>
-                            </div>
-                            <div class="flex items-center justify-center text-center">
-                                <span class="w-[90px] h-full">Year</span>
+                                <span class="2xl:w-[90px] xl:w-[90px] lg:w-[90px] md:w-[50px] sm:w-[40px] xs:w-[40px] h-full">Year</span>
                             </div>
                             <div v-if="this.authStore.user.user.user_type === 'admin'" class="flex items-center justify-center text-center">
-                                <span class="w-[120px] h-full">Operacje</span>
+                                <span class="2xl:w-[120px] xl:w-[120px] lg:w-[120px] md:w-[100px] sm:w-[100px] xs:w-[100px] h-full">Operacje</span>
                             </div>
                         </div>
                         <div v-if="this.playersSorted.length === 0" class="w-full h-[599px] border-b-[0.0625rem] border-[hsl(0 0% 92%)] flex items-center justify-center px-10 font-inter text-[#2b2b2b]">
@@ -100,39 +111,50 @@
                                 Nic nie znaleziono!
                             </span>
                         </div>
-                        <div v-for="(player, index) in this.playersSorted[this.currentPagePlayers - 1]" :key="player.id" :class="{ 'border-b-[0.0625rem] border-[hsl(0 0% 92%)]': index !== this.playersSorted[this.currentPagePlayers - 1].length - 1 }" class="w-full h-[60px] flex items-center justify-between px-10 font-inter text-[#2b2b2b]">
-                            <div class="flex items-center justify-start w-[60px]">
-                                <img :src="player.image" :alt="player.name" class="w-[50px] h-[50px] rounded-md">
+                        <div v-for="(player, index) in this.playersSorted[this.currentPagePlayers - 1]" :key="player.id" :class="{ 'border-b-[0.0625rem] border-[hsl(0 0% 92%)]': index !== this.playersSorted[this.currentPagePlayers - 1].length - 1 }" class="w-full h-[60px] flex items-center justify-between 2xl:px-10 xl:px-10 lg:px-10 md:px-8 sm:px-3 xs:px-2 font-inter text-[#2b2b2b] 2xl:text-[1rem] xl:text-[1rem] lg:text-[1rem] md:text-[0.85rem] sm:text-[0.85rem] xs:text-[0.75rem]">
+                            <div class="flex items-center justify-start 2xl:min-w-[60px] xl:min-w-[60px] lg:min-w-[60px] md:min-w-[60px] sm:min-w-[50px] xs:min-w-[50px] ">
+                                <img v-if="player.image !== null" :src="player.image" :alt="player.name" class="2xl:w-[50px] xl:w-[50px] lg:w-[50px] md:w-[50px] sm:w-[40px] xs:w-[40px] 2xl:h-[50px] xl:h-[50px] lg:h-[50px] md:h-[50px] sm:h-[40px] xs:h-[40px] rounded-md">
+                                <img v-else src="https://st3.depositphotos.com/6672868/13701/v/450/depositphotos_137014128-stock-illustration-user-profile-icon.jpg" alt="placeholder" class="2xl:w-[50px] xl:w-[50px] lg:w-[50px] md:w-[50px] sm:w-[40px] xs:w-[40px] 2xl:h-[50px] xl:h-[50px] lg:h-[50px] md:h-[50px] sm:h-[40px] xs:h-[40px] rounded-md">
                             </div>
                             <div class="flex items-center justify-center">
-                                <span class="w-[150px] h-full font-[500]">{{player.name}}</span>
+                                <span class="2xl:w-[150px] xl:w-[150px] lg:w-[150px] md:w-[130px] sm:w-[120px] xs:w-[70px] h-full font-[500]">{{player.name}}</span>
                             </div>
-                            <div class="flex items-center justify-center">
-                                <span v-if="player.position.value === 'BR'" class="w-[90px] h-full">Bramkarz</span>
-                                <span v-if="player.position.value === 'OB'" class="w-[90px] h-full">Obrońca</span>
-                                <span v-if="player.position.value === 'PO'" class="w-[90px] h-full">Pomocnik</span>
-                                <span v-if="player.position.value === 'NA'" class="w-[90px] h-full">Napastnik</span>
+                            <div class="2xl:flex xl:flex lg:flex md:hidden sm:hidden xs:hidden items-center justify-center 2xl:text-left xl:text-left lg:text-left md:text-center sm:text-center xs:text-center">
+                                <span v-if="player.position.value === 'BR'" class="2xl:w-[90px] xl:w-[90px] lg:w-[90px] md:w-[60px] sm:w-[60px] xs:w-[60px] h-full">Bramkarz</span>
+                                <span v-if="player.position.value === 'OB'" class="2xl:w-[90px] xl:w-[90px] lg:w-[90px] md:w-[60px] sm:w-[60px] xs:w-[60px] h-full">Obrońca</span>
+                                <span v-if="player.position.value === 'PO'" class="2xl:w-[90px] xl:w-[90px] lg:w-[90px] md:w-[60px] sm:w-[60px] xs:w-[60px] h-full">Pomocnik</span>
+                                <span v-if="player.position.value === 'NA'" class="2xl:w-[90px] xl:w-[90px] lg:w-[90px] md:w-[60px] sm:w-[60px] xs:w-[60px] h-full">Napastnik</span>
+                            </div>
+                            <div class="2xl:hidden xl:hidden lg:hidden md:flex sm:flex xs:flex items-center justify-center 2xl:text-left xl:text-left lg:text-left md:text-center sm:text-center xs:text-center">
+                                <span v-if="player.position.value === 'BR'" class="2xl:w-[90px] xl:w-[90px] lg:w-[90px] md:w-[60px] sm:w-[60px] xs:w-[40px] h-full">BR</span>
+                                <span v-if="player.position.value === 'OB'" class="2xl:w-[90px] xl:w-[90px] lg:w-[90px] md:w-[60px] sm:w-[60px] xs:w-[40px] h-full">OB</span>
+                                <span v-if="player.position.value === 'PO'" class="2xl:w-[90px] xl:w-[90px] lg:w-[90px] md:w-[60px] sm:w-[60px] xs:w-[40px] h-full">PO</span>
+                                <span v-if="player.position.value === 'NA'" class="2xl:w-[90px] xl:w-[90px] lg:w-[90px] md:w-[60px] sm:w-[60px] xs:w-[40px] h-full">NA</span>
+                            </div>
+                            <div class="2xl:flex xl:flex lg:flex md:flex sm:flex xs:hidden items-center justify-center text-center">
+                                <span v-if="player.status.value === 'nieaktywny'" class="h-full border-[1px] border-red-600 bg-red-50 text-red 2xl:text-sm xl:text-sm lg:text-sm md:text-[0.85rem] sm:text-[0.85rem] xs:text-[0.75rem] rounded-full 2xl:w-[120px] xl:w-[120px] lg:w-[120px] md:w-[100px] sm:w-[100px] xs:w-[100px] py-1">Nieaktywny</span>
+                                <span v-else class="h-full border-[1px] border-green-600 bg-green-50 text-green 2xl:text-sm xl:text-sm lg:text-sm md:text-[0.85rem] sm:text-[0.85rem] xs:text-[0.75rem] rounded-full 2xl:w-[120px] xl:w-[120px] lg:w-[120px] md:w-[100px] sm:w-[100px] xs:w-[100px] py-1">Aktywny</span>
+                            </div>
+                            <div class="2xl:hidden xl:hidden lg:hidden md:hidden sm:hidden xs:flex items-center justify-center text-center">
+                                <span v-if="player.status.value === 'nieaktywny'" class="h-full border-[1px] border-red-600 bg-red-50 text-red 2xl:text-sm xl:text-sm lg:text-sm md:text-[0.85rem] sm:text-[0.85rem] xs:text-[0.75rem] rounded-full 2xl:w-[120px] xl:w-[120px] lg:w-[120px] md:w-[100px] sm:w-[100px] xs:w-[40px] py-1">N</span>
+                                <span v-else class="h-full border-[1px] border-green-600 bg-green-50 text-green 2xl:text-sm xl:text-sm lg:text-sm md:text-[0.85rem] sm:text-[0.85rem] xs:text-[0.75rem] rounded-full 2xl:w-[120px] xl:w-[120px] lg:w-[120px] md:w-[100px] sm:w-[100px] xs:w-[40px] py-1">A</span>
                             </div>
                             <div class="flex items-center justify-center text-center">
-                                <span v-if="player.status.value === 'nieaktywny'" class="h-full border-[1px] border-red-600 bg-red-50 text-red text-sm rounded-full w-[120px] py-1">Nieaktywny</span>
-                                <span v-else class="h-full border-[1px] border-green-600 bg-green-50 text-green text-sm rounded-full w-[120px] py-1">Aktywny</span>
+                                <span class="2xl:w-[70px] xl:w-[70px] lg:w-[70px] md:w-[60px] sm:w-[60px] xs:w-[40px] h-full">{{player.number}}</span>
                             </div>
                             <div class="flex items-center justify-center text-center">
-                                <span class="w-[70px] h-full">{{player.number}}</span>
+                                <span class="2xl:w-[90px] xl:w-[90px] lg:w-[90px] md:w-[50px] sm:w-[40px] xs:w-[40px] h-full">{{player.year}}</span>
                             </div>
-                            <div class="flex items-center justify-center text-center">
-                                <span class="w-[90px] h-full">{{player.year}}</span>
-                            </div>
-                            <div v-if="this.authStore.user.user.user_type === 'admin'" class="flex items-center justify-center w-[120px]">
+                            <div v-if="this.authStore.user.user.user_type === 'admin'" class="flex items-center justify-center 2xl:w-[120px] xl:w-[120px] lg:w-[120px] md:w-[100px] sm:w-[100px] xs:w-[100px]">
                                 <v-icon @click="this.updatePlayer(player.id, player.name, player.position, player.status, player.number, player.year)">mdi-pencil-plus</v-icon>
-                                <v-icon @click="this.imagePlayer(player.id, player.name, player.image)" class="mx-5">mdi-image-edit</v-icon>
+                                <v-icon @click="this.imagePlayer(player.id, player.name, player.image)" class="2xl:mx-5 xl:mx-5 lg:mx-5 md:mx-3 sm:mx-3 xs:mx-2">mdi-image-edit</v-icon>
                                 <v-icon @click="this.deletePlayer(player.id, player.name)">mdi-delete</v-icon>
                             </div>
                         </div>
                     </div>
                 </article>
-                <div v-if="!loading && pagesPlayers > 0" class="w-full h-auto my-5 flex text-black items-center justify-between font-inter">
-                    <div class="w-[230px] h-full bg-white rounded-md flex items-center">
+                <div v-if="!loading && pagesPlayers > 0" class="w-full h-auto my-5 flex 2xl:flex-row xl:flex-row lg:flex-row md:flex-row sm:flex-row xs:flex-col text-black items-center justify-between font-inter">
+                    <div class="w-[230px] h-full bg-white rounded-md flex items-center 2xl:mb-0 xl:mb-0 lg:mb-0 md:mb-0 sm:mb-0 xs:mb-5">
                         <select @change="this.changeItemsPerPage(this.itemsPerPage)" v-model="this.itemsPerPage" class="py-3 px-4 block w-[88px] bg-white rounded-[0.5rem] text-sm h-[44px]">
                             <option :value="10">10</option>
                             <option :value="20">20</option>
@@ -140,7 +162,7 @@
                         </select>
                         <span class="text-sm border-l-[1px] h-full pl-2">Wyniki na stronie</span>
                     </div>
-                    <div class="pagination flex items-center justify-center flex-col">
+                    <div class="pagination flex items-center justify-center flex-col 2xl:mb-0 xl:mb-0 lg:mb-0 md:mb-0 sm:mb-0 xs:mb-5">
                         <span v-if="this.pagesPlayers > 1" class="flex items-center">
                             <button @click="this.currentPagePlayers = 1" class="text-black w-[35px] h-[35px] cursor-pointer">
                                 <v-icon>mdi-chevron-left</v-icon>
@@ -166,7 +188,7 @@
                             Strona <b>{{ this.currentPagePlayers }}</b> z <b>{{ this.pagesPlayers }}</b>
                         </span>
                     </div>
-                    <div class="w-[230px] h-full flex items-center justify-end">
+                    <div class="w-[230px] h-full flex items-center 2xl:justify-end xl:justify-end lg:justify-end md:justify-end sm:justify-end xs:justify-center">
                         <span class="font-bold">{{ this.playersSorted[this.currentPagePlayers - 1].length }}</span>
                         <span class="mx-1">z</span>
                         <span class="font-bold">{{ this.players.length }}</span>
@@ -174,18 +196,19 @@
                 </div>
             </div>
             <v-dialog v-model="dialogUpdate" persistent transition="dialog-bottom-transition">
-                <v-form @submit.prevent ref="updateValid" v-model="updateValid" class="bg-white h-auto w-[500px] p-10 rounded-[1rem] border-[1px] border-gray-300 shadow-md">
+                <v-form @submit.prevent ref="updateValid" v-model="updateValid" class="bg-white h-auto 2xl:w-[500px] xl:w-[500px] lg:w-[500px] md:w-[500px] sm:w-[500px] xs:w-[400px] 2xl:p-10 xl:p-10 lg:p-10 md:p-5 sm:p-5 xs:p-5 rounded-[1rem] border-[1px] border-gray-300 shadow-md">
                     <div class="flex flex-row justify-between items-start w-full mb-6">
                         <div class="bg-gray-300 h-[50px] w-[50px] rounded-full flex items-center justify-center">
                             <v-icon>mdi-pencil-plus</v-icon>
                         </div>
                         <v-icon @click="this.dialogUpdate = false; this.currentUpdate = {};" class="cursor-pointer text-gray-500 transition ease-in-out duration-300" style="font-size:28px !important;">mdi-close</v-icon>
                     </div>
-                    <div class="flex flex-col mb-10 font-poppins">
-                        <span class="font-medium mb-1 text-[1.5rem] leading-[1.5] tracking-[0.005em]">Edycja danych zawodnika.</span>
-                        <span class="text-[1rem] text-gray-500 leading-[1.5] tracking-[0.005em] mb-3">Historię edycji tego zawodnika możesz sprawdzić w <NuxtLink :to="`/players/user-history?id=${this.currentUpdate.id}`" class="font-bold text-black">Jego historii</NuxtLink>.</span>
+                    <div class="flex flex-col mb-7 font-inter">
+                        <span class="font-medium mb-5 text-[1.5rem] leading-[1.5] tracking-[0.005em]">Edycja danych zawodnika.</span>
+                        <span class="text-[1rem] text-gray-500 leading-[1.5] tracking-[0.005em] mb-3">Edytujesz dane zawodnika <b>{{ currentUpdate.name }}</b>.</span>
+                        <span class="text-[1rem] text-red-700 leading-[1.5] tracking-[0.005em]">Ta akcja <b>nie może</b> być cofnięta.</span>
                     </div>
-                    <div class="flex flex-col mt-3 mb-8 font-poppins">
+                    <div class="flex flex-col mt-3 mb-8 font-inter">
                         <v-text-field v-model="this.currentUpdate.name" :rules="this.nameRules" variant="outlined" class="max-h-[56px] w-full mb-8" placeholder="Name" label="Name"></v-text-field>
                         <div class="flex flex-row justify-between mb-8">
                             <v-text-field v-model="this.currentUpdate.number" :rules="this.numberRules" variant="outlined" class="max-h-[56px] max-w-[48%]" placeholder="Number" label="Number"></v-text-field>
@@ -196,29 +219,29 @@
                             <v-select v-model="this.currentUpdate.position" variant="outlined" class="max-h-[56px] max-w-[48%]" :items="positions" item-title="title" item-value="value" return-object placeholder="Position" label="Position"></v-select>
                         </div>
                     </div>
-                    <div class="flex flex-row w-full items-center justify-end font-poppins">
+                    <div class="flex flex-row w-full items-center justify-end font-inter">
                         <MainButton :click="updatePlayerClose" type="white" buttonText="Anuluj" style="color: black !important;" />
                         <MainButton :click="updatePlayerDialog" type="black" :loading="buttonLoading" :disabled="!updateValid" buttonText="Zapisz" class="ml-5" />
                     </div>
                 </v-form>
             </v-dialog>
             <v-dialog v-model="dialogImage" persistent transition="dialog-bottom-transition">
-                <div class="bg-white h-auto w-[500px] p-10 rounded-lg border-[1px] border-gray-300 shadow-md">
+                <div class="bg-white h-auto 2xl:w-[500px] xl:w-[500px] lg:w-[500px] md:w-[500px] sm:w-[500px] xs:w-[400px] 2xl:p-10 xl:p-10 lg:p-10 md:p-5 sm:p-5 xs:p-5 rounded-lg border-[1px] border-gray-300 shadow-md">
                     <div class="flex flex-row justify-between items-start w-full mb-6">
                         <div class="bg-blue-300 h-[50px] w-[50px] rounded-full flex items-center justify-center">
                             <v-icon class="text-blue-700">mdi-image-edit</v-icon>
                         </div>
                         <v-icon @click="this.dialogImage = false; this.currentImage = {}; this.selectedImage = {};" class="cursor-pointer text-gray-500 transition ease-in-out duration-300" style="font-size:28px !important;">mdi-close</v-icon>
                     </div>
-                    <div class="flex flex-col mb-10 font-poppins">
-                        <span class="font-medium mb-1 text-[1.5rem] leading-[1.5] tracking-[0.005em]">Edycja zdjęcia zawodnika.</span>
+                    <div class="flex flex-col mb-7 font-inter">
+                        <span class="font-medium mb-5 text-[1.5rem] leading-[1.5] tracking-[0.005em]">Edycja zdjęcia zawodnika.</span>
                         <span class="text-[1rem] text-gray-500 leading-[1.5] tracking-[0.005em] mb-3">Dodajesz nowe zdjęcie zawodnika <b>{{ this.currentImage.name }}</b>.</span>
                         <span class="text-[1rem] text-red-700 leading-[1.5] tracking-[0.005em]">Ta akcja <b>nie może</b> być cofnięta.</span>
                     </div>
 
                     <div v-if="currentImage.image !== null && isObjectEmpty(selectedImage)" class="flex flex-col mt-3 mb-8 font-inter">
                         <span class="font-medium text-[1.25rem] leading-[1.5] tracking-[0.005em] mb-3">Obecne zdjęcie</span>
-                        <img :src="currentImage.image" :alt="currentImage.name" class="rounded-xl">
+                        <img :src="currentImage.image" :alt="currentImage.name" class="rounded-xl 2xl:max-h-[418px] xl:max-h-[418px] lg:max-h-[418px] md:max-h-[418px] sm:max-h-[418px] xs:max-h-[358px]">
                     </div>
 
                     <div v-else class="flex flex-col mt-3 font-inter">
@@ -232,14 +255,14 @@
                         <cropper v-if="!isObjectEmpty(selectedImage) && !this.imageIsCropped" class="cropper" :src="selectedImage.url" :stencil-props="{aspectRatio: 1 / 1, }" ref="cropper"/>
                         <div v-if="!isObjectEmpty(selectedImage) && !this.imageIsCropped" class="flex mt-5 w-full items-center justify-end">
                             <MainButton :click="imagePlayerClose" type="white" buttonText="Anuluj" style="color: black !important;" />
-                            <MainButton :click="deleteImagePreview" type="red" buttonText="Usuń zdjęcie" class="ml-5" />
+                            <MainButton :click="deleteImagePreview" type="red" buttonText="Usuń" class="ml-5" />
                             <MainButton :click="cropImage" type="green" buttonText="Wytnij" class="ml-5" />
                         </div>
 
                         <canvas v-if="!isObjectEmpty(selectedImage) && this.imageIsCropped" ref="canvas" class="rounded-xl max-h-[600px] w-auto object-contain"></canvas>
                     </div>
 
-                    <div v-if="isObjectEmpty(selectedImage)" class="flex flex-row w-full items-center justify-end font-poppins">
+                    <div v-if="isObjectEmpty(selectedImage)" class="flex flex-row w-full items-center justify-end font-inter">
                         <MainButton :click="imagePlayerClose" type="white" buttonText="Anuluj" style="color: black !important;" />
                         <label v-if="isObjectEmpty(selectedImage)" @click="this.loadingImage = true;" for="file-upload" class="btn h-[40px] text-white bg-blue-700 hover:bg-blue-800 transition ease-in-out duration-300 rounded-[0.5rem] text-[1rem] font-medium px-4 py-1 w-auto flex items-center justify-center font-inter leading-[1.5] tracking-[0.005em] ml-5">
                             Dodaj nowe zdjęcie
@@ -249,43 +272,43 @@
 
                     <div v-if="imageIsCropped && !isObjectEmpty(selectedImage)" class="flex flex-row items-center justify-end mt-10">
                         <MainButton :click="imagePlayerClose" type="white" buttonText="Anuluj" style="color: black !important;" />
-                        <MainButton v-if="croppedImage !== null" :click="deleteCanvasImage" type="red" buttonText="Usuń zdjęcie" class="ml-5" />
+                        <MainButton v-if="croppedImage !== null" :click="deleteCanvasImage" type="red" buttonText="Usuń" class="ml-5" />
                         <Input :icon="false" :click="imagePlayerDialog" buttonText="Zapisz zdjęcie" class="ml-5" />
                     </div>
                 </div>
             </v-dialog>
             <v-dialog v-model="dialogDelete" persistent transition="dialog-bottom-transition">
-                <v-form @submit.prevent ref="deleteValid" v-model="deleteValid"  class="bg-white h-auto w-[500px] p-10 rounded-lg border-[1px] border-gray-300 shadow-md">
+                <v-form @submit.prevent ref="deleteValid" v-model="deleteValid"  class="bg-white h-auto 2xl:w-[500px] xl:w-[500px] lg:w-[500px] md:w-[500px] sm:w-[500px] xs:w-[400px] 2xl:p-10 xl:p-10 lg:p-10 md:p-5 sm:p-5 xs:p-5 rounded-lg border-[1px] border-gray-300 shadow-md">
                     <div class="flex flex-row justify-between items-start w-full mb-6">
                         <div class="bg-red-200 h-[50px] w-[50px] rounded-full flex items-center justify-center">
                             <v-icon class="text-red-700">mdi-delete</v-icon>
                         </div>
                         <v-icon @click="this.dialogDelete = false; this.currentDelete = {};" class="cursor-pointer text-gray-500 transition ease-in-out duration-300" style="font-size:28px !important;">mdi-close</v-icon>
                     </div>
-                    <div class="flex flex-col mb-10 font-poppins">
-                        <span class="font-medium mb-1 text-[1.5rem] leading-[1.5] tracking-[0.005em]">Usuwanie zawodnika.</span>
+                    <div class="flex flex-col mb-7 font-inter">
+                        <span class="font-medium mb-5 text-[1.5rem] leading-[1.5] tracking-[0.005em]">Usuwanie zawodnika.</span>
                         <span class="text-[1rem] text-gray-500 leading-[1.5] tracking-[0.005em] mb-3">Czy na pewno chcesz usunąć zawdonika <b>{{ this.currentDelete.name }}</b> z bazy danych?</span>
                         <span class="text-[1rem] text-red-700 leading-[1.5] tracking-[0.005em]">Ta akcja <b>nie może</b> być cofnięta.</span>
                     </div>
-                    <div class="flex flex-row w-full items-center justify-end font-poppins">
+                    <div class="flex flex-row w-full items-center justify-end font-inter">
                         <MainButton :click="deletePlayerClose" type="white" buttonText="Anuluj" style="color: black !important;" />
                         <MainButton :click="deletePlayerDialog" type="red" buttonText="Usuń zawodnika" class="ml-5" />
                     </div>
                 </v-form>
             </v-dialog>
             <v-dialog v-model="dialogAdd" persistent transition="dialog-top-transition">
-                <v-form @submit.prevent ref="addValid" v-model="addValid" class="bg-white h-auto w-[500px] p-10 rounded-lg border-[1px] border-gray-300 shadow-md">
+                <v-form @submit.prevent ref="addValid" v-model="addValid" class="bg-white h-auto 2xl:w-[500px] xl:w-[500px] lg:w-[500px] md:w-[500px] sm:w-[500px] xs:w-[400px] 2xl:p-10 xl:p-10 lg:p-10 md:p-5 sm:p-5 xs:p-5 rounded-lg border-[1px] border-gray-300 shadow-md">
                     <div class="flex flex-row justify-between items-start w-full mb-6">
                         <div class="bg-green-200 h-[50px] w-[50px] rounded-full flex items-center justify-center">
                             <v-icon class="text-green-700">mdi-account-plus</v-icon>
                         </div>
                         <v-icon @click="this.dialogAdd = false; this.currentAdd = {};" class="cursor-pointer text-gray-500 transition ease-in-out duration-300" style="font-size:28px !important;">mdi-close</v-icon>
                     </div>
-                    <div class="flex flex-col mb-10 font-poppins">
-                        <span class="font-medium mb-1 text-[1.5rem] leading-[1.5] tracking-[0.005em]">Dodawanie zawodnika.</span>
+                    <div class="flex flex-col mb-7 font-inter">
+                        <span class="font-medium mb-5 text-[1.5rem] leading-[1.5] tracking-[0.005em]">Dodawanie zawodnika.</span>
                         <span class="text-[1rem] text-gray-500 leading-[1.5] tracking-[0.005em]">Dodajesz zawodnika do bazy danych <b>Latarnika Choczewo</b>.</span>
                     </div>
-                    <div class="flex flex-col mt-3 mb-8 font-poppins">
+                    <div class="flex flex-col mt-3 mb-8 font-inter">
                         <v-text-field v-model="this.currentAdd.name" :rules="this.nameRules" variant="outlined" class="max-h-[56px] w-full mb-8" placeholder="Name" label="Name"></v-text-field>
                         <div class="flex flex-row justify-between mb-8">
                             <v-text-field v-model="this.currentAdd.number" :rules="this.numberRules" variant="outlined" class="max-h-[56px] max-w-[48%]" placeholder="Number" label="Number"></v-text-field>
@@ -303,18 +326,18 @@
                 </v-form>
             </v-dialog>
             <v-dialog v-model="dialogFilter" persistent transition="dialog-top-transition">
-                <div class="bg-white h-auto w-[500px] p-10 rounded-lg border-[1px] border-gray-300 shadow-md">
+                <div class="bg-white h-auto 2xl:w-[500px] xl:w-[500px] lg:w-[500px] md:w-[500px] sm:w-[500px] xs:w-[400px] 2xl:p-10 xl:p-10 lg:p-10 md:p-5 sm:p-5 xs:p-5 rounded-lg border-[1px] border-gray-300 shadow-md">
                     <div class="flex flex-row justify-between items-start w-full mb-6">
                         <div class="bg-yellow-200 h-[50px] w-[50px] rounded-full flex items-center justify-center">
                             <v-icon class="text-yellow-700">mdi-filter</v-icon>
                         </div>
                         <v-icon @click="this.dialogFilter = false;" class="cursor-pointer text-gray-500 transition ease-in-out duration-300" style="font-size:28px !important;">mdi-close</v-icon>
                     </div>
-                    <div class="flex flex-col mb-10 font-inter">
-                        <span class="font-medium mb-1 text-[1.5rem] leading-[1.5] tracking-[0.005em]">Filtrowanie zawodników.</span>
+                    <div class="flex flex-col mb-7 font-inter">
+                        <span class="font-medium mb-5 text-[1.5rem] leading-[1.5] tracking-[0.005em]">Filtrowanie zawodników.</span>
                         <span class="text-[1rem] text-gray-500 leading-[1.5] tracking-[0.005em]">Wybierz opcje, według których mają być zwróceni zawodnicy.</span>
                     </div>
-                    <div class="flex flex-col mt-3 mb-8 font-poppins">
+                    <div class="flex flex-col mt-3 mb-8 font-inter">
                         <div class="w-full flex items-center">
                             <v-icon class="mr-3">mdi-account-badge</v-icon>
                             <span class="text-[1rem]">Status</span>
@@ -406,7 +429,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="flex flex-row w-full items-center justify-end font-poppins">
+                    <div class="flex flex-row w-full items-center justify-end font-inter">
                         <MainButton :click="filterClose" type="white" buttonText="Anuluj" style="color: black !important;" />
                         <MainButton :click="updateFilter" type="yellow" buttonText="Filtruj" class="ml-5" style="color: white !important;" />
                     </div>

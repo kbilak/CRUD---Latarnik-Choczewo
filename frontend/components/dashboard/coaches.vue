@@ -537,13 +537,7 @@ export default{
                     (!filterOptions.typeGW || coach.type === "GW") &&
                     (!filterOptions.typeAS || coach.type === "AS")
 
-                    const yearCondition =
-                    (!filterOptions.year1 || (parseInt(coach.year) >= 1970 && parseInt(coach.year) <= 1999)) &&
-                    (!filterOptions.year2 || (parseInt(coach.year) >= 2000 && parseInt(coach.year) <= 2005)) &&
-                    (!filterOptions.year3 || (parseInt(coach.year) >= 2006 && parseInt(coach.year) <= 2010)) &&
-                    (!filterOptions.year4 || (parseInt(coach.year) >= 2010 && parseInt(coach.year) <= 2019));
-
-                    return statusCondition && typeCondition && yearCondition;
+                    return statusCondition && typeCondition;
                 });
             }
             const coachesEnd = filterCoaches(filteredCoaches, this.filterOptions)
@@ -616,13 +610,7 @@ export default{
                         (!filterOptions.typeGW || coach.type === "GW") &&
                         (!filterOptions.typeAS || coach.type === "AS");
 
-                        const yearCondition =
-                        (!filterOptions.year1 || (parseInt(coach.year) >= 1970 && parseInt(coach.year) <= 1999)) &&
-                        (!filterOptions.year2 || (parseInt(coach.year) >= 2000 && parseInt(coach.year) <= 2005)) &&
-                        (!filterOptions.year3 || (parseInt(coach.year) >= 2006 && parseInt(coach.year) <= 2010)) &&
-                        (!filterOptions.year4 || (parseInt(coach.year) >= 2010 && parseInt(coach.year) <= 2019));
-
-                        return statusCondition && typeCondition && yearCondition;
+                        return statusCondition && typeCondition;
                     });
                 }
                 this.coaches = filterCoaches(this.coaches, this.filterOptions)
@@ -813,13 +801,8 @@ export default{
                     const typeCondition =
                         (!filterOptions.typeGW || coach.type === "GW") &&
                         (!filterOptions.typeAS || coach.type === "AS");
-                    const yearCondition =
-                        (!filterOptions.year1 || (parseInt(coach.year) >= 1970 && parseInt(coach.year) <= 1999)) &&
-                        (!filterOptions.year2 || (parseInt(coach.year) >= 2000 && parseInt(coach.year) <= 2005)) &&
-                        (!filterOptions.year3 || (parseInt(coach.year) >= 2006 && parseInt(coach.year) <= 2010)) &&
-                        (!filterOptions.year4 || (parseInt(coach.year) >= 2010 && parseInt(coach.year) <= 2019));
 
-                    return statusCondition && typeCondition && yearCondition;
+                    return statusCondition && typeCondition;
                 });
             }
 
