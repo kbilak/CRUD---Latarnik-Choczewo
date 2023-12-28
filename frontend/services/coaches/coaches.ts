@@ -10,11 +10,14 @@ interface Coach {
     image: string | null;
 }
 
+// Define the base URL
+const BASE_URL = 'http://127.0.0.1:8000';
+
 // Function to get all coaches from the API
 export async function getCoaches(): Promise<Coach[] | null> {
     try {
         // Making a GET request to the coaches endpoint
-        const response: AxiosResponse<Coach[]> = await axios.get('http://127.0.0.1:8000/players/coaches/');
+        const response: AxiosResponse<Coach[]> = await axios.get(`${BASE_URL}/players/coaches/`);
 
         // Returning the data from the response
         return response.data;
@@ -34,7 +37,7 @@ export async function createCoach(token: string, coachData: Partial<Coach>): Pro
         };
 
         // Making a POST request to the create coach endpoint
-        const response: AxiosResponse<Coach> = await axios.post('http://127.0.0.1:8000/players/coach/create/', coachData, { headers });
+        const response: AxiosResponse<Coach> = await axios.post(`${BASE_URL}/players/coach/create/`, coachData, { headers });
 
         // Returning the data from the response
         return response.data;
@@ -54,7 +57,7 @@ export async function updateCoach(token: string, coachData: Partial<Coach>): Pro
         };
 
         // Making a PUT request to the update coach endpoint
-        const response: AxiosResponse<Coach> = await axios.put(`http://127.0.0.1:8000/players/coach/${coachData.id}/update/`, coachData, { headers });
+        const response: AxiosResponse<Coach> = await axios.put(`${BASE_URL}/players/coach/${coachData.id}/update/`, coachData, { headers });
 
         // Returning the data from the response
         return response.data;
@@ -74,7 +77,7 @@ export async function deleteCoach(token: string, coachId: string): Promise<boole
         };
 
         // Making a DELETE request to the delete coach endpoint
-        await axios.delete(`http://127.0.0.1:8000/players/coach/${coachId}/delete/`, { headers });
+        await axios.delete(`${BASE_URL}/players/coach/${coachId}/delete/`, { headers });
 
         // If the request is successful, return true
         return true;
