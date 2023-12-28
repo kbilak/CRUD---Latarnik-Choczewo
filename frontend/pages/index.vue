@@ -10,7 +10,7 @@ export default{
             authStore: useAuthStore(),
         }
     },
-    created() {
+    mounted() {
         if (this.authStore.loggedIn) {
             this.$router.push('/players');
         } else {
