@@ -11,7 +11,7 @@ class User(models.Model):
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=True)
     email = models.CharField(max_length=255, unique=True)
-    password_hash = models.CharField(max_length=255)
+    password_hash = models.CharField(max_length=255, verbose_name='Hash hasła')
     date_joined = models.DateTimeField(default=timezone.now, verbose_name='Data dołączenia')
     user_type = models.CharField(choices=USER_TYPES, max_length=255, default='normal', verbose_name='Typ użytkownika')
 

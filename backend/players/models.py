@@ -25,6 +25,12 @@ class Player(models.Model):
 
     def __str__(self):
         return self.name
+    
+    class Meta:
+        ordering = ('name',)
+        verbose_name = 'Zawodnik'
+        verbose_name_plural = 'Zawodnicy'
+
 
 
 class Coach(models.Model):
@@ -47,3 +53,8 @@ class Coach(models.Model):
 
     def __str__(self):
         return self.name
+
+    class Meta:
+        ordering = ('name',)
+        verbose_name = 'Trener'
+        verbose_name_plural = 'Trenerzy'

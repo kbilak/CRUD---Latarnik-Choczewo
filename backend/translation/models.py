@@ -12,8 +12,8 @@ class Language(models.Model):
     
     class Meta:
         ordering = ('number',)
-        verbose_name = 'Language'
-        verbose_name_plural = 'Languages'
+        verbose_name = 'Język'
+        verbose_name_plural = 'Języki'
 
 
 class Code(models.Model):
@@ -24,8 +24,8 @@ class Code(models.Model):
     
     class Meta:
         ordering = ('code',)
-        verbose_name = 'Code'
-        verbose_name_plural = 'Codes'
+        verbose_name = 'Kod'
+        verbose_name_plural = 'Kody'
 
 
 class Translation(models.Model):
@@ -38,5 +38,5 @@ class Translation(models.Model):
     
     class Meta:
         ordering = ('code', 'language', )
-        verbose_name = 'Translation'
-        verbose_name_plural = 'Translations'
+        verbose_name = 'Tłumaczenie'
+        verbose_name_plural = 'Tłumaczenia'
