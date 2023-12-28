@@ -2,20 +2,10 @@
     <div></div>
 </template>
 
-<script lang="ts">
-import { useAuthStore } from '../stores/auth'
+<script>
 export default{
-    data() {
-        return {
-            authStore: useAuthStore(),
-        }
+    beforeMount() {
+        this.$router.push('/auth/login');
     },
-    mounted() {
-        if (this.authStore.loggedIn) {
-            this.$router.push('/players');
-        } else {
-            this.$router.push('/auth/login');
-        }
-    }
 };
 </script>
