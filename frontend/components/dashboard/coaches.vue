@@ -2,8 +2,8 @@
     <section id="table" class="flex flex-col items-center justify-start w-full min-h-[calc(100vh-110px)] text-black bg-[#f5f5f5] h-auto">
         <div v-if="authStore.loggedIn" class="xs:max-w-screen-[450px] sm:max-w-screen-sm md:max-w-screen-md lg:max-w-screen-lg xl:max-w-screen-xl 2xl:max-w-screen-xl w-full h-full flex flex-col justify-center items-center">
             <div class="w-full flex flex-col items-center justify-center">
-                <div class="flex flex-row h-[70px] my-2 justify-end w-full items-center">
-                    <div class="w-full h-[48px] flex justify-between">
+                <div class="flex 2xl:flex-row xl:flex-row lg:flex-row md:flex-col sm:flex-col xs:flex-col 2xl:h-[70px] xl:h-[70px] lg:h-[70px] md:h-[104px] sm:h-[104px] xs:h-[168px] my-2 justify-between w-full items-center">
+                    <div class="w-auto h-[48px] flex justify-between">
                         <div class="flex">
                             <MainButton :click="filter" type="black" buttonText="Filtruj" class="mr-5" />
                             <div v-if="shouldDisplayFilterDiv" class="flex flex-col font-inter items-start justify-center pr-5">
@@ -38,42 +38,44 @@
                             <v-icon @click="changeCoachesDirection()" class="text-white bg-black h-[48px] w-[48px] hover:bg-[#101010] transition ease-in-out duration-300 font-medium rounded-[0.5rem] text-[1rem] ml-5 flex items-center justify-center leading-[1.5] tracking-[0.005em] cursor-pointer">mdi-arrow-up-down</v-icon>
                         </div>
                     </div>
-                    <div class="bg-white h-[48px] rounded-[0.5rem] ml-5 min-w-[220px]">
-                        <div class="relative h-[48px] flex items-center justify-center">
-                            <span class="absolute inset-y-0 left-0 flex items-center pl-3">
-                                <v-icon>mdi-magnify</v-icon>
-                            </span>
-                            <input v-model="searchText" type="stext" class="h-full pl-10 pr-4 py-2 rounded-[0.5rem] block w-full font-inter text-[1rem] leading-[1.5] tracking-[0.005em]" placeholder="Szukaj trenera...">
-                            <span v-if="searchText.length > 0" @click="searchText = ''" class="absolute inset-y-0 right-0 flex items-center pr-3 cursor-pointer">
-                                <v-icon>mdi-close</v-icon>
-                            </span>
+                    <div class="flex 2xl:flex-row xl:flex-row lg:flex-row md:flex-row sm:flex-row xs:flex-col 2xl:w-auto xl:w-auto lg:w-auto md:w-auto sm:w-auto xs:w-[400px]">
+                        <div class="bg-white h-[48px] rounded-[0.5rem] 2xl:ml-5 xl:ml-5 lg:ml-5 md:ml-5 sm:ml-5 xs:ml-0 min-w-[220px] 2xl:mb-0 xl:mb-0 lg:mb-0 md:mb-0 sm:mb-0 xs:mb-3">
+                            <div class="relative h-[48px] flex items-center justify-center">
+                                <span class="absolute inset-y-0 left-0 flex items-center pl-3">
+                                    <v-icon>mdi-magnify</v-icon>
+                                </span>
+                                <input v-model="searchText" type="stext" class="h-full pl-10 pr-4 py-2 rounded-[0.5rem] block w-full font-inter text-[1rem] leading-[1.5] tracking-[0.005em]" placeholder="Szukaj trenera...">
+                                <span v-if="searchText.length > 0" @click="searchText = ''" class="absolute inset-y-0 right-0 flex items-center pr-3 cursor-pointer">
+                                    <v-icon>mdi-close</v-icon>
+                                </span>
+                            </div>
                         </div>
+                        <MainButton :click="addCoach" buttonText="Dodaj trenera" type="green" class="bg-green-700 2xl:ml-5 xl:ml-5 lg:ml-5 md:ml-5 sm:ml-5 xs:ml-0" :disabled="false" />
                     </div>
-                    <MainButton :click="addCoach" type="green" class="bg-green-700 hover:bg-green-800 ml-5" buttonText="Dodaj trenera" :disabled="false" />
                 </div>
-                <article class="w-full rounded-[0.5rem] bg-white h-auto">
+                <article class="2xl:w-[1280px] xl:w-[1280px] lg:w-[1024px] md:w-[768px] sm:w-[640px] xs:w-[400px] rounded-[0.5rem] bg-white h-auto">
                     <div v-if="loading" class="w-full min-h-[660px] h-full flex items-center justify-center">
                         <div class="spinner"></div>
                     </div>
                     <div v-else class="w-full flex items-center justify-start flex-col min-h-[660px]">
-                        <div class="w-full h-[60px] border-b-[1px] border-gray-200 flex items-center justify-between px-10 font-inter text-[#0f0f0f] text-[1rem] font-medium leading-6 tracking-[0.005em]">
+                        <div class="2xl:w-[1280px] xl:w-[1280px] lg:w-[1024px] md:w-[768px] sm:w-[640px] xs:w-[400px] h-[60px] border-b-[1px] border-gray-200 flex items-center justify-between 2xl:px-10 xl:px-10 lg:px-10 md:px-8 sm:px-3 xs:px-2 font-inter text-[#0f0f0f] 2xl:text-sm xl:text-sm lg:text-sm md:text-[0.85rem] sm:text-[0.85rem] xs:text-[0.75rem] font-medium leading-6 tracking-[0.005em]">
                             <div class="flex items-center justify-center">
-                                <span class="w-[60px] h-full">Photo</span>
+                                <span class="2xl:w-[60px] xl:w-[60px] lg:w-[60px] md:w-[60px] sm:w-[50px] xs:w-[50px] h-full">Photo</span>
                             </div>
                             <div class="flex items-center justify-center">
-                                <span class="w-[150px] h-full">Name</span>
+                                <span class="2xl:w-[150px] xl:w-[150px] lg:w-[150px] md:w-[130px] sm:w-[120px] xs:w-[70px] h-full">Name</span>
                             </div>
                             <div class="flex items-center justify-center">
-                                <span class="w-[150px] h-full">Rola</span>
+                                <span class="2xl:w-[150px] xl:w-[150px] lg:w-[150px] md:w-[120px] sm:w-[120px] xs:w-[60px] h-full 2xl:text-left xl:text-left lg:text-left md:text-left sm:text-left xs:text-center">Rola</span>
                             </div>
                             <div class="flex items-center justify-center">
-                                <span class="w-[120px] h-full">Status</span>
+                                <span class="2xl:w-[120px] xl:w-[120px] lg:w-[120px] md:w-[100px] sm:w-[100px] xs:w-[40px] h-full 2xl:text-left xl:text-left lg:text-left md:text-left sm:text-left xs:text-center">Status</span>
                             </div>
                             <div class="flex items-center justify-center">
-                                <span class="w-[150px] h-full">Team</span>
+                                <span class="2xl:w-[150px] xl:w-[150px] lg:w-[150px] md:w-[120px] sm:w-[120px] xs:w-[70px] h-full 2xl:text-left xl:text-left lg:text-left md:text-left sm:text-left xs:text-center">Team</span>
                             </div>
                             <div v-if="this.authStore.user.user.user_type === 'admin'" class="flex items-center justify-center text-center">
-                                <span class="w-[120px] h-full">Operacje</span>
+                                <span class="2xl:w-[120px] xl:w-[120px] lg:w-[120px] md:w-[100px] sm:w-[100px] xs:w-[70px] h-full">Operacje</span>
                             </div>
                         </div>
                         <div v-if="this.coachesSorted.length === 0" class="w-full h-[599px] border-b-[0.0625rem] border-[hsl(0 0% 92%)] flex items-center justify-center px-10 font-inter text-[#2b2b2b]">
@@ -81,35 +83,39 @@
                                 Nic nie znaleziono!
                             </span>
                         </div>
-                        <div v-for="(coach, index) in this.coachesSorted[this.currentPageCoaches - 1]" :key="coach.id" :class="{ 'border-b-[0.0625rem] border-[hsl(0 0% 92%)]': index !== this.coachesSorted[this.currentPageCoaches - 1].length - 1 }" class="w-full h-[60px] flex items-center justify-between px-10 font-inter text-[#2b2b2b]">
-                            <div class="flex items-center justify-start w-[60px]">
-                                <img v-if="coach.image !== null" :src="coach.image" :alt="coach.name" class="w-[50px] h-[50px] rounded-md">
-                                <img v-else src="https://st3.depositphotos.com/6672868/13701/v/450/depositphotos_137014128-stock-illustration-user-profile-icon.jpg" alt="placeholder" class="w-[50px] h-[50px] rounded-md">
+                        <div v-for="(coach, index) in this.coachesSorted[this.currentPageCoaches - 1]" :key="coach.id" :class="{ 'border-b-[0.0625rem] border-[hsl(0 0% 92%)]': index !== this.coachesSorted[this.currentPageCoaches - 1].length - 1 }" class="w-full h-[60px] flex items-center justify-between 2xl:px-10 xl:px-10 lg:px-10 md:px-8 sm:px-3 xs:px-2 font-inter text-[#2b2b2b] 2xl:text-[1rem] xl:text-[1rem] lg:text-[1rem] md:text-[0.85rem] sm:text-[0.85rem] xs:text-[0.75rem]">
+                            <div class="flex items-center justify-start 2xl:min-w-[60px] xl:min-w-[60px] lg:min-w-[60px] md:min-w-[60px] sm:min-w-[50px] xs:min-w-[50px]">
+                                <img v-if="coach.image !== null" :src="coach.image" :alt="coach.name" class="2xl:w-[50px] xl:w-[50px] lg:w-[50px] md:w-[50px] sm:w-[40px] xs:w-[40px] 2xl:h-[50px] xl:h-[50px] lg:h-[50px] md:h-[50px] sm:h-[40px] xs:h-[40px] rounded-md">
+                                <img v-else src="https://st3.depositphotos.com/6672868/13701/v/450/depositphotos_137014128-stock-illustration-user-profile-icon.jpg" alt="placeholder" class="2xl:w-[50px] xl:w-[50px] lg:w-[50px] md:w-[50px] sm:w-[40px] xs:w-[40px] 2xl:h-[50px] xl:h-[50px] lg:h-[50px] md:h-[50px] sm:h-[40px] xs:h-[40px] rounded-md">
                             </div>
                             <div class="flex items-center justify-center">
-                                <span class="w-[150px] h-full font-[500]">{{coach.name}}</span>
+                                <span class="2xl:w-[150px] xl:w-[150px] lg:w-[150px] md:w-[130px] sm:w-[120px] xs:w-[70px] h-full font-[500]">{{coach.name}}</span>
                             </div>
-                            <div class="flex items-center justify-center">
-                                <span v-if="coach.type.value === 'GW'" class="w-[150px] h-full">Trener główny</span>
-                                <span v-if="coach.type.value === 'AS'" class="w-[150px] h-full">Asystent</span>
+                            <div class="flex items-center justify-center 2xl:text-left xl:text-left lg:text-left md:text-left sm:text-left xs:text-center">
+                                <span v-if="coach.type.value === 'GW'" class="2xl:w-[150px] xl:w-[150px] lg:w-[150px] md:w-[120px] sm:w-[120px] xs:w-[60px] h-full">Trener główny</span>
+                                <span v-if="coach.type.value === 'AS'" class="2xl:w-[150px] xl:w-[150px] lg:w-[150px] md:w-[120px] sm:w-[120px] xs:w-[60px] h-full">Asystent</span>
                             </div>
-                            <div class="flex items-center justify-center text-center">
-                                <span v-if="coach.status.value === 'nieaktywny'" class="h-full border-[1px] border-red-600 bg-red-50 text-red text-sm rounded-full w-[120px] py-1">Nieaktywny</span>
-                                <span v-else class="h-full border-[1px] border-green-600 bg-green-50 text-green text-sm rounded-full w-[120px] py-1">Aktywny</span>
+                            <div class="2xl:flex xl:flex lg:flex md:flex sm:flex xs:hidden items-center justify-center text-center">
+                                <span v-if="coach.status.value === 'nieaktywny'" class="h-full border-[1px] border-red-600 bg-red-50 text-red 2xl:text-sm xl:text-sm lg:text-sm md:text-[0.85rem] sm:text-[0.85rem] xs:text-[0.75rem] rounded-full 2xl:w-[120px] xl:w-[120px] lg:w-[120px] md:w-[100px] sm:w-[100px] xs:w-[100px] py-1">Nieaktywny</span>
+                                <span v-else class="h-full border-[1px] border-green-600 bg-green-50 text-green 2xl:text-sm xl:text-sm lg:text-sm md:text-[0.85rem] sm:text-[0.85rem] xs:text-[0.75rem] rounded-full 2xl:w-[120px] xl:w-[120px] lg:w-[120px] md:w-[100px] sm:w-[100px] xs:w-[100px] py-1">Aktywny</span>
                             </div>
-                            <div class="flex items-center justify-center">
-                                <span class="w-[150px] h-full">{{coach.team}}</span>
+                            <div class="2xl:hidden xl:hidden lg:hidden md:hidden sm:hidden xs:flex items-center justify-center text-center">
+                                <span v-if="coach.status.value === 'nieaktywny'" class="h-full border-[1px] border-red-600 bg-red-50 text-red 2xl:text-sm xl:text-sm lg:text-sm md:text-[0.85rem] sm:text-[0.85rem] xs:text-[0.75rem] rounded-full 2xl:w-[120px] xl:w-[120px] lg:w-[120px] md:w-[100px] sm:w-[100px] xs:w-[40px] py-1">N</span>
+                                <span v-else class="h-full border-[1px] border-green-600 bg-green-50 text-green 2xl:text-sm xl:text-sm lg:text-sm md:text-[0.85rem] sm:text-[0.85rem] xs:text-[0.75rem] rounded-full 2xl:w-[120px] xl:w-[120px] lg:w-[120px] md:w-[100px] sm:w-[100px] xs:w-[40px] py-1">A</span>
                             </div>
-                            <div v-if="this.authStore.user.user.user_type === 'admin'" class="flex items-center justify-center w-[120px]">
+                            <div class="flex items-center justify-center 2xl:text-left xl:text-left lg:text-left md:text-left sm:text-left xs:text-center">
+                                <span class="2xl:w-[150px] xl:w-[150px] lg:w-[150px] md:w-[120px] sm:w-[120px] xs:w-[70px] h-full">{{coach.team}}</span>
+                            </div>
+                            <div v-if="this.authStore.user.user.user_type === 'admin'" class="flex items-center justify-center2xl:w-[120px] xl:w-[120px] lg:w-[120px] md:w-[100px] sm:w-[100px] xs:w-[70px]">
                                 <v-icon @click="this.updateCoach(coach.id, coach.name, coach.type, coach.status, coach.team)">mdi-pencil-plus</v-icon>
-                                <v-icon @click="this.imageCoach(coach.id, coach.name, coach.image)" class="mx-5">mdi-image-edit</v-icon>
+                                <v-icon @click="this.imageCoach(coach.id, coach.name, coach.image)" class="2xl:mx-5 xl:mx-5 lg:mx-5 md:mx-3 sm:mx-3 xs:mx-2">mdi-image-edit</v-icon>
                                 <v-icon @click="this.deleteCoach(coach.id, coach.name)">mdi-delete</v-icon>
                             </div>
                         </div>
                     </div>
                 </article>
-                <div v-if="!loading && pagesCoaches > 0" class="w-full h-auto my-5 flex text-black items-center justify-between font-inter">
-                    <div class="w-[230px] h-full bg-white rounded-md flex items-center">
+                <div v-if="!loading && pagesCoaches > 0" class="w-full h-auto my-5 flex 2xl:flex-row xl:flex-row lg:flex-row md:flex-row sm:flex-row xs:flex-col text-black items-center justify-between font-inter">
+                    <div class="w-[230px] h-full bg-white rounded-md flex items-center 2xl:mb-0 xl:mb-0 lg:mb-0 md:mb-0 sm:mb-0 xs:mb-5">
                         <select @change="this.changeItemsPerPage(this.itemsPerPage)" v-model="this.itemsPerPage" class="py-3 px-4 block w-[88px] bg-white rounded-[0.5rem] text-sm h-[44px]">
                             <option :value="10">10</option>
                             <option :value="20">20</option>
@@ -117,7 +123,7 @@
                         </select>
                         <span class="text-sm border-l-[1px] h-full pl-2">Wyniki na stronie</span>
                     </div>
-                    <div class="pagination flex items-center justify-center flex-col">
+                    <div class="pagination flex items-center justify-center flex-col 2xl:mb-0 xl:mb-0 lg:mb-0 md:mb-0 sm:mb-0 xs:mb-5">
                         <span v-if="this.pagesCoaches > 1" class="flex items-center">
                             <button @click="this.currentPageCoaches = 1" class="text-black w-[35px] h-[35px] cursor-pointer">
                                 <v-icon>mdi-chevron-left</v-icon>
@@ -143,7 +149,7 @@
                             Strona <b>{{ this.currentPageCoaches }}</b> z <b>{{ this.pagesCoaches }}</b>
                         </span>
                     </div>
-                    <div class="w-[230px] h-full flex items-center justify-end">
+                    <div class="w-[230px] h-full flex items-center 2xl:justify-end xl:justify-end lg:justify-end md:justify-end sm:justify-end xs:justify-center">
                         <span class="font-bold">{{ this.coachesSorted[this.currentPageCoaches - 1].length }}</span>
                         <span class="mx-1">z</span>
                         <span class="font-bold">{{ this.coaches.length }}</span>
@@ -151,7 +157,7 @@
                 </div>
             </div>
             <v-dialog v-model="dialogUpdate" persistent transition="dialog-bottom-transition">
-                <v-form @submit.prevent ref="updateValid" v-model="updateValid" class="bg-white h-auto w-[500px] p-10 rounded-[1rem] border-[1px] border-gray-300 shadow-md">
+                <v-form @submit.prevent ref="updateValid" v-model="updateValid" class="bg-white h-auto 2xl:w-[500px] xl:w-[500px] lg:w-[500px] md:w-[500px] sm:w-[500px] xs:w-[400px] 2xl:p-10 xl:p-10 lg:p-10 md:p-5 sm:p-5 xs:p-5 rounded-lg border-[1px] border-gray-300 shadow-md">
                     <div class="flex flex-row justify-between items-start w-full mb-6">
                         <div class="bg-gray-300 h-[50px] w-[50px] rounded-full flex items-center justify-center">
                             <v-icon>mdi-pencil-plus</v-icon>
@@ -178,7 +184,7 @@
                 </v-form>
             </v-dialog>
             <v-dialog v-model="dialogImage" persistent transition="dialog-bottom-transition">
-                <div class="bg-white h-auto w-[500px] p-10 rounded-lg border-[1px] border-gray-300 shadow-md">
+                <div class="bg-white h-auto 2xl:w-[500px] xl:w-[500px] lg:w-[500px] md:w-[500px] sm:w-[500px] xs:w-[400px] 2xl:p-10 xl:p-10 lg:p-10 md:p-5 sm:p-5 xs:p-5 rounded-lg border-[1px] border-gray-300 shadow-md">
                     <div class="flex flex-row justify-between items-start w-full mb-6">
                         <div class="bg-blue-300 h-[50px] w-[50px] rounded-full flex items-center justify-center">
                             <v-icon class="text-blue-700">mdi-image-edit</v-icon>
@@ -193,7 +199,7 @@
 
                     <div v-if="currentImage.image !== null && isObjectEmpty(selectedImage)" class="flex flex-col mt-3 mb-8 font-inter">
                         <span class="font-medium text-[1.25rem] leading-[1.5] tracking-[0.005em] mb-3">Obecne zdjęcie</span>
-                        <img :src="currentImage.image" :alt="currentImage.name" class="rounded-xl">
+                        <img :src="currentImage.image" :alt="currentImage.name" class="rounded-xl 2xl:max-h-[418px] xl:max-h-[418px] lg:max-h-[418px] md:max-h-[418px] sm:max-h-[418px] xs:max-h-[358px]">
                     </div>
 
                     <div v-else class="flex flex-col mt-3 font-inter">
@@ -230,7 +236,7 @@
                 </div>
             </v-dialog>
             <v-dialog v-model="dialogDelete" persistent transition="dialog-bottom-transition">
-                <v-form @submit.prevent ref="deleteValid" v-model="deleteValid"  class="bg-white h-auto w-[500px] p-10 rounded-lg border-[1px] border-gray-300 shadow-md">
+                <v-form @submit.prevent ref="deleteValid" v-model="deleteValid" class="bg-white h-auto 2xl:w-[500px] xl:w-[500px] lg:w-[500px] md:w-[500px] sm:w-[500px] xs:w-[400px] 2xl:p-10 xl:p-10 lg:p-10 md:p-5 sm:p-5 xs:p-5 rounded-lg border-[1px] border-gray-300 shadow-md">
                     <div class="flex flex-row justify-between items-start w-full mb-6">
                         <div class="bg-red-200 h-[50px] w-[50px] rounded-full flex items-center justify-center">
                             <v-icon class="text-red-700">mdi-delete</v-icon>
@@ -240,7 +246,7 @@
                     <div class="flex flex-col mb-7 font-inter">
                         <span class="font-medium mb-5 text-[1.5rem] leading-[1.5] tracking-[0.005em]">Usuwanie zawodnika.</span>
                         <span class="text-[1rem] text-gray-500 leading-[1.5] tracking-[0.005em] mb-3">Czy na pewno chcesz usunąć zawdonika <b>{{ this.currentDelete.name }}</b> z bazy danych?</span>
-                        <span class="text-[1rem] text-red-700 leading-[1.5] tracking-[0.005em] mb-3">Ta akcja <b>nie może</b> być cofnięta.</span>
+                        <span class="text-[1rem] text-red-700 leading-[1.5] tracking-[0.005em]">Ta akcja <b>nie może</b> być cofnięta.</span>
                     </div>
                     <div class="flex flex-row w-full items-center justify-end font-inter">
                         <MainButton :click="deleteCoachClose" type="white" buttonText="Anuluj" style="color: black !important;" />
@@ -249,7 +255,7 @@
                 </v-form>
             </v-dialog>
             <v-dialog v-model="dialogAdd" persistent transition="dialog-top-transition">
-                <v-form @submit.prevent ref="addValid" v-model="addValid" class="bg-white h-auto w-[500px] p-10 rounded-lg border-[1px] border-gray-300 shadow-md">
+                <v-form @submit.prevent ref="addValid" v-model="addValid" class="bg-white h-auto 2xl:w-[500px] xl:w-[500px] lg:w-[500px] md:w-[500px] sm:w-[500px] xs:w-[400px] 2xl:p-10 xl:p-10 lg:p-10 md:p-5 sm:p-5 xs:p-5 rounded-lg border-[1px] border-gray-300 shadow-md">
                     <div class="flex flex-row justify-between items-start w-full mb-6">
                         <div class="bg-green-200 h-[50px] w-[50px] rounded-full flex items-center justify-center">
                             <v-icon class="text-green-700">mdi-account-plus</v-icon>
@@ -275,7 +281,7 @@
                 </v-form>
             </v-dialog>
             <v-dialog v-model="dialogFilter" persistent transition="dialog-top-transition">
-                <div class="bg-white h-auto w-[500px] p-10 rounded-lg border-[1px] border-gray-300 shadow-md">
+                <div class="bg-white h-auto 2xl:w-[500px] xl:w-[500px] lg:w-[500px] md:w-[500px] sm:w-[500px] xs:w-[400px] 2xl:p-10 xl:p-10 lg:p-10 md:p-5 sm:p-5 xs:p-5 rounded-lg border-[1px] border-gray-300 shadow-md">
                     <div class="flex flex-row justify-between items-start w-full mb-6">
                         <div class="bg-yellow-200 h-[50px] w-[50px] rounded-full flex items-center justify-center">
                             <v-icon class="text-yellow-700">mdi-filter</v-icon>
@@ -343,13 +349,13 @@
             </div>
         </v-snackbar>
         <v-snackbar v-model="snackbarError" :timeout="snackbarTimeout" variant="outlined" color="rgba(1, 1, 1, 0)">
-            <div class="p-4 my-4 w-[350px] text-sm text-red-600 border-[1px] border-red-900 rounded-lg bg-red-50 text-center" type="alert">
+            <div class="p-4 my-4 w-[350px] text-sm text-red-600 border-[1px] border-red-900 rounded-lg bg-red-50 text-center flex items-start justify-between" type="alert">
                 <span class="font-medium font-inter">{{ this.languageStore.t.auth_login_mess_error }}</span> 
                 <v-icon @click="this.snackbarError = false;">mdi-close</v-icon>
             </div>
         </v-snackbar>
         <v-snackbar v-model="snackbarErrorPhoto" :timeout="snackbarTimeout" variant="outlined" color="rgba(1, 1, 1, 0)">
-            <div class="p-4 my-4 w-[350px] text-sm text-red-600 border-[1px] border-red-900 rounded-lg bg-red-50 text-center" type="alert">
+            <div class="p-4 my-4 w-[350px] text-sm text-red-600 border-[1px] border-red-900 rounded-lg bg-red-50 text-center flex items-start justify-between" type="alert">
                 <span class="font-medium font-inter">{{ this.languageStore.t.auth_login_mess_error }}</span> 
                 <v-icon @click="this.snackbarErrorPhoto = false;">mdi-close</v-icon>
             </div>

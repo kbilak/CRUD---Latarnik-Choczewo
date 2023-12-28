@@ -44,8 +44,44 @@
                     </div>
                 </div>
                 <v-app-bar-nav-icon size="x-large" elevation="0" class="2xl:hidden xl:hidden lg:hidden md:flex sm:flex xs:flex text-main2 md:ml-20 sm:ml-10 xs:ml-0" @click="this.drawer = !this.drawer"></v-app-bar-nav-icon>
-                <v-navigation-drawer v-model="drawer" temporary class="flex flex-col">
-                    <span>drawer</span>
+                <v-navigation-drawer v-model="drawer" temporary class="flex flex-col p-5 items-left h-full justify-between">
+                    <div class="flex flex-col h-full justify-between">
+                        <div class="flex flex-col">
+                            <div class="flex items-center">
+                                <img src="/logo/logo_latarnik.png" alt="Logo Latarnika Choczewo" class="h-[45px]">
+                                <span class="ml-5 2xl:text-xl xl:text-xl lg:text-xl md:text-xl sm:text-xl xs:text-md font-inter flex flex-col"><span class="text-dark text-[1rem] font-medium tracking-[0.02em] leading-[1.333]">Latarnik Choczewo</span><span class="text-[0.825rem] leading-[1] tracking-[0.02em]">{{this.languageStore.t.nav_list}}</span></span>
+                            </div>
+                            <hr class="w-full h-[1px] bg-black mt-5 mb-2">
+                            <div class="flex flex-col">
+                                <NuxtLink v-if="!this.isPlayersRoute" to="/players" class="text-gray-600 py-2 flex items-center">
+                                    <v-icon class="mr-5">mdi-soccer</v-icon>
+                                    <button class="text-[1.25rem] leading-[1.5] tracking-[0.005em]">{{this.languageStore.t.nav_players}}</button>
+                                </NuxtLink>
+                                <NuxtLink v-else class="py-2 rounded-[0.5rem] text-black flex items-center">
+                                    <v-icon class="mr-5">mdi-soccer</v-icon>
+                                    <button class="text-[1.25rem] leading-[1.5] tracking-[0.005em]">{{this.languageStore.t.nav_players}}</button>
+                                </NuxtLink>
+                                <NuxtLink v-if="!this.isCoachesRoute && this.authStore.user !== null && this.authStore.user.user.user_type === 'admin'" to="/coaches" class="text-gray-600 py-2 flex items-center">
+                                    <v-icon class="mr-5">mdi-account</v-icon>
+                                    <button class="text-[1.25rem] leading-[1.5] tracking-[0.005em]">Trenerzy</button>
+                                </NuxtLink>
+                                <NuxtLink v-else-if="this.isCoachesRoute && this.authStore.user !== null && this.authStore.user.user.user_type === 'admin'" class="text-black py-2 rounded-[0.5rem] flex items-center">
+                                    <v-icon class="mr-5">mdi-account</v-icon>
+                                    <button class="text-[1.25rem] leading-[1.5] tracking-[0.005em]">Trenerzy</button>
+                                </NuxtLink>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="mb-5">
+                                <span v-if="selectedLanguage.code !== 'PL'" @click="this.changeLanguage({name: 'Polski', code: 'PL'})" class="mr-5 cursor-pointer"><span class="mr-5">🇵🇱</span> PL</span>
+                                <span v-if="selectedLanguage.code !== 'EN'" @click="this.changeLanguage({name: 'English', code: 'EN'})" class="cursor-pointer"><span class="mr-5">🇬🇧</span> EN</span>
+                            </div>
+                            <hr class="w-full h-[1px] bg-black my-5">
+                            <NuxtLink to="/auth/login?action=logout" @click="this.logout()" class="text-red-500 flex items-center">
+                                <v-icon class="mr-5">mdi-logout</v-icon> Wyloguj
+                            </NuxtLink>
+                        </div>
+                    </div>
                 </v-navigation-drawer>
             </div>
         </div>

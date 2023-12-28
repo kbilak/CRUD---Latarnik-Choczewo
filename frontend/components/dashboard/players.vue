@@ -112,7 +112,7 @@
                             </span>
                         </div>
                         <div v-for="(player, index) in this.playersSorted[this.currentPagePlayers - 1]" :key="player.id" :class="{ 'border-b-[0.0625rem] border-[hsl(0 0% 92%)]': index !== this.playersSorted[this.currentPagePlayers - 1].length - 1 }" class="w-full h-[60px] flex items-center justify-between 2xl:px-10 xl:px-10 lg:px-10 md:px-8 sm:px-3 xs:px-2 font-inter text-[#2b2b2b] 2xl:text-[1rem] xl:text-[1rem] lg:text-[1rem] md:text-[0.85rem] sm:text-[0.85rem] xs:text-[0.75rem]">
-                            <div class="flex items-center justify-start 2xl:min-w-[60px] xl:min-w-[60px] lg:min-w-[60px] md:min-w-[60px] sm:min-w-[50px] xs:min-w-[50px] ">
+                            <div class="flex items-center justify-start 2xl:min-w-[60px] xl:min-w-[60px] lg:min-w-[60px] md:min-w-[60px] sm:min-w-[50px] xs:min-w-[50px]">
                                 <img v-if="player.image !== null" :src="player.image" :alt="player.name" class="2xl:w-[50px] xl:w-[50px] lg:w-[50px] md:w-[50px] sm:w-[40px] xs:w-[40px] 2xl:h-[50px] xl:h-[50px] lg:h-[50px] md:h-[50px] sm:h-[40px] xs:h-[40px] rounded-md">
                                 <img v-else src="https://st3.depositphotos.com/6672868/13701/v/450/depositphotos_137014128-stock-illustration-user-profile-icon.jpg" alt="placeholder" class="2xl:w-[50px] xl:w-[50px] lg:w-[50px] md:w-[50px] sm:w-[40px] xs:w-[40px] 2xl:h-[50px] xl:h-[50px] lg:h-[50px] md:h-[50px] sm:h-[40px] xs:h-[40px] rounded-md">
                             </div>
@@ -196,7 +196,7 @@
                 </div>
             </div>
             <v-dialog v-model="dialogUpdate" persistent transition="dialog-bottom-transition">
-                <v-form @submit.prevent ref="updateValid" v-model="updateValid" class="bg-white h-auto 2xl:w-[500px] xl:w-[500px] lg:w-[500px] md:w-[500px] sm:w-[500px] xs:w-[400px] 2xl:p-10 xl:p-10 lg:p-10 md:p-5 sm:p-5 xs:p-5 rounded-[1rem] border-[1px] border-gray-300 shadow-md">
+                <v-form @submit.prevent ref="updateValid" v-model="updateValid" class="bg-white h-auto 2xl:w-[500px] xl:w-[500px] lg:w-[500px] md:w-[500px] sm:w-[500px] xs:w-[400px] 2xl:p-10 xl:p-10 lg:p-10 md:p-5 sm:p-5 xs:p-5 rounded-lg border-[1px] border-gray-300 shadow-md">
                     <div class="flex flex-row justify-between items-start w-full mb-6">
                         <div class="bg-gray-300 h-[50px] w-[50px] rounded-full flex items-center justify-center">
                             <v-icon>mdi-pencil-plus</v-icon>
@@ -278,7 +278,7 @@
                 </div>
             </v-dialog>
             <v-dialog v-model="dialogDelete" persistent transition="dialog-bottom-transition">
-                <v-form @submit.prevent ref="deleteValid" v-model="deleteValid"  class="bg-white h-auto 2xl:w-[500px] xl:w-[500px] lg:w-[500px] md:w-[500px] sm:w-[500px] xs:w-[400px] 2xl:p-10 xl:p-10 lg:p-10 md:p-5 sm:p-5 xs:p-5 rounded-lg border-[1px] border-gray-300 shadow-md">
+                <v-form @submit.prevent ref="deleteValid" v-model="deleteValid" class="bg-white h-auto 2xl:w-[500px] xl:w-[500px] lg:w-[500px] md:w-[500px] sm:w-[500px] xs:w-[400px] 2xl:p-10 xl:p-10 lg:p-10 md:p-5 sm:p-5 xs:p-5 rounded-lg border-[1px] border-gray-300 shadow-md">
                     <div class="flex flex-row justify-between items-start w-full mb-6">
                         <div class="bg-red-200 h-[50px] w-[50px] rounded-full flex items-center justify-center">
                             <v-icon class="text-red-700">mdi-delete</v-icon>
@@ -590,8 +590,8 @@ export default{
         }
 
         this.nameRules = [
-            (v) => !!v || this.languageStore.t.rules_email_not,
-            (v) => (v && v.length >= 5 && v.length <= 60) || this.languageStore.t.rules_email_length,
+            (v: string) => !!v || this.languageStore.t.rules_email_not,
+            (v: string) => (v && v.length >= 5 && v.length <= 60) || this.languageStore.t.rules_email_length,
         ];
         this.numberRules = [
             (v) => !isNaN(parseFloat(v)) && isFinite(v) && v >= 1 && v <= 99 || 'Number',
@@ -609,13 +609,13 @@ export default{
         
     },
     watch: {
-        async searchText(newVal) {
+        async searchText(newVal: string) {
             if (newVal === '') {
                 await this.getAllPlayers();
                 return;
             }
             this.players = await getPlayers(); 
-            const filteredPlayers = this.players.filter(player => {
+            const filteredPlayers = this.players.filter((player: Object) => {
                 for (const key in player) {
                     if (key !== 'id') {
                         if (typeof player[key] === 'object') {

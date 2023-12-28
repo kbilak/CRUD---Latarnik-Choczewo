@@ -23,28 +23,32 @@
                 </div>
             </v-form>
             <div class="mb-5">
-                <span @click="this.changeLanguage('Polski', 'PL')" class="mr-5 cursor-pointer">🇵🇱 PL</span>
-                <span @click="this.changeLanguage('English', 'EN')" class="cursor-pointer">🇬🇧 EN</span>
+                <span v-if="languageStore.language.code !== 'PL'" @click="this.changeLanguage('Polski', 'PL')" class="mr-5 cursor-pointer">🇵🇱 PL</span>
+                <span v-if="languageStore.language.code !== 'EN'" @click="this.changeLanguage('English', 'EN')" class="cursor-pointer">🇬🇧 EN</span>
             </div>
             <ClientOnly>
                 <v-snackbar v-model="snackbar" :timeout="snackbarTimeout" variant="outlined" color="rgba(1, 1, 1, 0)">
-                    <div class="p-4 my-4 w-[350px] text-sm text-red-600 border-[1px] border-red-900 rounded-lg bg-red-50 text-center" role="alert">
-                        <span class="font-medium font-inter">{{ this.languageStore.t.auth_login_mess_error }}</span> 
+                    <div class="p-4 my-4 w-[350px] text-sm text-red-600 border-[1px] border-red-900 rounded-lg bg-red-50 text-center flex items-start justify-between" role="alert">
+                        <span class="font-medium font-inter">{{ this.languageStore.t.auth_login_mess_error }}</span>
+                        <v-icon @click="this.snackbar = false;">mdi-close</v-icon>
                     </div>
                 </v-snackbar>
                 <v-snackbar v-model="snackbar2" :timeout="snackbarTimeout" variant="outlined" color="rgba(1, 1, 1, 0)">
-                    <div class="p-4 my-4 w-[350px] text-sm text-green-600 border-[1px] border-green-900 rounded-lg bg-green-50 text-center" role="alert">
+                    <div class="p-4 my-4 w-[350px] text-sm text-green-600 border-[1px] border-green-900 rounded-lg bg-green-50 text-center flex items-start justify-between" role="alert">
                         <span class="font-medium font-inter">{{ this.languageStore.t.auth_sign_up_mess_success }}</span> 
+                        <v-icon @click="this.snackbar2 = false;">mdi-close</v-icon>
                     </div>
                 </v-snackbar>
                 <v-snackbar v-model="snackbar3" :timeout="snackbarTimeout" variant="outlined" color="rgba(1, 1, 1, 0)">
-                    <div class="p-4 my-4 w-[350px] text-sm text-green-600 border-[1px] border-green-900 rounded-lg bg-green-50 text-center" role="alert">
+                    <div class="p-4 my-4 w-[350px] text-sm text-green-600 border-[1px] border-green-900 rounded-lg bg-green-50 text-center flex items-start justify-between" role="alert">
                         <span class="font-medium font-inter">{{ this.languageStore.t.auth_logout_mess_success }}</span> 
+                        <v-icon @click="this.snackbar3 = false;">mdi-close</v-icon>
                     </div>
                 </v-snackbar>
                 <v-snackbar v-model="snackbar4" :timeout="snackbarTimeout" variant="outlined" color="rgba(1, 1, 1, 0)">
-                    <div class="p-4 my-4 w-[350px] text-sm text-red-600 border-[1px] border-red-900 rounded-lg bg-red-50 text-center" role="alert">
+                    <div class="p-4 my-4 w-[350px] text-sm text-red-600 border-[1px] border-red-900 rounded-lg bg-red-50 text-center flex items-start justify-between" role="alert">
                         <span class="font-medium font-inter">{{ this.languageStore.t.auth_login_not_login }}</span> 
+                        <v-icon @click="this.snackbar4 = false;">mdi-close</v-icon>
                     </div>
                 </v-snackbar>
             </ClientOnly>

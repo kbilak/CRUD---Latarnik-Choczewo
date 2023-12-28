@@ -29,8 +29,9 @@
             </div>
             <ClientOnly>
                 <v-snackbar v-model="snackbar" :timeout="snackbarTimeout" variant="outlined" color="rgba(1, 1, 1, 0)">
-                    <div class="p-4 my-4 w-[350px] text-sm text-red-600 border-[1px] border-red-900 rounded-lg bg-red-50 text-center" role="alert">
+                    <div class="p-4 my-4 w-[350px] text-sm text-red-600 border-[1px] border-red-900 rounded-lg bg-red-50 text-center flex items-start justify-between" role="alert">
                         <span class="font-medium font-inter">{{ this.languageStore.t.auth_signup_mess_error }}</span> 
+                        <v-icon @click="this.snackbar = false;">mdi-close</v-icon>
                     </div>
                 </v-snackbar>
             </ClientOnly>
