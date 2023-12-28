@@ -63,18 +63,18 @@ export default {
             this.$router.push('/players');
         }
         this.emailRules = [
-            (v) => !!v || this.languageStore.t.rules_email_not,
-            (v) => (v && v.length >= 5) || this.languageStore.t.rules_email_length,
-            (v) => /.+@.+\..+/.test(v) || this.languageStore.t.rules_email_wrong,
+            (v: string) => !!v || this.languageStore.t.rules_email_not,
+            (v: string) => (v && v.length >= 5) || this.languageStore.t.rules_email_length,
+            (v: string) => /.+@.+\..+/.test(v) || this.languageStore.t.rules_email_wrong,
         ];
         this.passwordRules = [
-            (v) => !!v || this.languageStore.t.rules_password_not,
-            (v) => (v && v.length >= 8) || this.languageStore.t.rules_password_length,
+            (v: string) => !!v || this.languageStore.t.rules_password_not,
+            (v: string) => (v && v.length >= 8) || this.languageStore.t.rules_password_length,
         ]
         this.password2Rules = [
-            (v) => !!v || this.languageStore.t.rules_password_not,
-            (v) => (v && v.length >= 8) || this.languageStore.t.rules_password_length,
-            (v) => (this.password === this.password2) || this.languageStore.t.rules_password_the_same,
+            (v: string) => !!v || this.languageStore.t.rules_password_not,
+            (v: string) => (v && v.length >= 8) || this.languageStore.t.rules_password_length,
+            (v: string) => (this.password === this.password2) || this.languageStore.t.rules_password_the_same,
         ]
     },
     methods: {
@@ -83,7 +83,7 @@ export default {
         },
         async signUp() {
             this.loading = true;
-            this.$refs.form.validate().then(async valid => {
+            this.$refs.form.validate().then(async (valid: boolean) => {
                 if (valid) {
                     let response = await this.authStore.signUp(this.email, this.password);
                     if (response) {
