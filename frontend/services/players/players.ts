@@ -12,7 +12,7 @@ interface Player {
 }
 
 // Define the base URL
-const BASE_URL = 'http://127.0.0.1:8000';
+const BASE_URL = 'https://api.crud.dipit.dev';
 
 // Function to get all players from the API
 export async function getPlayers(): Promise<Player[] | null> {

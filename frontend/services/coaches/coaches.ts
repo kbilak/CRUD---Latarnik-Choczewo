@@ -11,7 +11,7 @@ interface Coach {
 }
 
 // Define the base URL
-const BASE_URL = 'http://127.0.0.1:8000';
+const BASE_URL = 'https://api.crud.dipit.dev';
 
 // Function to get all coaches from the API
 export async function getCoaches(): Promise<Coach[] | null> {

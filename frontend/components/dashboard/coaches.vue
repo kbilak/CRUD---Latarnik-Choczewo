@@ -973,7 +973,7 @@ export default{
             formData.append('image', blob, `${this.currentImage.id}${new Date()}.webp`);
 
             try {
-                const response = await axios.post(`http://127.0.0.1:8000/players/coach/image/`, formData, {
+                const response = await axios.post(`https://api.crud.dipit.dev/players/coach/image/`, formData, {
                     headers: {
                         'Content-Type': 'multipart/form-data',
                     },

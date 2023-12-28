@@ -14,7 +14,7 @@ Aplikacja stworzona w ramach zadania rekrutacyjnego. Wyświetlanie, dodawanie, e
         - email: normal@normal.pl
         - hasło: normal1234
 - Backend (panel administracyjny) - https://api.crud.dipit.dev/admin/
-    - email: admin@admin.pl
+    - nazwa: admin
     - hasło: admin1234
 
 
@@ -41,6 +41,7 @@ Aplikacja stworzona w ramach zadania rekrutacyjnego. Wyświetlanie, dodawanie, e
 ## Funkcjonalności - backend
 
 - Wygodny panel administracyjny (Django),
+- Personalizowany wygląd panelu administracyjnego,
 - Możliwość zarządzania zawodnikami, trenerami oraz tłumaczeniami,
 - Tłumaczenia: dodawanie kodów tłumaczeń wraz z automatycznymi tłumaczeniami w wielu językach,
 - System tokenów - żądania wysyłane z frontendu są sprawdzane pod kątem poprawnego tokenu - bez poprawnego tokenu żądanie nie zostanie wykonanem.

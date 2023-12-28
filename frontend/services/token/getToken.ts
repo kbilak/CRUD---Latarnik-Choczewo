@@ -7,7 +7,7 @@ interface TokenResponse {
 }
 
 // Define the base URL
-const BASE_URL = 'http://127.0.0.1:8000';
+const BASE_URL = 'https://api.crud.dipit.dev';
 
 // Defining an async function to get the token
 export async function getToken(): Promise<string | null> {

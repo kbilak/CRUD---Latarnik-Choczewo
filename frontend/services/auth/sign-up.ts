@@ -19,7 +19,7 @@ export interface TokenCredentials {
 }
 
 // Define the base URL
-const BASE_URL = 'http://127.0.0.1:8000';
+const BASE_URL = 'https://api.crud.dipit.dev';
 
 // Defining an async function to perform sign-up
 export async function signUp(email: string, password: string, token: string): Promise<AuthResponse | null> {
