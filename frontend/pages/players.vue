@@ -4,7 +4,7 @@
     </div>
 </template>
 
-<script>
+<!-- <script>
 useSeoMeta({
     title: 'Lista zawodników - Latarnik Choczewo',
     description: 'Dodawanie, usuwanie, edycja i wyświetlanie zawodników i trenerów Latarnika Choczewo.',
@@ -29,4 +29,4 @@ useHead({
         }
     ]
 })
-</script>
+</script> -->

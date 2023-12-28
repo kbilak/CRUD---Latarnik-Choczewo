@@ -73,8 +73,8 @@
                         </div>
                         <div>
                             <div class="mb-5">
-                                <span v-if="selectedLanguage.code !== 'PL'" @click="this.changeLanguage({name: 'Polski', code: 'PL'})" class="mr-5 cursor-pointer"><span class="mr-5">🇵🇱</span> PL</span>
-                                <span v-if="selectedLanguage.code !== 'EN'" @click="this.changeLanguage({name: 'English', code: 'EN'})" class="cursor-pointer"><span class="mr-5">🇬🇧</span> EN</span>
+                                <span v-if="this.selectedLanguage.code !== 'PL'" @click="this.changeLanguage({name: 'Polski', code: 'PL'})" class="mr-5 cursor-pointer"><span class="mr-5">🇵🇱</span> PL</span>
+                                <span v-if="this.selectedLanguage.code !== 'EN'" @click="this.changeLanguage({name: 'English', code: 'EN'})" class="cursor-pointer"><span class="mr-5">🇬🇧</span> EN</span>
                             </div>
                             <hr class="w-full h-[1px] bg-black my-5">
                             <NuxtLink to="/auth/login?action=logout" @click="this.logout()" class="text-red-500 flex items-center">

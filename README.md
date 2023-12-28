@@ -6,7 +6,7 @@ Aplikacja stworzona w ramach zadania rekrutacyjnego. Wyświetlanie, dodawanie, e
 
 ## Demo + dane logowania
 
-- Frontend (właściwa aplikacja) - https://crud-latarnik-choczewo.vercel.app/auth/login 
+- Frontend (właściwa aplikacja) - https://crud-latarnik-choczewo.vercel.app
     - Admin
         - email: admin@admin.pl
         - hasło: admin1234

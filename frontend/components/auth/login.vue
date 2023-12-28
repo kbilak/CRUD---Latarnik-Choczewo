@@ -23,8 +23,8 @@
                 </div>
             </v-form>
             <div class="mb-5">
-                <span v-if="languageStore.language.code !== 'PL'" @click="this.changeLanguage('Polski', 'PL')" class="mr-5 cursor-pointer">🇵🇱 PL</span>
-                <span v-if="languageStore.language.code !== 'EN'" @click="this.changeLanguage('English', 'EN')" class="cursor-pointer">🇬🇧 EN</span>
+                <span v-if="this.languageStore.language.code !== 'PL'" @click="this.changeLanguage('Polski', 'PL')" class="cursor-pointer">🇵🇱 PL</span>
+                <span v-if="this.languageStore.language.code !== 'EN'" @click="this.changeLanguage('English', 'EN')" class="cursor-pointer">🇬🇧 EN</span>
             </div>
             <ClientOnly>
                 <v-snackbar v-model="snackbar" :timeout="snackbarTimeout" variant="outlined" color="rgba(1, 1, 1, 0)">
