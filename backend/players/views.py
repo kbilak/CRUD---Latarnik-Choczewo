@@ -90,12 +90,9 @@ class ListPlayersView(ListAPIView):
     serializer_class = PlayerSerializer
 
     def get_queryset(self):
-        referring_url = self.request.META.get('HTTP_REFERER')
-
-        # specific_url = 'https://crud-latarnik-choczewo.vercel.app'
-        specific_url = 'http://localhost:3000/'
-
-        if referring_url == specific_url:
+        origin_url = self.request.META.get('HTTP_REFERER')
+        expected_url = 'https://crud-latarnik-choczewo.vercel.app/'
+        if origin_url == expected_url:
             return Player.objects.all()
         else:
             raise PermissionDenied("Access denied for this URL")
@@ -105,12 +102,9 @@ class ListCoachesView(ListAPIView):
     serializer_class = CoachSerializer
 
     def get_queryset(self):
-        referring_url = self.request.META.get('HTTP_REFERER')
-
-        # specific_url = 'https://crud-latarnik-choczewo.vercel.app'
-        specific_url = 'http://localhost:3000/'
-
-        if referring_url == specific_url:
+        origin_url = self.request.META.get('HTTP_REFERER')
+        expected_url = 'https://crud-latarnik-choczewo.vercel.app/'
+        if origin_url == expected_url:
             return Coach.objects.all()
         else:
             raise PermissionDenied("Access denied for this URL")

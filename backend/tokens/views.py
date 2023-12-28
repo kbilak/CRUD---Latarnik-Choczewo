@@ -9,9 +9,8 @@ from .serializers import TokenSerializer
 class CreateTokenView(APIView):
     def post(self, request):
         origin_url = request.META.get('HTTP_REFERER')
-        # origin_url = request.META.get('HTTP_ORIGIN')
-        expected_url = 'http://localhost:3000/'
-        # expected_url = 'https://crud-latarnik-choczewo.vercel.app'
+        expected_url = 'https://crud-latarnik-choczewo.vercel.app/'
+        print('Token: ' + origin_url)
         if origin_url == expected_url:
             token = Token()
             token.save()
