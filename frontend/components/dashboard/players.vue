@@ -79,7 +79,7 @@
                                 <span class="2xl:w-[60px] xl:w-[60px] lg:w-[60px] md:w-[60px] sm:w-[50px] xs:w-[50px] h-full">{{this.languageStore.t.table_header_photo}}</span>
                             </div>
                             <div class="flex items-center justify-center">
-                                <span class="2xl:w-[150px] xl:w-[150px] lg:w-[150px] md:w-[130px] sm:w-[120px] xs:w-[70px] h-full">{{this.languageStore.t.table_header_name}}</span>
+                                <span class="2xl:w-[300px] xl:w-[150px] lg:w-[150px] md:w-[130px] sm:w-[120px] xs:w-[70px] h-full">{{this.languageStore.t.table_header_name}}</span>
                             </div>
                             <div class="2xl:flex xl:flex lg:flex md:hidden sm:hidden xs:hidden items-center justify-center 2xl:text-left xl:text-left lg:text-left md:text-center sm:text-center xs:text-center">
                                 <span class="2xl:w-[90px] xl:w-[90px] lg:w-[90px] md:w-[60px] sm:w-[60px] xs:w-[50px] h-full">{{this.languageStore.t.table_header_position}}</span>
@@ -117,7 +117,7 @@
                                 <img v-else src="https://st3.depositphotos.com/6672868/13701/v/450/depositphotos_137014128-stock-illustration-user-profile-icon.jpg" alt="placeholder" class="2xl:w-[50px] xl:w-[50px] lg:w-[50px] md:w-[50px] sm:w-[40px] xs:w-[40px] 2xl:h-[50px] xl:h-[50px] lg:h-[50px] md:h-[50px] sm:h-[40px] xs:h-[40px] rounded-md">
                             </div>
                             <div class="flex items-center justify-center">
-                                <span class="2xl:w-[150px] xl:w-[150px] lg:w-[150px] md:w-[130px] sm:w-[120px] xs:w-[70px] h-full font-[500]">{{player.name}}</span>
+                                <span class="2xl:w-[300px] xl:w-[150px] lg:w-[150px] md:w-[130px] sm:w-[120px] xs:w-[70px] h-full font-[500]">{{player.name}}</span>
                             </div>
                             <div class="2xl:flex xl:flex lg:flex md:hidden sm:hidden xs:hidden items-center justify-center 2xl:text-left xl:text-left lg:text-left md:text-center sm:text-center xs:text-center">
                                 <span v-if="player.position.value === 'BR'" class="2xl:w-[90px] xl:w-[90px] lg:w-[90px] md:w-[60px] sm:w-[60px] xs:w-[60px] h-full">{{this.languageStore.t.table_data_position_b}}</span>
