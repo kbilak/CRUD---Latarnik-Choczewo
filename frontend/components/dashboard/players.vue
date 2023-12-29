@@ -709,6 +709,7 @@ export default{
             console.error('WebSocket error:', error);
         },
         async getAllPlayers() {
+            this.searchText = '';
             try {
                 this.loading = true;
                 this.players = await getPlayers(); 
@@ -765,6 +766,7 @@ export default{
                 year: year
             };
             this.dialogUpdate = true;
+            this.searchText = '';
         },
         updatePlayerClose() {
             this.dialogUpdate = false;
@@ -783,8 +785,10 @@ export default{
                 image: image,
             }
             this.dialogImage = true;
+            this.searchText = '';
         },
         async updatePlayerDialog(): Promise<void> {
+            this.searchText = '';
             this.buttonLoading = true;
             try {
                 const valid = await this.$refs.updateValid.validate();
@@ -815,6 +819,7 @@ export default{
             }
         },
         deletePlayer(id: String, name: String) {
+            this.searchText = '';
             this.currentDelete = {
                 id: id,
                 name: name,
@@ -826,6 +831,7 @@ export default{
             this.currentDelete = {};
         },
         async deletePlayerDialog(): Promise<void> {
+            this.searchText = '';
             this.buttonLoading = true;
             try {
                 const valid = await this.$refs.deleteValid.validate();
@@ -856,6 +862,7 @@ export default{
             }
         },
         addPlayer() {
+            this.searchText = '';
             this.currentAdd = {
                 name: '',
                 position: {title: this.languageStore.t.table_data_position_b, value: 'BR'},
@@ -870,6 +877,7 @@ export default{
             this.currentAdd = {};
         },
         async addPlayerDialog(): Promise<void> {
+            this.searchText = '';
             this.buttonLoading = true;
             try {
                 const valid: boolean = await this.$refs.addValid.validate();
@@ -909,6 +917,7 @@ export default{
             this.dialogFilter = false;
         },
         async updateFilter(): Promise<void> {
+            this.searchText = '';
             interface PlayerFilter {
                 status: string;
                 position: string;
@@ -965,6 +974,7 @@ export default{
             this.loading = false;
         },
         async organizePlayers(): Promise<void> {
+            this.searchText = '';
             interface PlayerOrganize {
                 status: string | { title: string; value: string };
                 position: string | { title: string; value: string };

@@ -598,6 +598,7 @@ export default{
             console.error('WebSocket error:', error);
         },
         async getAllCoaches() {
+            this.searchText = '';
             try {
                 this.loading = true;
                 this.coaches = await getCoaches(); 
@@ -623,6 +624,7 @@ export default{
             }
         },
         updateCoach(id: String, name: String, type, status, team: String) {
+            this.searchText = '';
             if (status.value === 'aktywny') {
                 status = {title: this.languageStore.t.table_data_status_a, value: 'aktywny'}
             } else if (status.value === 'nieaktywny') {
@@ -653,6 +655,7 @@ export default{
             this.imageIsCropped = null;
         },
         imageCoach(id: String, name: String, image: String) {
+            this.searchText = '';
             this.currentImage = {
                 id: id,
                 name: name,
@@ -661,6 +664,7 @@ export default{
             this.dialogImage = true;
         },
         async updateCoachDialog(): Promise<void> {
+            this.searchText = '';
             this.buttonLoading = true;
             try {
                 const valid = await this.$refs.updateValid.validate();
@@ -691,6 +695,7 @@ export default{
             }
         },
         deleteCoach(id: String, name: String) {
+            this.searchText = '';
             this.currentDelete = {
                 id: id,
                 name: name,
@@ -702,6 +707,7 @@ export default{
             this.currentDelete = {};
         },
         async deleteCoachDialog(): Promise<void> {
+            this.searchText = '';
             this.buttonLoading = true;
             try {
                 const valid = await this.$refs.deleteValid.validate();
@@ -732,6 +738,7 @@ export default{
             }
         },
         addCoach() {
+            this.searchText = '';
             this.currentAdd = {
                 name: '',
                 type: {title: this.languageStore.t.table_data_role_as, value: 'AS'},
@@ -745,6 +752,7 @@ export default{
             this.currentAdd = {};
         },
         async addCoachDialog(): Promise<void> {
+            this.searchText = '';
             this.buttonLoading = true;
             try {
                 const valid: boolean = await this.$refs.addValid.validate();
@@ -783,6 +791,7 @@ export default{
             this.dialogFilter = false;
         },
         async updateFilter(): Promise<void> {
+            this.searchText = '';
             interface CoachFilter {
                 status: string;
                 type: string;
@@ -822,6 +831,7 @@ export default{
             this.loading = false;
         },
         async organizeCoaches(): Promise<void> {
+            this.searchText = '';
             interface CoachOrganize {
                 status: string | { title: string; value: string };
                 type: string | { title: string; value: string };
