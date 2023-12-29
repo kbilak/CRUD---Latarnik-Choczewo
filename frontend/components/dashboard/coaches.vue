@@ -14,9 +14,9 @@
                                     </span>
                                 </div>
                             </div>
-                            <div class="dropdown dropdown-bottom dropdown-end">
+                            <div class="dropdown dropdown-center flex justify-end">
                                 <MainButton tabindex="0" type="black" buttonText="Sortuj" />
-                                <ul class="dropdown-content z-[1] menu p-2 shadow bg-white border-[1px] border-gray-300 rounded-box w-[180px] mt-2">
+                                <ul tabindex="0" class="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-[150px] mt-[50px]">
                                     <li>
                                         <div class="form-control">
                                             <label class="label cursor-pointer">

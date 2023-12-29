@@ -14,21 +14,21 @@
                         <button class="text-[1rem] leading-[1.5] tracking-[0.005em]">{{this.languageStore.t.nav_players}}</button>
                     </NuxtLink>
                     <NuxtLink v-if="!this.isCoachesRoute && this.authStore.user !== null && this.authStore.user.user.user_type === 'admin'" to="/coaches" class="px-5 py-2">
-                        <button class="text-[1rem] leading-[1.5] tracking-[0.005em]">Trenerzy</button>
+                        <button class="text-[1rem] leading-[1.5] tracking-[0.005em]">{{this.languageStore.t.nav_coaches}}</button>
                     </NuxtLink>
                     <NuxtLink v-else-if="this.isCoachesRoute && this.authStore.user !== null && this.authStore.user.user.user_type === 'admin'" class="bg-[#f5f5f5] px-5 py-2 rounded-[0.5rem]">
-                        <button class="text-[1rem] leading-[1.5] tracking-[0.005em]">Trenerzy</button>
+                        <button class="text-[1rem] leading-[1.5] tracking-[0.005em]">{{this.languageStore.t.nav_coaches}}</button>
                     </NuxtLink>
                 </div>
                 <div class="2xl:flex xl:flex lg:flex md:hidden sm:hidden xs:hidden flex-row items-center justify-end w-1/3">
-                    <div v-if="this.authStore.loggedIn" class="dropdown dropdown-bottom dropdown-end rounded-full mr-5 p-1 h-[44px] w-[44px] flex items-center justify-center font-inter">
+                    <div v-if="this.authStore.loggedIn" class="dropdown dropdown-center w-[50px] flex justify-end mr-5">
                         <v-icon tabindex="0" role="button" class="text-black" style="font-size: 30px !important;">mdi-account</v-icon>
-                        <ul class="dropdown-content z-[1] menu p-2 bg-white rounded-[0.5rem] w-[250px] border-[1px] border-[#f5f5f5]">
+                        <ul tabindex="0" class="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-[250px] mt-[30px]">
                             <li v-if="this.authStore.user.user" class="text-left cursor-default justify-start">
                                 <span class="flex flex-col text-left"><span class="font-[500]">{{ this.authStore.user.user.email }}</span></span>
                             </li>
                             <li><NuxtLink to="/auth/login?action=logout" @click="this.logout()" class="text-red-500">
-                                <v-icon>mdi-logout</v-icon> Wyloguj
+                                <v-icon>mdi-logout</v-icon> {{this.languageStore.t.nav_logout}}
                             </NuxtLink></li>
                         </ul>
                     </div>
@@ -63,11 +63,11 @@
                                 </NuxtLink>
                                 <NuxtLink v-if="!this.isCoachesRoute && this.authStore.user !== null && this.authStore.user.user.user_type === 'admin'" to="/coaches" class="text-gray-600 py-2 flex items-center">
                                     <v-icon class="mr-5">mdi-account</v-icon>
-                                    <button class="text-[1.25rem] leading-[1.5] tracking-[0.005em]">Trenerzy</button>
+                                    <button class="text-[1.25rem] leading-[1.5] tracking-[0.005em]">{{this.languageStore.t.nav_coaches}}</button>
                                 </NuxtLink>
                                 <NuxtLink v-else-if="this.isCoachesRoute && this.authStore.user !== null && this.authStore.user.user.user_type === 'admin'" class="text-black py-2 rounded-[0.5rem] flex items-center">
                                     <v-icon class="mr-5">mdi-account</v-icon>
-                                    <button class="text-[1.25rem] leading-[1.5] tracking-[0.005em]">Trenerzy</button>
+                                    <button class="text-[1.25rem] leading-[1.5] tracking-[0.005em]">{{this.languageStore.t.nav_coaches}}</button>
                                 </NuxtLink>
                             </div>
                         </div>
@@ -77,8 +77,8 @@
                                 <span v-if="this.selectedLanguage.code !== 'EN'" @click="this.changeLanguage({name: 'English', code: 'EN'})" class="cursor-pointer"><span class="mr-5">🇬🇧</span> EN</span>
                             </div>
                             <hr class="w-full h-[1px] bg-black my-5">
-                            <NuxtLink to="/auth/login?action=logout" @click="this.logout()" class="text-red-500 flex items-center">
-                                <v-icon class="mr-5">mdi-logout</v-icon> Wyloguj
+                            <NuxtLink to="/auth/login?action=logout" @click="this.drawer = false, this.logout()" class="text-red-500 flex items-center">
+                                <v-icon class="mr-5">mdi-logout</v-icon> {{this.languageStore.t.nav_logout}}
                             </NuxtLink>
                         </div>
                     </div>

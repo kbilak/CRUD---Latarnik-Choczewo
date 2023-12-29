@@ -18,7 +18,7 @@
                         </template>
                     </button> 
                     <div class="text-center text-[1rem] font-[400] leading-[1.5] mt-[3rem]">
-                        <span class="text-blackish text-[1rem] font-[400] leading-[1.5]">Nie masz jeszcze konta? <NuxtLink to="/auth/sign-up" class="transition ease-in-out duration-300 text-[1rem] font-medium leading-[1.5] hover:text-black">Zarejestruj się</NuxtLink></span>
+                        <span class="text-blackish text-[1rem] font-[400] leading-[1.5]">{{this.languageStore.t.auth_login_account_not}} <NuxtLink to="/auth/sign-up" class="transition ease-in-out duration-300 text-[1rem] font-medium leading-[1.5] hover:text-black">{{this.languageStore.t.auth_login_account_not_sign_up}}</NuxtLink></span>
                     </div>
                 </div>
             </v-form>

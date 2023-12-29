@@ -51,6 +51,7 @@ export const useAuthStore = defineStore({
         // Action to sign up a new user
         async signUp(email: string, password: string) {
             try {
+                await this.fetchToken(); // Fetch the token
                 const response = await signUp(email, password, this.token); // Attempt to sign up
                 if (response) {
                     return true; // If successful, return true

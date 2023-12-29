@@ -5,23 +5,23 @@
                 <div class="flex 2xl:flex-row xl:flex-row lg:flex-row md:flex-col sm:flex-col xs:flex-col 2xl:h-[70px] xl:h-[70px] lg:h-[70px] md:h-[104px] sm:h-[104px] xs:h-[168px] my-2 justify-between w-full items-center">
                     <div class="w-auto h-[48px] flex justify-between">
                         <div class="flex">
-                            <MainButton :click="filter" type="black" buttonText="Filtruj" class="mr-5" />
+                            <MainButton :click="filter" type="black" :buttonText="this.languageStore.t.table_nav_filter" class="mr-5" />
                             <div v-if="shouldDisplayFilterDiv" class="flex flex-col font-inter items-start justify-center pr-5">
-                                <span class="text-[1rem]">Filtrowanie:</span>
+                                <span class="text-[1rem]">{{this.languageStore.t.table_nav_filter_action}}</span>
                                 <div class="flex flex-row ml-[-6px]">
                                     <span v-for="(key, i) in Object.keys(this.filterOptions)" :key="i" class="text-[0.825rem] text-gray-500 flex flex-row items-start">
-                                        <span v-if="this.filterOptions[key] === true" class="flex ml-1 w-full"><v-icon @click="this.filterOptions[key] = false, updateFilter(), this.searchText = ''" class="cursor-pointer">mdi-close</v-icon>{{ this.filterOptionsTranslations[i] }}</span>
+                                        <span v-if="this.filterOptions[key] === true" class="flex ml-1 w-full"><v-icon @click="this.filterOptions[key] = false, updateFilter(), this.searchText = ''" class="cursor-pointer">mdi-close</v-icon>{{ [this.languageStore.t.table_data_status_a,this.languageStore.t.table_data_status_n,this.languageStore.t.table_data_position_b,this.languageStore.t.table_data_position_o,this.languageStore.t.table_data_position_p,this.languageStore.t.table_data_position_n,'1970-1999', '2000-2005', '2006-2010', '2010-2019'][i] }}</span>
                                     </span>
                                 </div>
                             </div>
-                            <div class="dropdown dropdown-bottom dropdown-end">
-                                <MainButton tabindex="0" type="black" buttonText="Sortuj" />
-                                <ul class="dropdown-content z-[1] menu p-2 shadow bg-white border-[1px] border-gray-300 rounded-box w-[180px] mt-2">
+                            <div class="dropdown dropdown-center flex justify-end">
+                                <MainButton tabindex="0" type="black" :buttonText="this.languageStore.t.table_nav_sort" />
+                                <ul tabindex="0" class="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-[150px] mt-[50px]">
                                     <li>
-                                        <div class="form-control">
-                                            <label class="label cursor-pointer">
+                                        <div class="form-control w-full">
+                                            <label class="label cursor-pointer w-full">
                                                 <input v-model="sortingOptions.position" @change="updateSorting" type="checkbox" class="checkbox checkbox-[#000000] bg-gray-300 border-[1px] border-gray-300 mr-2" />
-                                                <span class="label-text">Pozycja</span> 
+                                                <span class="label-text">{{this.languageStore.t.table_header_position}}</span> 
                                             </label>
                                         </div>
                                     </li>
@@ -29,7 +29,7 @@
                                         <div class="form-control">
                                             <label class="label cursor-pointer">
                                                 <input v-model="sortingOptions.year" @change="updateSorting" type="checkbox" class="checkbox checkbox-[#000000] bg-gray-300 border-[1px] border-gray-300 mr-2" />
-                                                <span class="label-text">Rocznik</span> 
+                                                <span class="label-text">{{this.languageStore.t.table_header_year}}</span> 
                                             </label>
                                         </div>
                                     </li>
@@ -37,7 +37,7 @@
                                         <div class="form-control">
                                             <label class="label cursor-pointer">
                                                 <input v-model="sortingOptions.number" @change="updateSorting" type="checkbox" class="checkbox checkbox-[#000000] bg-gray-300 border-[1px] border-gray-300 mr-2" />
-                                                <span class="label-text">Numer</span> 
+                                                <span class="label-text">{{this.languageStore.t.table_header_number}}</span> 
                                             </label>
                                         </div>
                                     </li>
@@ -45,7 +45,7 @@
                                         <div class="form-control">
                                             <label class="label cursor-pointer">
                                                 <input v-model="sortingOptions.status" @change="updateSorting" type="checkbox" class="checkbox checkbox-[#000000] bg-gray-300 border-[1px] border-gray-300 mr-2" />
-                                                <span class="label-text">Status</span> 
+                                                <span class="label-text">{{this.languageStore.t.table_header_status}}</span> 
                                             </label>
                                         </div>
                                     </li>
@@ -60,13 +60,13 @@
                                 <span class="absolute inset-y-0 left-0 flex items-center pl-3">
                                     <v-icon>mdi-magnify</v-icon>
                                 </span>
-                                <input v-model="searchText" type="stext" class="h-full pl-10 pr-4 py-2 rounded-[0.5rem] block w-full font-inter text-[1rem] leading-[1.5] tracking-[0.005em]" placeholder="Szukaj zawodnika...">
+                                <input v-model="searchText" type="stext" class="h-full pl-10 pr-4 py-2 rounded-[0.5rem] block w-full font-inter text-[1rem] leading-[1.5] tracking-[0.005em]" :placeholder="this.languageStore.t.table_nav_search_player">
                                 <span v-if="searchText.length > 0" @click="searchText = ''" class="absolute inset-y-0 right-0 flex items-center pr-3 cursor-pointer">
                                     <v-icon>mdi-close</v-icon>
                                 </span>
                             </div>
                         </div>
-                        <MainButton :click="addPlayer" type="green" class="bg-green-700 2xl:ml-5 xl:ml-5 lg:ml-5 md:ml-5 sm:ml-5 xs:ml-0" :disabled="false" />
+                        <MainButton :click="addPlayer" :buttonText="this.languageStore.t.table_nav_add_player" type="green" class="bg-green-700 2xl:ml-5 xl:ml-5 lg:ml-5 md:ml-5 sm:ml-5 xs:ml-0" :disabled="false" />
                     </div>
                 </div>
                 <article class="2xl:w-[1280px] xl:w-[1280px] lg:w-[1024px] md:w-[768px] sm:w-[640px] xs:w-[400px] rounded-[0.5rem] bg-white h-auto">
@@ -76,34 +76,34 @@
                     <div v-else class="w-full flex items-center justify-start flex-col min-h-[660px]">
                         <div class="2xl:w-[1280px] xl:w-[1280px] lg:w-[1024px] md:w-[768px] sm:w-[640px] xs:w-[400px] h-[60px] border-b-[1px] border-gray-200 flex items-center justify-between 2xl:px-10 xl:px-10 lg:px-10 md:px-8 sm:px-3 xs:px-2 font-inter text-[#0f0f0f] 2xl:text-sm xl:text-sm lg:text-sm md:text-[0.85rem] sm:text-[0.85rem] xs:text-[0.75rem] font-medium leading-6 tracking-[0.005em]">
                             <div class="flex items-center justify-center">
-                                <span class="2xl:w-[60px] xl:w-[60px] lg:w-[60px] md:w-[60px] sm:w-[50px] xs:w-[50px] h-full">Photo</span>
+                                <span class="2xl:w-[60px] xl:w-[60px] lg:w-[60px] md:w-[60px] sm:w-[50px] xs:w-[50px] h-full">{{this.languageStore.t.table_header_photo}}</span>
                             </div>
                             <div class="flex items-center justify-center">
-                                <span class="2xl:w-[150px] xl:w-[150px] lg:w-[150px] md:w-[130px] sm:w-[120px] xs:w-[70px] h-full">Name</span>
+                                <span class="2xl:w-[150px] xl:w-[150px] lg:w-[150px] md:w-[130px] sm:w-[120px] xs:w-[70px] h-full">{{this.languageStore.t.table_header_name}}</span>
                             </div>
                             <div class="2xl:flex xl:flex lg:flex md:hidden sm:hidden xs:hidden items-center justify-center 2xl:text-left xl:text-left lg:text-left md:text-center sm:text-center xs:text-center">
-                                <span class="2xl:w-[90px] xl:w-[90px] lg:w-[90px] md:w-[60px] sm:w-[60px] xs:w-[50px] h-full">Pozycja</span>
+                                <span class="2xl:w-[90px] xl:w-[90px] lg:w-[90px] md:w-[60px] sm:w-[60px] xs:w-[50px] h-full">{{this.languageStore.t.table_header_position}}</span>
                             </div>
                             <div class="2xl:hidden xl:hidden lg:hidden md:flex sm:flex xs:flex items-center justify-center 2xl:text-left xl:text-left lg:text-left md:text-center sm:text-center xs:text-center">
-                                <span class="2xl:w-[90px] xl:w-[90px] lg:w-[90px] md:w-[60px] sm:w-[60px] xs:w-[40px] h-full">POZ</span>
+                                <span class="2xl:w-[90px] xl:w-[90px] lg:w-[90px] md:w-[60px] sm:w-[60px] xs:w-[40px] h-full">{{this.languageStore.t.table_header_position_short}}</span>
                             </div>
                             <div class="2xl:flex xl:flex lg:flex md:hidden sm:hidden xs:hidden items-center justify-center 2xl:text-left xl:text-left lg:text-left md:text-center sm:text-center xs:text-center">
-                                <span class=" 2xl:w-[120px] xl:w-[120px] lg:w-[120px] md:w-[100px] sm:w-[100px] xs:w-[40px] h-full">Status</span>
+                                <span class=" 2xl:w-[120px] xl:w-[120px] lg:w-[120px] md:w-[100px] sm:w-[100px] xs:w-[40px] h-full">{{this.languageStore.t.table_header_status}}</span>
                             </div>
                             <div class="2xl:hidden xl:hidden lg:hidden md:flex sm:flex xs:flex items-center justify-center 2xl:text-left xl:text-left lg:text-left md:text-center sm:text-center xs:text-center">
-                                <span class=" 2xl:w-[120px] xl:w-[120px] lg:w-[120px] md:w-[100px] sm:w-[100px] xs:w-[40px] h-full">STA</span>
+                                <span class=" 2xl:w-[120px] xl:w-[120px] lg:w-[120px] md:w-[100px] sm:w-[100px] xs:w-[40px] h-full">{{this.languageStore.t.table_header_status_short}}</span>
                             </div>
                             <div class="2xl:flex xl:flex lg:flex md:hidden sm:hidden xs:hidden items-center justify-center text-center">
-                                <span class="2xl:w-[70px] xl:w-[70px] lg:w-[70px] md:w-[60px] sm:w-[60px] xs:w-[60px] h-full">Number</span>
+                                <span class="2xl:w-[70px] xl:w-[70px] lg:w-[70px] md:w-[60px] sm:w-[60px] xs:w-[60px] h-full">{{this.languageStore.t.table_header_number}}</span>
                             </div>
                             <div class="2xl:hidden xl:hidden lg:hidden md:flex sm:flex xs:flex items-center justify-center text-center">
-                                <span class="2xl:w-[70px] xl:w-[70px] lg:w-[70px] md:w-[60px] sm:w-[60px] xs:w-[40px] h-full">NUM</span>
+                                <span class="2xl:w-[70px] xl:w-[70px] lg:w-[70px] md:w-[60px] sm:w-[60px] xs:w-[40px] h-full">{{this.languageStore.t.table_header_number_short}}</span>
                             </div>
                             <div class="flex items-center justify-center text-center">
-                                <span class="2xl:w-[90px] xl:w-[90px] lg:w-[90px] md:w-[50px] sm:w-[40px] xs:w-[40px] h-full">Year</span>
+                                <span class="2xl:w-[90px] xl:w-[90px] lg:w-[90px] md:w-[50px] sm:w-[40px] xs:w-[40px] h-full">{{this.languageStore.t.table_header_year}}</span>
                             </div>
                             <div v-if="this.authStore.user.user.user_type === 'admin'" class="flex items-center justify-center text-center">
-                                <span class="2xl:w-[120px] xl:w-[120px] lg:w-[120px] md:w-[100px] sm:w-[100px] xs:w-[100px] h-full">Operacje</span>
+                                <span class="2xl:w-[120px] xl:w-[120px] lg:w-[120px] md:w-[100px] sm:w-[100px] xs:w-[100px] h-full">{{this.languageStore.t.table_header_operations}}</span>
                             </div>
                         </div>
                         <div v-if="this.playersSorted.length === 0" class="w-full h-[599px] border-b-[0.0625rem] border-[hsl(0 0% 92%)] flex items-center justify-center px-10 font-inter text-[#2b2b2b]">
@@ -120,24 +120,24 @@
                                 <span class="2xl:w-[150px] xl:w-[150px] lg:w-[150px] md:w-[130px] sm:w-[120px] xs:w-[70px] h-full font-[500]">{{player.name}}</span>
                             </div>
                             <div class="2xl:flex xl:flex lg:flex md:hidden sm:hidden xs:hidden items-center justify-center 2xl:text-left xl:text-left lg:text-left md:text-center sm:text-center xs:text-center">
-                                <span v-if="player.position.value === 'BR'" class="2xl:w-[90px] xl:w-[90px] lg:w-[90px] md:w-[60px] sm:w-[60px] xs:w-[60px] h-full">Bramkarz</span>
-                                <span v-if="player.position.value === 'OB'" class="2xl:w-[90px] xl:w-[90px] lg:w-[90px] md:w-[60px] sm:w-[60px] xs:w-[60px] h-full">Obrońca</span>
-                                <span v-if="player.position.value === 'PO'" class="2xl:w-[90px] xl:w-[90px] lg:w-[90px] md:w-[60px] sm:w-[60px] xs:w-[60px] h-full">Pomocnik</span>
-                                <span v-if="player.position.value === 'NA'" class="2xl:w-[90px] xl:w-[90px] lg:w-[90px] md:w-[60px] sm:w-[60px] xs:w-[60px] h-full">Napastnik</span>
+                                <span v-if="player.position.value === 'BR'" class="2xl:w-[90px] xl:w-[90px] lg:w-[90px] md:w-[60px] sm:w-[60px] xs:w-[60px] h-full">{{this.languageStore.t.table_data_position_b}}</span>
+                                <span v-if="player.position.value === 'OB'" class="2xl:w-[90px] xl:w-[90px] lg:w-[90px] md:w-[60px] sm:w-[60px] xs:w-[60px] h-full">{{this.languageStore.t.table_data_position_o}}</span>
+                                <span v-if="player.position.value === 'PO'" class="2xl:w-[90px] xl:w-[90px] lg:w-[90px] md:w-[60px] sm:w-[60px] xs:w-[60px] h-full">{{this.languageStore.t.table_data_position_p}}</span>
+                                <span v-if="player.position.value === 'NA'" class="2xl:w-[90px] xl:w-[90px] lg:w-[90px] md:w-[60px] sm:w-[60px] xs:w-[60px] h-full">{{this.languageStore.t.table_data_position_n}}</span>
                             </div>
                             <div class="2xl:hidden xl:hidden lg:hidden md:flex sm:flex xs:flex items-center justify-center 2xl:text-left xl:text-left lg:text-left md:text-center sm:text-center xs:text-center">
-                                <span v-if="player.position.value === 'BR'" class="2xl:w-[90px] xl:w-[90px] lg:w-[90px] md:w-[60px] sm:w-[60px] xs:w-[40px] h-full">BR</span>
-                                <span v-if="player.position.value === 'OB'" class="2xl:w-[90px] xl:w-[90px] lg:w-[90px] md:w-[60px] sm:w-[60px] xs:w-[40px] h-full">OB</span>
-                                <span v-if="player.position.value === 'PO'" class="2xl:w-[90px] xl:w-[90px] lg:w-[90px] md:w-[60px] sm:w-[60px] xs:w-[40px] h-full">PO</span>
-                                <span v-if="player.position.value === 'NA'" class="2xl:w-[90px] xl:w-[90px] lg:w-[90px] md:w-[60px] sm:w-[60px] xs:w-[40px] h-full">NA</span>
+                                <span v-if="player.position.value === 'BR'" class="2xl:w-[90px] xl:w-[90px] lg:w-[90px] md:w-[60px] sm:w-[60px] xs:w-[40px] h-full">{{this.languageStore.t.table_data_position_b_short}}</span>
+                                <span v-if="player.position.value === 'OB'" class="2xl:w-[90px] xl:w-[90px] lg:w-[90px] md:w-[60px] sm:w-[60px] xs:w-[40px] h-full">{{this.languageStore.t.table_data_position_o_short}}</span>
+                                <span v-if="player.position.value === 'PO'" class="2xl:w-[90px] xl:w-[90px] lg:w-[90px] md:w-[60px] sm:w-[60px] xs:w-[40px] h-full">{{this.languageStore.t.table_data_position_p_short}}</span>
+                                <span v-if="player.position.value === 'NA'" class="2xl:w-[90px] xl:w-[90px] lg:w-[90px] md:w-[60px] sm:w-[60px] xs:w-[40px] h-full">{{this.languageStore.t.table_data_position_n_short}}</span>
                             </div>
                             <div class="2xl:flex xl:flex lg:flex md:flex sm:flex xs:hidden items-center justify-center text-center">
-                                <span v-if="player.status.value === 'nieaktywny'" class="h-full border-[1px] border-red-600 bg-red-50 text-red 2xl:text-sm xl:text-sm lg:text-sm md:text-[0.85rem] sm:text-[0.85rem] xs:text-[0.75rem] rounded-full 2xl:w-[120px] xl:w-[120px] lg:w-[120px] md:w-[100px] sm:w-[100px] xs:w-[100px] py-1">Nieaktywny</span>
-                                <span v-else class="h-full border-[1px] border-green-600 bg-green-50 text-green 2xl:text-sm xl:text-sm lg:text-sm md:text-[0.85rem] sm:text-[0.85rem] xs:text-[0.75rem] rounded-full 2xl:w-[120px] xl:w-[120px] lg:w-[120px] md:w-[100px] sm:w-[100px] xs:w-[100px] py-1">Aktywny</span>
+                                <span v-if="player.status.value === 'nieaktywny'" class="h-full border-[1px] border-red-600 bg-red-50 text-red 2xl:text-sm xl:text-sm lg:text-sm md:text-[0.85rem] sm:text-[0.85rem] xs:text-[0.75rem] rounded-full 2xl:w-[120px] xl:w-[120px] lg:w-[120px] md:w-[100px] sm:w-[100px] xs:w-[100px] py-1">{{this.languageStore.t.table_data_status_n}}</span>
+                                <span v-else class="h-full border-[1px] border-green-600 bg-green-50 text-green 2xl:text-sm xl:text-sm lg:text-sm md:text-[0.85rem] sm:text-[0.85rem] xs:text-[0.75rem] rounded-full 2xl:w-[120px] xl:w-[120px] lg:w-[120px] md:w-[100px] sm:w-[100px] xs:w-[100px] py-1">{{this.languageStore.t.table_data_status_a}}</span>
                             </div>
                             <div class="2xl:hidden xl:hidden lg:hidden md:hidden sm:hidden xs:flex items-center justify-center text-center">
-                                <span v-if="player.status.value === 'nieaktywny'" class="h-full border-[1px] border-red-600 bg-red-50 text-red 2xl:text-sm xl:text-sm lg:text-sm md:text-[0.85rem] sm:text-[0.85rem] xs:text-[0.75rem] rounded-full 2xl:w-[120px] xl:w-[120px] lg:w-[120px] md:w-[100px] sm:w-[100px] xs:w-[40px] py-1">N</span>
-                                <span v-else class="h-full border-[1px] border-green-600 bg-green-50 text-green 2xl:text-sm xl:text-sm lg:text-sm md:text-[0.85rem] sm:text-[0.85rem] xs:text-[0.75rem] rounded-full 2xl:w-[120px] xl:w-[120px] lg:w-[120px] md:w-[100px] sm:w-[100px] xs:w-[40px] py-1">A</span>
+                                <span v-if="player.status.value === 'nieaktywny'" class="h-full border-[1px] border-red-600 bg-red-50 text-red 2xl:text-sm xl:text-sm lg:text-sm md:text-[0.85rem] sm:text-[0.85rem] xs:text-[0.75rem] rounded-full 2xl:w-[120px] xl:w-[120px] lg:w-[120px] md:w-[100px] sm:w-[100px] xs:w-[40px] py-1">{{this.languageStore.t.table_data_status_n_short}}</span>
+                                <span v-else class="h-full border-[1px] border-green-600 bg-green-50 text-green 2xl:text-sm xl:text-sm lg:text-sm md:text-[0.85rem] sm:text-[0.85rem] xs:text-[0.75rem] rounded-full 2xl:w-[120px] xl:w-[120px] lg:w-[120px] md:w-[100px] sm:w-[100px] xs:w-[40px] py-1">{{this.languageStore.t.table_data_status_a_short}}</span>
                             </div>
                             <div class="flex items-center justify-center text-center">
                                 <span class="2xl:w-[70px] xl:w-[70px] lg:w-[70px] md:w-[60px] sm:w-[60px] xs:w-[40px] h-full">{{player.number}}</span>
@@ -160,7 +160,7 @@
                             <option :value="20">20</option>
                             <option :value="50">50</option>
                         </select>
-                        <span class="text-sm border-l-[1px] h-full pl-2">Wyniki na stronie</span>
+                        <span class="text-sm border-l-[1px] h-full pl-2">{{this.languageStore.t.table_footer_results}}</span>
                     </div>
                     <div class="pagination flex items-center justify-center flex-col 2xl:mb-0 xl:mb-0 lg:mb-0 md:mb-0 sm:mb-0 xs:mb-5">
                         <span v-if="this.pagesPlayers > 1" class="flex items-center">
@@ -185,12 +185,12 @@
                             </button>
                         </span>
                         <span class="mt-2">
-                            Strona <b>{{ this.currentPagePlayers }}</b> z <b>{{ this.pagesPlayers }}</b>
+                            {{this.languageStore.t.table_footer_page}} <b>{{ this.currentPagePlayers }}</b> {{this.languageStore.t.table_footer_of}} <b>{{ this.pagesPlayers }}</b>
                         </span>
                     </div>
                     <div class="w-[230px] h-full flex items-center 2xl:justify-end xl:justify-end lg:justify-end md:justify-end sm:justify-end xs:justify-center">
                         <span class="font-bold">{{ this.playersSorted[this.currentPagePlayers - 1].length }}</span>
-                        <span class="mx-1">z</span>
+                        <span class="mx-1">{{this.languageStore.t.table_footer_of}}</span>
                         <span class="font-bold">{{ this.players.length }}</span>
                     </div>
                 </div>
@@ -204,24 +204,24 @@
                         <v-icon @click="this.dialogUpdate = false; this.currentUpdate = {};" class="cursor-pointer text-gray-500 transition ease-in-out duration-300" style="font-size:28px !important;">mdi-close</v-icon>
                     </div>
                     <div class="flex flex-col mb-7 font-inter">
-                        <span class="font-medium mb-5 text-[1.5rem] leading-[1.5] tracking-[0.005em]">Edycja danych zawodnika.</span>
-                        <span class="text-[1rem] text-gray-500 leading-[1.5] tracking-[0.005em] mb-3">Edytujesz dane zawodnika <b>{{ currentUpdate.name }}</b>.</span>
-                        <span class="text-[1rem] text-red-700 leading-[1.5] tracking-[0.005em]">Ta akcja <b>nie może</b> być cofnięta.</span>
+                        <span class="font-medium mb-5 text-[1.5rem] leading-[1.5] tracking-[0.005em]">{{this.languageStore.t.dialog_update_players}}</span>
+                        <span class="text-[1rem] text-gray-500 leading-[1.5] tracking-[0.005em] mb-3">{{this.languageStore.t.dialog_update_players_desc}} <b>{{ currentUpdate.name }}</b>.</span>
+                        <span class="text-[1rem] text-red-700 leading-[1.5] tracking-[0.005em]">{{this.languageStore.t.dialog_cant_undo}}</span>
                     </div>
                     <div class="flex flex-col mt-3 mb-8 font-inter">
-                        <v-text-field v-model="this.currentUpdate.name" :rules="this.nameRules" variant="outlined" class="max-h-[56px] w-full mb-8" placeholder="Name" label="Name"></v-text-field>
+                        <v-text-field v-model="this.currentUpdate.name" :rules="this.nameRules" variant="outlined" class="max-h-[56px] w-full mb-8" :placeholder="this.languageStore.t.placeholder_name" :label="this.languageStore.t.placeholder_name"></v-text-field>
                         <div class="flex flex-row justify-between mb-8">
-                            <v-text-field v-model="this.currentUpdate.number" :rules="this.numberRules" variant="outlined" class="max-h-[56px] max-w-[48%]" placeholder="Number" label="Number"></v-text-field>
-                            <v-text-field v-model="this.currentUpdate.year" :rules="this.yearRules" variant="outlined" class="max-h-[56px] max-w-[48%]" placeholder="Birth year" label="Birth year"></v-text-field>
+                            <v-text-field v-model="this.currentUpdate.number" :rules="this.numberRules" variant="outlined" class="max-h-[56px] max-w-[48%]" :placeholder="this.languageStore.t.placeholder_number" :label="this.languageStore.t.placeholder_number"></v-text-field>
+                            <v-text-field v-model="this.currentUpdate.year" :rules="this.yearRules" variant="outlined" class="max-h-[56px] max-w-[48%]" :placeholder="this.languageStore.t.placeholder_year" :label="this.languageStore.t.placeholder_year"></v-text-field>
                         </div>
                         <div class="flex flex-row justify-between">
-                            <v-select v-model="this.currentUpdate.status" variant="outlined" class="max-h-[56px] max-w-[48%]" :items="statuses" item-title="title" item-value="value" return-object placeholder="Status" label="Status"></v-select>
-                            <v-select v-model="this.currentUpdate.position" variant="outlined" class="max-h-[56px] max-w-[48%]" :items="positions" item-title="title" item-value="value" return-object placeholder="Position" label="Position"></v-select>
+                            <v-select v-model="this.currentUpdate.status" variant="outlined" class="max-h-[56px] max-w-[48%]" :items="[{ title: this.languageStore.t.table_data_status_n, value: 'nieaktywny' }, { title: this.languageStore.t.table_data_status_a, value: 'aktywny' },]" item-title="title" item-value="value" return-object :placeholder="this.languageStore.t.placeholder_status" :label="this.languageStore.t.placeholder_status"></v-select>
+                            <v-select v-model="this.currentUpdate.position" variant="outlined" class="max-h-[56px] max-w-[48%]" :items="[{ title: this.languageStore.t.table_data_position_b, value: 'BR' }, { title: this.languageStore.t.table_data_position_o, value: 'OB' }, { title: this.languageStore.t.table_data_position_p, value: 'PO' }, { title: this.languageStore.t.table_data_position_n, value: 'NA' },]" item-title="title" item-value="value" return-object :placeholder="this.languageStore.t.placeholder_position" :label="this.languageStore.t.placeholder_position"></v-select>
                         </div>
                     </div>
                     <div class="flex flex-row w-full items-center justify-end font-inter">
-                        <MainButton :click="updatePlayerClose" type="white" buttonText="Anuluj" style="color: black !important;" />
-                        <MainButton :click="updatePlayerDialog" type="black" :loading="buttonLoading" :disabled="!updateValid" buttonText="Zapisz" class="ml-5" />
+                        <MainButton :click="updatePlayerClose" type="white" :buttonText="this.languageStore.t.dialog_cancel" style="color: black !important;" />
+                        <MainButton :click="updatePlayerDialog" type="black" :loading="buttonLoading" :disabled="!updateValid" :buttonText="this.languageStore.t.dialog_save" class="ml-5" />
                     </div>
                 </v-form>
             </v-dialog>
@@ -234,46 +234,46 @@
                         <v-icon @click="this.dialogImage = false; this.currentImage = {}; this.selectedImage = {};" class="cursor-pointer text-gray-500 transition ease-in-out duration-300" style="font-size:28px !important;">mdi-close</v-icon>
                     </div>
                     <div class="flex flex-col mb-7 font-inter">
-                        <span class="font-medium mb-5 text-[1.5rem] leading-[1.5] tracking-[0.005em]">Edycja zdjęcia zawodnika.</span>
-                        <span class="text-[1rem] text-gray-500 leading-[1.5] tracking-[0.005em] mb-3">Dodajesz nowe zdjęcie zawodnika <b>{{ this.currentImage.name }}</b>.</span>
-                        <span class="text-[1rem] text-red-700 leading-[1.5] tracking-[0.005em]">Ta akcja <b>nie może</b> być cofnięta.</span>
+                        <span class="font-medium mb-5 text-[1.5rem] leading-[1.5] tracking-[0.005em]">{{this.languageStore.t.dialog_image_players}}</span>
+                        <span class="text-[1rem] text-gray-500 leading-[1.5] tracking-[0.005em] mb-3">{{this.languageStore.t.dialog_image_players_desc}} <b>{{ this.currentImage.name }}</b>.</span>
+                        <span class="text-[1rem] text-red-700 leading-[1.5] tracking-[0.005em]">{{this.languageStore.t.dialog_cant_undo}}</span>
                     </div>
 
                     <div v-if="currentImage.image !== null && isObjectEmpty(selectedImage)" class="flex flex-col mt-3 mb-8 font-inter">
-                        <span class="font-medium text-[1.25rem] leading-[1.5] tracking-[0.005em] mb-3">Obecne zdjęcie</span>
+                        <span class="font-medium text-[1.25rem] leading-[1.5] tracking-[0.005em] mb-3">{{this.languageStore.t.dialog_image_players_current}}</span>
                         <img :src="currentImage.image" :alt="currentImage.name" class="rounded-xl 2xl:max-h-[418px] xl:max-h-[418px] lg:max-h-[418px] md:max-h-[418px] sm:max-h-[418px] xs:max-h-[358px]">
                     </div>
 
                     <div v-else class="flex flex-col mt-3 font-inter">
-                        <span v-if="isObjectEmpty(selectedImage)" class="italic mb-10">Zawodnik obecnie nie ma zdjęcia.</span>
+                        <span v-if="isObjectEmpty(selectedImage)" class="italic mb-10">{{this.languageStore.t.dialog_image_players_not}}</span>
 
                         <div v-if="!isObjectEmpty(selectedImage)" class="flex flex-row justify-between w-full items-center">
-                            <span class="font-medium text-[1.25rem] leading-[1.5] tracking-[0.005em] mb-3">Dodane zdjęcie</span>
+                            <span class="font-medium text-[1.25rem] leading-[1.5] tracking-[0.005em] mb-3">{{this.languageStore.t.dialog_image_players_added}}</span>
                             <v-icon @click="this.selectedImage = {};this.imageIsCropped = null;" class="cursor-pointer">mdi-close</v-icon>
                         </div>
 
                         <cropper v-if="!isObjectEmpty(selectedImage) && !this.imageIsCropped" class="cropper" :src="selectedImage.url" :stencil-props="{aspectRatio: 1 / 1, }" ref="cropper"/>
                         <div v-if="!isObjectEmpty(selectedImage) && !this.imageIsCropped" class="flex mt-5 w-full items-center justify-end">
-                            <MainButton :click="imagePlayerClose" type="white" buttonText="Anuluj" style="color: black !important;" />
-                            <MainButton :click="deleteImagePreview" type="red" buttonText="Usuń" class="ml-5" />
-                            <MainButton :click="cropImage" type="green" buttonText="Wytnij" class="ml-5" />
+                            <MainButton :click="imagePlayerClose" type="white" :buttonText="this.languageStore.t.dialog_cancel" style="color: black !important;" />
+                            <MainButton :click="deleteImagePreview" type="red" :buttonText="this.languageStore.t.dialog_image_delete" class="ml-5" />
+                            <MainButton :click="cropImage" type="green" :buttonText="this.languageStore.t.dialog_image_crop" class="ml-5" />
                         </div>
 
                         <canvas v-if="!isObjectEmpty(selectedImage) && this.imageIsCropped" ref="canvas" class="rounded-xl max-h-[600px] w-auto object-contain"></canvas>
                     </div>
 
                     <div v-if="isObjectEmpty(selectedImage)" class="flex flex-row w-full items-center justify-end font-inter">
-                        <MainButton :click="imagePlayerClose" type="white" buttonText="Anuluj" style="color: black !important;" />
+                        <MainButton :click="imagePlayerClose" type="white" :buttonText="this.languageStore.t.dialog_cancel" style="color: black !important;" />
                         <label v-if="isObjectEmpty(selectedImage)" @click="this.loadingImage = true;" for="file-upload" class="btn h-[40px] text-white bg-blue-700 hover:bg-blue-800 transition ease-in-out duration-300 rounded-[0.5rem] text-[1rem] font-medium px-4 py-1 w-auto flex items-center justify-center font-inter leading-[1.5] tracking-[0.005em] ml-5">
-                            Dodaj nowe zdjęcie
+                            {{this.languageStore.t.dialog_add_image}}
                         </label>
                         <input type="file" id="file-upload" ref="fileInput" accept="image/*" @change="previewImage">
                     </div>
 
                     <div v-if="imageIsCropped && !isObjectEmpty(selectedImage)" class="flex flex-row items-center justify-end mt-10">
-                        <MainButton :click="imagePlayerClose" type="white" buttonText="Anuluj" style="color: black !important;" />
-                        <MainButton v-if="croppedImage !== null" :click="deleteCanvasImage" type="red" buttonText="Usuń" class="ml-5" />
-                        <Input :icon="false" :click="imagePlayerDialog" buttonText="Zapisz zdjęcie" class="ml-5" />
+                        <MainButton :click="imagePlayerClose" type="white" :buttonText="this.languageStore.t.dialog_cancel" style="color: black !important;" />
+                        <MainButton v-if="croppedImage !== null" :click="deleteCanvasImage" type="red" :buttonText="this.languageStore.t.dialog_image_delete" class="ml-5" />
+                        <Input :icon="false" :click="imagePlayerDialog" :buttonText="this.languageStore.t.dialog_image_save" class="ml-5" />
                     </div>
                 </div>
             </v-dialog>
@@ -286,13 +286,13 @@
                         <v-icon @click="this.dialogDelete = false; this.currentDelete = {};" class="cursor-pointer text-gray-500 transition ease-in-out duration-300" style="font-size:28px !important;">mdi-close</v-icon>
                     </div>
                     <div class="flex flex-col mb-7 font-inter">
-                        <span class="font-medium mb-5 text-[1.5rem] leading-[1.5] tracking-[0.005em]">Usuwanie zawodnika.</span>
-                        <span class="text-[1rem] text-gray-500 leading-[1.5] tracking-[0.005em] mb-3">Czy na pewno chcesz usunąć zawdonika <b>{{ this.currentDelete.name }}</b> z bazy danych?</span>
-                        <span class="text-[1rem] text-red-700 leading-[1.5] tracking-[0.005em]">Ta akcja <b>nie może</b> być cofnięta.</span>
+                        <span class="font-medium mb-5 text-[1.5rem] leading-[1.5] tracking-[0.005em]">{{this.languageStore.t.dialog_delete_players}}</span>
+                        <span class="text-[1rem] text-gray-500 leading-[1.5] tracking-[0.005em] mb-3">{{this.languageStore.t.dialog_delete_players_desc1}} <b>{{ this.currentDelete.name }}</b> {{this.languageStore.t.dialog_delete_players_desc2}}</span>
+                        <span class="text-[1rem] text-red-700 leading-[1.5] tracking-[0.005em]">{{this.languageStore.t.dialog_cant_undo}}</span>
                     </div>
                     <div class="flex flex-row w-full items-center justify-end font-inter">
-                        <MainButton :click="deletePlayerClose" type="white" buttonText="Anuluj" style="color: black !important;" />
-                        <MainButton :click="deletePlayerDialog" type="red" buttonText="Usuń zawodnika" class="ml-5" />
+                        <MainButton :click="deletePlayerClose" type="white" :buttonText="this.languageStore.t.dialog_cancel" style="color: black !important;" />
+                        <MainButton :click="deletePlayerDialog" type="red" :buttonText="this.languageStore.t.dialog_delete" class="ml-5" />
                     </div>
                 </v-form>
             </v-dialog>
@@ -305,23 +305,23 @@
                         <v-icon @click="this.dialogAdd = false; this.currentAdd = {};" class="cursor-pointer text-gray-500 transition ease-in-out duration-300" style="font-size:28px !important;">mdi-close</v-icon>
                     </div>
                     <div class="flex flex-col mb-7 font-inter">
-                        <span class="font-medium mb-5 text-[1.5rem] leading-[1.5] tracking-[0.005em]">Dodawanie zawodnika.</span>
-                        <span class="text-[1rem] text-gray-500 leading-[1.5] tracking-[0.005em]">Dodajesz zawodnika do bazy danych <b>Latarnika Choczewo</b>.</span>
+                        <span class="font-medium mb-5 text-[1.5rem] leading-[1.5] tracking-[0.005em]">{{this.languageStore.t.dialog_add_players}}</span>
+                        <span class="text-[1rem] text-gray-500 leading-[1.5] tracking-[0.005em]">{{this.languageStore.t.dialog_add_players_desc}} <b>{{this.languageStore.t.dialog_add_players_desc_name}}</b>.</span>
                     </div>
                     <div class="flex flex-col mt-3 mb-8 font-inter">
-                        <v-text-field v-model="this.currentAdd.name" :rules="this.nameRules" variant="outlined" class="max-h-[56px] w-full mb-8" placeholder="Name" label="Name"></v-text-field>
+                        <v-text-field v-model="this.currentAdd.name" :rules="this.nameRules" variant="outlined" class="max-h-[56px] w-full mb-8" :placeholder="this.languageStore.t.placeholder_name" :label="this.languageStore.t.placeholder_name"></v-text-field>
                         <div class="flex flex-row justify-between mb-8">
-                            <v-text-field v-model="this.currentAdd.number" :rules="this.numberRules" variant="outlined" class="max-h-[56px] max-w-[48%]" placeholder="Number" label="Number"></v-text-field>
-                            <v-text-field v-model="this.currentAdd.year" :rules="this.yearRules" variant="outlined" class="max-h-[56px] max-w-[48%]" placeholder="Birth year" label="Birth year"></v-text-field>
+                            <v-text-field v-model="this.currentAdd.number" :rules="this.numberRules" variant="outlined" class="max-h-[56px] max-w-[48%]" :placeholder="this.languageStore.t.placeholder_number" :label="this.languageStore.t.placeholder_number"></v-text-field>
+                            <v-text-field v-model="this.currentAdd.year" :rules="this.yearRules" variant="outlined" class="max-h-[56px] max-w-[48%]" :placeholder="this.languageStore.t.placeholder_year" :label="this.languageStore.t.placeholder_year"></v-text-field>
                         </div>
                         <div class="flex flex-row justify-between">
-                            <v-select v-model="this.currentAdd.status" variant="outlined" class="max-h-[56px] max-w-[48%]" :items="statuses" item-title="title" item-value="value" return-object placeholder="Status" label="Status"></v-select>
-                            <v-select v-model="this.currentAdd.position" variant="outlined" class="max-h-[56px] max-w-[48%]" :items="positions" item-title="title" item-value="value" return-object placeholder="Position" label="Position"></v-select>
+                            <v-select v-model="this.currentAdd.status" variant="outlined" class="max-h-[56px] max-w-[48%]" :items="[{ title: this.languageStore.t.table_data_status_n, value: 'nieaktywny' }, { title: this.languageStore.t.table_data_status_a, value: 'aktywny' },]" item-title="title" item-value="value" return-object :placeholder="this.languageStore.t.placeholder_status" :label="this.languageStore.t.placeholder_status"></v-select>
+                            <v-select v-model="this.currentAdd.position" variant="outlined" class="max-h-[56px] max-w-[48%]" :items="[{ title: this.languageStore.t.table_data_position_b, value: 'BR' }, { title: this.languageStore.t.table_data_position_o, value: 'OB' }, { title: this.languageStore.t.table_data_position_p, value: 'PO' }, { title: this.languageStore.t.table_data_position_n, value: 'NA' },]" item-title="title" item-value="value" return-object :placeholder="this.languageStore.t.placeholder_position" :label="this.languageStore.t.placeholder_position"></v-select>
                         </div>
                     </div>
                     <div class="flex flex-row w-full items-center justify-end font-inter">
-                        <MainButton :click="addPlayerClose" type="white" buttonText="Anuluj" style="color: black !important;" />
-                        <MainButton :click="addPlayerDialog" :loading="buttonLoading" :disabled="!addValid" type="green" class="ml-5" />
+                        <MainButton :click="addPlayerClose" type="white" :buttonText="this.languageStore.t.dialog_cancel" style="color: black !important;" />
+                        <MainButton :click="addPlayerDialog" :buttonText="this.languageStore.t.table_nav_add_player" :loading="buttonLoading" :disabled="!addValid" type="green" class="ml-5" />
                     </div>
                 </v-form>
             </v-dialog>
@@ -334,69 +334,69 @@
                         <v-icon @click="this.dialogFilter = false;" class="cursor-pointer text-gray-500 transition ease-in-out duration-300" style="font-size:28px !important;">mdi-close</v-icon>
                     </div>
                     <div class="flex flex-col mb-7 font-inter">
-                        <span class="font-medium mb-5 text-[1.5rem] leading-[1.5] tracking-[0.005em]">Filtrowanie zawodników.</span>
-                        <span class="text-[1rem] text-gray-500 leading-[1.5] tracking-[0.005em]">Wybierz opcje, według których mają być zwróceni zawodnicy.</span>
+                        <span class="font-medium mb-5 text-[1.5rem] leading-[1.5] tracking-[0.005em]">{{this.languageStore.t.dialog_filter_players}}</span>
+                        <span class="text-[1rem] text-gray-500 leading-[1.5] tracking-[0.005em]">{{this.languageStore.t.dialog_filter_players_desc}}</span>
                     </div>
                     <div class="flex flex-col mt-3 mb-8 font-inter">
                         <div class="w-full flex items-center">
                             <v-icon class="mr-3">mdi-account-badge</v-icon>
-                            <span class="text-[1rem]">Status</span>
+                            <span class="text-[1rem]">{{this.languageStore.t.table_header_status}}</span>
                         </div>
                         <div class="flex flex-wrap ml-5 mt-2 font-inter text-black">
                             <div class="form-control w-1/2">
                                 <label class="label cursor-pointer flex justify-start">
                                     <input v-if="this.filterOptions.statusN" v-model="filterOptions.statusA" disabled type="checkbox" class="checkbox checkbox-[#000000] bg-gray-300 border-[1px] border-gray-300 mr-2" />
                                     <input v-else v-model="filterOptions.statusA" type="checkbox" class="checkbox checkbox-[#000000] bg-gray-300 border-[1px] border-gray-300 mr-2" />
-                                    <span class="label-text">Aktywny</span> 
+                                    <span class="label-text">{{this.languageStore.t.table_data_status_a}}</span> 
                                 </label>
                             </div>
                             <div class="form-control w-1/2">
                                 <label class="label cursor-pointer flex justify-start">
                                     <input v-if="this.filterOptions.statusA" v-model="filterOptions.statusN" disabled type="checkbox" class="checkbox checkbox-[#000000] bg-gray-300 border-[1px] border-gray-300 mr-2" />
                                     <input v-else v-model="filterOptions.statusN" type="checkbox" class="checkbox checkbox-[#000000] bg-gray-300 border-[1px] border-gray-300 mr-2" />
-                                    <span class="label-text">Nieaktywny</span> 
+                                    <span class="label-text">{{this.languageStore.t.table_data_status_n}}</span> 
                                 </label>
                             </div>
                         </div>
                         <hr class="w-full h-[0.0625rem] bg-[hsl(0 0% 92%)] my-2">
                         <div class="w-full flex items-center">
                             <v-icon class="mr-3">mdi-soccer-field</v-icon>
-                            <span class="text-[1rem]">Pozycja</span>
+                            <span class="text-[1rem]">{{this.languageStore.t.table_header_position}}</span>
                         </div>
                         <div class="flex flex-wrap ml-5 mt-2 font-inter text-black">
                             <div class="form-control w-1/2">
                                 <label class="label cursor-pointer flex justify-start">
                                     <input v-if="this.filterOptions.positionO || this.filterOptions.positionP || this.filterOptions.positionN" v-model="filterOptions.positionB" disabled type="checkbox" class="checkbox checkbox-[#000000] bg-gray-300 border-[1px] border-gray-300 mr-2" />
                                     <input v-else v-model="filterOptions.positionB" type="checkbox" class="checkbox checkbox-[#000000] bg-gray-300 border-[1px] border-gray-300 mr-2" />
-                                    <span class="label-text">Bramkarz</span> 
+                                    <span class="label-text">{{this.languageStore.t.table_data_position_b}}</span> 
                                 </label>
                             </div>
                             <div class="form-control w-1/2">
                                 <label class="label cursor-pointer flex justify-start">
                                     <input v-if="this.filterOptions.positionB || this.filterOptions.positionP || this.filterOptions.positionN" v-model="filterOptions.positionO" disabled type="checkbox" class="checkbox checkbox-[#000000] bg-gray-300 border-[1px] border-gray-300 mr-2" />
                                     <input v-else v-model="filterOptions.positionO" type="checkbox" class="checkbox checkbox-[#000000] bg-gray-300 border-[1px] border-gray-300 mr-2" />
-                                    <span class="label-text">Obrońca</span> 
+                                    <span class="label-text">{{this.languageStore.t.table_data_position_o}}</span> 
                                 </label>
                             </div>
                             <div class="form-control w-1/2">
                                 <label class="label cursor-pointer flex justify-start">
                                     <input v-if="this.filterOptions.positionO || this.filterOptions.positionB || this.filterOptions.positionN" v-model="filterOptions.positionP" disabled type="checkbox" class="checkbox checkbox-[#000000] bg-gray-300 border-[1px] border-gray-300 mr-2" />
                                     <input v-else v-model="filterOptions.positionP" type="checkbox" class="checkbox checkbox-[#000000] bg-gray-300 border-[1px] border-gray-300 mr-2" />
-                                    <span class="label-text">Pomocnik</span> 
+                                    <span class="label-text">{{this.languageStore.t.table_data_position_p}}</span> 
                                 </label>
                             </div>
                             <div class="form-control w-1/2">
                                 <label class="label cursor-pointer flex justify-start">
                                     <input v-if="this.filterOptions.positionO || this.filterOptions.positionP || this.filterOptions.positionB" v-model="filterOptions.positionB" disabled type="checkbox" class="checkbox checkbox-[#000000] bg-gray-300 border-[1px] border-gray-300 mr-2" />
                                     <input v-else v-model="filterOptions.positionN" type="checkbox" class="checkbox checkbox-[#000000] bg-gray-300 border-[1px] border-gray-300 mr-2" />
-                                    <span class="label-text">Napastnik</span> 
+                                    <span class="label-text">{{this.languageStore.t.table_data_position_n}}</span> 
                                 </label>
                             </div>
                         </div>
                         <hr class="w-full h-[0.0625rem] bg-[hsl(0 0% 92%)] my-2">
                         <div class="w-full flex items-center">
                             <v-icon class="mr-3">mdi-cake</v-icon>
-                            <span class="text-[1rem]">Rocznik</span>
+                            <span class="text-[1rem]">{{this.languageStore.t.table_header_year}}</span>
                         </div>
                         <div class="flex flex-wrap ml-5 mt-2 font-inter text-black">
                             <div class="form-control w-1/2">
@@ -430,27 +430,27 @@
                         </div>
                     </div>
                     <div class="flex flex-row w-full items-center justify-end font-inter">
-                        <MainButton :click="filterClose" type="white" buttonText="Anuluj" style="color: black !important;" />
-                        <MainButton :click="updateFilter" type="yellow" buttonText="Filtruj" class="ml-5" style="color: white !important;" />
+                        <MainButton :click="filterClose" type="white" :buttonText="this.languageStore.t.dialog_cancel" style="color: black !important;" />
+                        <MainButton :click="updateFilter" type="yellow" :buttonText="this.languageStore.t.table_nav_filter" class="ml-5" style="color: white !important;" />
                     </div>
                 </div>
             </v-dialog>
         </div>
         <v-snackbar v-model="snackbar" :timeout="snackbarTimeout" variant="outlined" color="rgba(1, 1, 1, 0)">
             <div class="p-4 my-4 w-[350px] text-sm text-green-600 border-[1px] border-green-900 rounded-lg bg-green-50 text-center flex items-start justify-between" role="alert">
-                <span class="font-medium font-inter">{{ this.languageStore.t.auth_sign_up_mess_success }}</span> 
+                <span class="font-medium font-inter">{{ this.languageStore.t.dialog_snackbar_success }}</span> 
                 <v-icon @click="this.snackbar = false;">mdi-close</v-icon>
             </div>
         </v-snackbar>
         <v-snackbar v-model="snackbarError" :timeout="snackbarTimeout" variant="outlined" color="rgba(1, 1, 1, 0)">
             <div class="p-4 my-4 w-[350px] text-sm text-red-600 border-[1px] border-red-900 rounded-lg bg-red-50 text-center" role="alert">
-                <span class="font-medium font-inter">{{ this.languageStore.t.auth_login_mess_error }}</span> 
+                <span class="font-medium font-inter">{{ this.languageStore.t.dialog_snackbar_error }}</span> 
                 <v-icon @click="this.snackbarError = false;">mdi-close</v-icon>
             </div>
         </v-snackbar>
         <v-snackbar v-model="snackbarErrorPhoto" :timeout="snackbarTimeout" variant="outlined" color="rgba(1, 1, 1, 0)">
             <div class="p-4 my-4 w-[350px] text-sm text-red-600 border-[1px] border-red-900 rounded-lg bg-red-50 text-center" role="alert">
-                <span class="font-medium font-inter">{{ this.languageStore.t.auth_login_mess_error }}</span> 
+                <span class="font-medium font-inter">{{ this.languageStore.t.dialog_snackbar_error_photo }}</span> 
                 <v-icon @click="this.snackbarErrorPhoto = false;">mdi-close</v-icon>
             </div>
         </v-snackbar>
@@ -553,17 +553,6 @@ export default{
             croppedImage: null,
             imageIsCropped: null,
 
-            statuses: [
-                { title: 'Nieaktywny', value: 'nieaktywny' },
-                { title: 'Aktywny', value: 'aktywny' },
-            ],
-            positions: [
-                { title: 'Bramkarz', value: 'BR' },
-                { title: 'Obrońca', value: 'OB' },
-                { title: 'Pomocnik', value: 'PO' },
-                { title: 'Napastnik', value: 'NA' },
-            ],
-
             searchText: '',
 
             snackbar: false,
@@ -590,15 +579,15 @@ export default{
         }
 
         this.nameRules = [
-            (v: string) => !!v || this.languageStore.t.rules_email_not,
-            (v: string) => (v && v.length >= 5 && v.length <= 60) || this.languageStore.t.rules_email_length,
+            (v: string) => !!v || this.languageStore.t.rules_name_not,
+            (v: string) => (v && v.length >= 5 && v.length <= 60) || this.languageStore.t.rules_name_length,
         ];
         this.numberRules = [
-            (v) => !isNaN(parseFloat(v)) && isFinite(v) && v >= 1 && v <= 99 || 'Number',
+            (v) => !isNaN(parseFloat(v)) && isFinite(v) && v >= 1 && v <= 99 || this.languageStore.t.rules_number,
         ];
 
         this.yearRules = [
-            (v) => !isNaN(parseFloat(v)) && isFinite(v) && Number.isInteger(parseFloat(v)) && v >= 1970 && v <= 2019 || 'Year',
+            (v) => !isNaN(parseFloat(v)) && isFinite(v) && Number.isInteger(parseFloat(v)) && v >= 1970 && v <= 2019 || this.languageStore.t.rules_year,
         ];
 
         // this.socket = new WebSocket('ws://127.0.0.1:8000/ws/chat/'); // Your WebSocket URL
@@ -752,7 +741,21 @@ export default{
                 this.loading = false;
             }
         },
-        updatePlayer(id: String, name: String, position: Object, status: Object, number: String, year: String) {
+        updatePlayer(id: String, name: String, position, status, number: String, year: String) {
+            if (status.value === 'aktywny') {
+                status = {title: this.languageStore.t.table_data_status_a, value: 'aktywny'}
+            } else if (status.value === 'nieaktywny') {
+                 status = {title: this.languageStore.t.table_data_status_n, value: 'nieaktywny'}
+            }
+            if (position.value === 'BR') {
+                position = {title: this.languageStore.t.table_data_position_b, value: 'BR'}
+            } else if (position.value === 'OB') {
+                 position = {title: this.languageStore.t.table_data_position_o, value: 'OB'}
+            } else if (position.value === 'PO') {
+                 position = {title: this.languageStore.t.table_data_position_p, value: 'PO'}
+            } else if (position.value === 'NA') {
+                 position = {title: this.languageStore.t.table_data_position_n, value: 'NA'}
+            }
             this.currentUpdate = {
                 id: id,
                 name: name,
@@ -796,8 +799,8 @@ export default{
                     this.dialogUpdate = false;
                     this.currentUpdate = {
                         name: '',
-                        position: { title: 'Bramkarz', value: 'BR' },
-                        status: { title: 'Aktywny', value: 'aktywny' },
+                        position: { title: this.languageStore.t.table_data_position_b, value: 'BR' },
+                        status: { title: this.languageStore.t.table_data_status_a, value: 'aktywny' },
                         number: '',
                         year: ''
                     };
@@ -855,8 +858,8 @@ export default{
         addPlayer() {
             this.currentAdd = {
                 name: '',
-                position: {title: 'Bramkarz', value: 'BR'},
-                status: {title: 'Aktywny', value: 'aktywny'},
+                position: {title: this.languageStore.t.table_data_position_b, value: 'BR'},
+                status: {title: this.languageStore.t.table_data_status_a, value: 'aktywny'},
                 number: '',
                 year: ''
             }
@@ -883,8 +886,8 @@ export default{
                     this.dialogAdd = false;
                     this.currentAdd = {
                         name: '',
-                        position: { title: 'Bramkarz', value: 'BR' },
-                        status: { title: 'Aktywny', value: 'aktywny' },
+                        position: { title: this.languageStore.t.table_data_position_b, value: 'BR' },
+                        status: { title: this.languageStore.t.table_data_status_a, value: 'aktywny' },
                         number: '',
                         year: ''
                     };
@@ -969,19 +972,19 @@ export default{
             let playersToSort: PlayerOrganize[] = [...this.players];
             for (let i = 0; i < playersToSort.length; i++) {
                 if (playersToSort[i].status === 'nieaktywny') {
-                    playersToSort[i].status = {title: 'Nieaktywny', value: 'nieaktywny'};
+                    playersToSort[i].status = {title: this.languageStore.t.table_data_status_n, value: 'nieaktywny'};
                 } else if (playersToSort[i].status === 'aktywny') {
-                    playersToSort[i].status = {title: 'Aktywny', value: 'aktywny'};
+                    playersToSort[i].status = {title: this.languageStore.t.table_data_status_a, value: 'aktywny'};
                 }
 
                 if (playersToSort[i].position === 'BR') {
-                    playersToSort[i].position = {title: 'Bramkarz', value: 'BR'};
+                    playersToSort[i].position = {title: this.languageStore.t.table_data_position_b, value: 'BR'};
                 } else if (playersToSort[i].position === 'OB') {
-                    playersToSort[i].position = {title: 'Obrońca', value: 'OB'};
+                    playersToSort[i].position = {title: this.languageStore.t.table_data_position_o, value: 'OB'};
                 } else if (playersToSort[i].position === 'PO') {
-                    playersToSort[i].position = {title: 'Pomocnik', value: 'PO'};
+                    playersToSort[i].position = {title: this.languageStore.t.table_data_position_p, value: 'PO'};
                 } else if (playersToSort[i].position === 'NA') {
-                    playersToSort[i].position = {title: 'Napastnik', value: 'NA'};
+                    playersToSort[i].position = {title: this.languageStore.t.table_data_position_n, value: 'NA'};
                 }
             }
             this.pagesPlayers = Math.ceil(playersToSort.length / this.itemsPerPage);
