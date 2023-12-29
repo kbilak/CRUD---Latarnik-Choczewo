@@ -92,6 +92,7 @@ class ListPlayersView(ListAPIView):
     def get_queryset(self):
         origin_url = self.request.META.get('HTTP_REFERER')
         expected_url = 'http://localhost:3000/'
+        # expected_url = 'https://crud-latarnik-choczewo.vercel.app/'
         if origin_url == expected_url:
             return Player.objects.all()
         else:
@@ -104,6 +105,7 @@ class ListCoachesView(ListAPIView):
     def get_queryset(self):
         origin_url = self.request.META.get('HTTP_REFERER')
         expected_url = 'http://localhost:3000/'
+        # expected_url = 'https://crud-latarnik-choczewo.vercel.app/'
         if origin_url == expected_url:
             return Coach.objects.all()
         else:

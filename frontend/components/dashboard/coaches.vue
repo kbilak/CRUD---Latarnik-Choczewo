@@ -5,23 +5,23 @@
                 <div class="flex 2xl:flex-row xl:flex-row lg:flex-row md:flex-col sm:flex-col xs:flex-col 2xl:h-[70px] xl:h-[70px] lg:h-[70px] md:h-[104px] sm:h-[104px] xs:h-[168px] my-2 justify-between w-full items-center">
                     <div class="w-auto h-[48px] flex justify-between">
                         <div class="flex">
-                            <MainButton :click="filter" type="black" buttonText="Filtruj" class="mr-5" />
+                            <MainButton :click="filter" type="black" :buttonText="this.languageStore.t.table_nav_filter" class="mr-5" />
                             <div v-if="shouldDisplayFilterDiv" class="flex flex-col font-inter items-start justify-center pr-5">
-                                <span class="text-[1rem]">Filtrowanie:</span>
+                                <span class="text-[1rem]">{{this.languageStore.t.table_nav_filter_action}}</span>
                                 <div class="flex flex-row ml-[-6px]">
                                     <span v-for="(key, i) in Object.keys(this.filterOptions)" :key="i" class="text-[0.825rem] text-gray-500 flex flex-row items-start">
-                                        <span v-if="this.filterOptions[key] === true" class="flex ml-1 w-full"><v-icon @click="this.filterOptions[key] = false, updateFilter(), this.searchText = ''" class="cursor-pointer">mdi-close</v-icon>{{ this.filterOptionsTranslations[i] }}</span>
+                                        <span v-if="this.filterOptions[key] === true" class="flex ml-1 w-full"><v-icon @click="this.filterOptions[key] = false, updateFilter(), this.searchText = ''" class="cursor-pointer">mdi-close</v-icon>{{ [this.languageStore.t.table_data_status_a,this.languageStore.t.table_data_status_n,this.languageStore.t.table_data_role_gw,this.languageStore.t.table_data_role_as][i] }}</span>
                                     </span>
                                 </div>
                             </div>
                             <div class="dropdown dropdown-center flex justify-end">
-                                <MainButton tabindex="0" type="black" buttonText="Sortuj" />
+                                <MainButton tabindex="0" type="black" :buttonText="this.languageStore.t.table_nav_sort" />
                                 <ul tabindex="0" class="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-[150px] mt-[50px]">
                                     <li>
                                         <div class="form-control">
                                             <label class="label cursor-pointer">
                                                 <input v-model="sortingOptions.type" @change="updateSorting" type="checkbox" class="checkbox checkbox-[#000000] bg-gray-300 border-[1px] border-gray-300 mr-2" />
-                                                <span class="label-text">Rola</span> 
+                                                <span class="label-text">{{this.languageStore.t.table_header_role}}</span> 
                                             </label>
                                         </div>
                                     </li>
@@ -29,7 +29,7 @@
                                         <div class="form-control">
                                             <label class="label cursor-pointer">
                                                 <input v-model="sortingOptions.status" @change="updateSorting" type="checkbox" class="checkbox checkbox-[#000000] bg-gray-300 border-[1px] border-gray-300 mr-2" />
-                                                <span class="label-text">Status</span> 
+                                                <span class="label-text">{{this.languageStore.t.table_header_status}}</span> 
                                             </label>
                                         </div>
                                     </li>
@@ -44,13 +44,13 @@
                                 <span class="absolute inset-y-0 left-0 flex items-center pl-3">
                                     <v-icon>mdi-magnify</v-icon>
                                 </span>
-                                <input v-model="searchText" type="stext" class="h-full pl-10 pr-4 py-2 rounded-[0.5rem] block w-full font-inter text-[1rem] leading-[1.5] tracking-[0.005em]" placeholder="Szukaj trenera...">
+                                <input v-model="searchText" type="stext" class="h-full pl-10 pr-4 py-2 rounded-[0.5rem] block w-full font-inter text-[1rem] leading-[1.5] tracking-[0.005em]" :placeholder="this.languageStore.t.table_nav_search_coach">
                                 <span v-if="searchText.length > 0" @click="searchText = ''" class="absolute inset-y-0 right-0 flex items-center pr-3 cursor-pointer">
                                     <v-icon>mdi-close</v-icon>
                                 </span>
                             </div>
                         </div>
-                        <MainButton :click="addCoach" buttonText="Dodaj trenera" type="green" class="bg-green-700 2xl:ml-5 xl:ml-5 lg:ml-5 md:ml-5 sm:ml-5 xs:ml-0" :disabled="false" />
+                        <MainButton :click="addCoach" :buttonText="this.languageStore.t.table_nav_add_coach" type="green" class="bg-green-700 2xl:ml-5 xl:ml-5 lg:ml-5 md:ml-5 sm:ml-5 xs:ml-0" :disabled="false" />
                     </div>
                 </div>
                 <article class="2xl:w-[1280px] xl:w-[1280px] lg:w-[1024px] md:w-[768px] sm:w-[640px] xs:w-[400px] rounded-[0.5rem] bg-white h-auto">
@@ -60,27 +60,27 @@
                     <div v-else class="w-full flex items-center justify-start flex-col min-h-[660px]">
                         <div class="2xl:w-[1280px] xl:w-[1280px] lg:w-[1024px] md:w-[768px] sm:w-[640px] xs:w-[400px] h-[60px] border-b-[1px] border-gray-200 flex items-center justify-between 2xl:px-10 xl:px-10 lg:px-10 md:px-8 sm:px-3 xs:px-2 font-inter text-[#0f0f0f] 2xl:text-sm xl:text-sm lg:text-sm md:text-[0.85rem] sm:text-[0.85rem] xs:text-[0.75rem] font-medium leading-6 tracking-[0.005em]">
                             <div class="flex items-center justify-center">
-                                <span class="2xl:w-[60px] xl:w-[60px] lg:w-[60px] md:w-[60px] sm:w-[50px] xs:w-[50px] h-full">Photo</span>
+                                <span class="2xl:w-[60px] xl:w-[60px] lg:w-[60px] md:w-[60px] sm:w-[50px] xs:w-[50px] h-full">{{this.languageStore.t.table_header_photo}}</span>
                             </div>
                             <div class="flex items-center justify-center">
-                                <span class="2xl:w-[150px] xl:w-[150px] lg:w-[150px] md:w-[130px] sm:w-[120px] xs:w-[70px] h-full">Name</span>
+                                <span class="2xl:w-[150px] xl:w-[150px] lg:w-[150px] md:w-[130px] sm:w-[120px] xs:w-[70px] h-full">{{this.languageStore.t.table_header_name}}</span>
                             </div>
                             <div class="flex items-center justify-center">
-                                <span class="2xl:w-[150px] xl:w-[150px] lg:w-[150px] md:w-[120px] sm:w-[120px] xs:w-[60px] h-full 2xl:text-left xl:text-left lg:text-left md:text-left sm:text-left xs:text-center">Rola</span>
+                                <span class="2xl:w-[150px] xl:w-[150px] lg:w-[150px] md:w-[120px] sm:w-[120px] xs:w-[60px] h-full 2xl:text-left xl:text-left lg:text-left md:text-left sm:text-left xs:text-center">{{this.languageStore.t.table_header_role}}</span>
                             </div>
                             <div class="flex items-center justify-center">
-                                <span class="2xl:w-[120px] xl:w-[120px] lg:w-[120px] md:w-[100px] sm:w-[100px] xs:w-[40px] h-full 2xl:text-left xl:text-left lg:text-left md:text-left sm:text-left xs:text-center">Status</span>
+                                <span class="2xl:w-[120px] xl:w-[120px] lg:w-[120px] md:w-[100px] sm:w-[100px] xs:w-[40px] h-full 2xl:text-left xl:text-left lg:text-left md:text-left sm:text-left xs:text-center">{{this.languageStore.t.table_header_status}}</span>
                             </div>
                             <div class="flex items-center justify-center">
-                                <span class="2xl:w-[150px] xl:w-[150px] lg:w-[150px] md:w-[120px] sm:w-[120px] xs:w-[70px] h-full 2xl:text-left xl:text-left lg:text-left md:text-left sm:text-left xs:text-center">Team</span>
+                                <span class="2xl:w-[150px] xl:w-[150px] lg:w-[150px] md:w-[120px] sm:w-[120px] xs:w-[70px] h-full 2xl:text-left xl:text-left lg:text-left md:text-left sm:text-left xs:text-center">{{this.languageStore.t.table_header_team}}</span>
                             </div>
                             <div v-if="this.authStore.user.user.user_type === 'admin'" class="flex items-center justify-center text-center">
-                                <span class="2xl:w-[120px] xl:w-[120px] lg:w-[120px] md:w-[100px] sm:w-[100px] xs:w-[70px] h-full">Operacje</span>
+                                <span class="2xl:w-[120px] xl:w-[120px] lg:w-[120px] md:w-[100px] sm:w-[100px] xs:w-[70px] h-full">{{this.languageStore.t.table_header_operations}}</span>
                             </div>
                         </div>
                         <div v-if="this.coachesSorted.length === 0" class="w-full h-[599px] border-b-[0.0625rem] border-[hsl(0 0% 92%)] flex items-center justify-center px-10 font-inter text-[#2b2b2b]">
                             <span class="font-inter text-[3rem]">
-                                Nic nie znaleziono!
+                                {{this.languageStore.t.table_nothing}}
                             </span>
                         </div>
                         <div v-for="(coach, index) in this.coachesSorted[this.currentPageCoaches - 1]" :key="coach.id" :class="{ 'border-b-[0.0625rem] border-[hsl(0 0% 92%)]': index !== this.coachesSorted[this.currentPageCoaches - 1].length - 1 }" class="w-full h-[60px] flex items-center justify-between 2xl:px-10 xl:px-10 lg:px-10 md:px-8 sm:px-3 xs:px-2 font-inter text-[#2b2b2b] 2xl:text-[1rem] xl:text-[1rem] lg:text-[1rem] md:text-[0.85rem] sm:text-[0.85rem] xs:text-[0.75rem]">
@@ -92,16 +92,16 @@
                                 <span class="2xl:w-[150px] xl:w-[150px] lg:w-[150px] md:w-[130px] sm:w-[120px] xs:w-[70px] h-full font-[500]">{{coach.name}}</span>
                             </div>
                             <div class="flex items-center justify-center 2xl:text-left xl:text-left lg:text-left md:text-left sm:text-left xs:text-center">
-                                <span v-if="coach.type.value === 'GW'" class="2xl:w-[150px] xl:w-[150px] lg:w-[150px] md:w-[120px] sm:w-[120px] xs:w-[60px] h-full">Trener główny</span>
-                                <span v-if="coach.type.value === 'AS'" class="2xl:w-[150px] xl:w-[150px] lg:w-[150px] md:w-[120px] sm:w-[120px] xs:w-[60px] h-full">Asystent</span>
+                                <span v-if="coach.type.value === 'GW'" class="2xl:w-[150px] xl:w-[150px] lg:w-[150px] md:w-[120px] sm:w-[120px] xs:w-[60px] h-full">{{this.languageStore.t.table_data_role_gw}}</span>
+                                <span v-if="coach.type.value === 'AS'" class="2xl:w-[150px] xl:w-[150px] lg:w-[150px] md:w-[120px] sm:w-[120px] xs:w-[60px] h-full">{{this.languageStore.t.table_data_role_as}}</span>
                             </div>
                             <div class="2xl:flex xl:flex lg:flex md:flex sm:flex xs:hidden items-center justify-center text-center">
-                                <span v-if="coach.status.value === 'nieaktywny'" class="h-full border-[1px] border-red-600 bg-red-50 text-red 2xl:text-sm xl:text-sm lg:text-sm md:text-[0.85rem] sm:text-[0.85rem] xs:text-[0.75rem] rounded-full 2xl:w-[120px] xl:w-[120px] lg:w-[120px] md:w-[100px] sm:w-[100px] xs:w-[100px] py-1">Nieaktywny</span>
-                                <span v-else class="h-full border-[1px] border-green-600 bg-green-50 text-green 2xl:text-sm xl:text-sm lg:text-sm md:text-[0.85rem] sm:text-[0.85rem] xs:text-[0.75rem] rounded-full 2xl:w-[120px] xl:w-[120px] lg:w-[120px] md:w-[100px] sm:w-[100px] xs:w-[100px] py-1">Aktywny</span>
+                                <span v-if="coach.status.value === 'nieaktywny'" class="h-full border-[1px] border-red-600 bg-red-50 text-red 2xl:text-sm xl:text-sm lg:text-sm md:text-[0.85rem] sm:text-[0.85rem] xs:text-[0.75rem] rounded-full 2xl:w-[120px] xl:w-[120px] lg:w-[120px] md:w-[100px] sm:w-[100px] xs:w-[100px] py-1">{{this.languageStore.t.table_data_status_n}}</span>
+                                <span v-else class="h-full border-[1px] border-green-600 bg-green-50 text-green 2xl:text-sm xl:text-sm lg:text-sm md:text-[0.85rem] sm:text-[0.85rem] xs:text-[0.75rem] rounded-full 2xl:w-[120px] xl:w-[120px] lg:w-[120px] md:w-[100px] sm:w-[100px] xs:w-[100px] py-1">{{this.languageStore.t.table_data_status_a}}</span>
                             </div>
                             <div class="2xl:hidden xl:hidden lg:hidden md:hidden sm:hidden xs:flex items-center justify-center text-center">
-                                <span v-if="coach.status.value === 'nieaktywny'" class="h-full border-[1px] border-red-600 bg-red-50 text-red 2xl:text-sm xl:text-sm lg:text-sm md:text-[0.85rem] sm:text-[0.85rem] xs:text-[0.75rem] rounded-full 2xl:w-[120px] xl:w-[120px] lg:w-[120px] md:w-[100px] sm:w-[100px] xs:w-[40px] py-1">N</span>
-                                <span v-else class="h-full border-[1px] border-green-600 bg-green-50 text-green 2xl:text-sm xl:text-sm lg:text-sm md:text-[0.85rem] sm:text-[0.85rem] xs:text-[0.75rem] rounded-full 2xl:w-[120px] xl:w-[120px] lg:w-[120px] md:w-[100px] sm:w-[100px] xs:w-[40px] py-1">A</span>
+                                <span v-if="coach.status.value === 'nieaktywny'" class="h-full border-[1px] border-red-600 bg-red-50 text-red 2xl:text-sm xl:text-sm lg:text-sm md:text-[0.85rem] sm:text-[0.85rem] xs:text-[0.75rem] rounded-full 2xl:w-[120px] xl:w-[120px] lg:w-[120px] md:w-[100px] sm:w-[100px] xs:w-[40px] py-1">{{this.languageStore.t.table_data_status_n_short}}</span>
+                                <span v-else class="h-full border-[1px] border-green-600 bg-green-50 text-green 2xl:text-sm xl:text-sm lg:text-sm md:text-[0.85rem] sm:text-[0.85rem] xs:text-[0.75rem] rounded-full 2xl:w-[120px] xl:w-[120px] lg:w-[120px] md:w-[100px] sm:w-[100px] xs:w-[40px] py-1">{{this.languageStore.t.table_data_status_a_short}}</span>
                             </div>
                             <div class="flex items-center justify-center 2xl:text-left xl:text-left lg:text-left md:text-left sm:text-left xs:text-center">
                                 <span class="2xl:w-[150px] xl:w-[150px] lg:w-[150px] md:w-[120px] sm:w-[120px] xs:w-[70px] h-full">{{coach.team}}</span>
@@ -121,7 +121,7 @@
                             <option :value="20">20</option>
                             <option :value="50">50</option>
                         </select>
-                        <span class="text-sm border-l-[1px] h-full pl-2">Wyniki na stronie</span>
+                        <span class="text-sm border-l-[1px] h-full pl-2">{{this.languageStore.t.table_footer_results}}</span>
                     </div>
                     <div class="pagination flex items-center justify-center flex-col 2xl:mb-0 xl:mb-0 lg:mb-0 md:mb-0 sm:mb-0 xs:mb-5">
                         <span v-if="this.pagesCoaches > 1" class="flex items-center">
@@ -146,12 +146,12 @@
                             </button>
                         </span>
                         <span class="mt-2">
-                            Strona <b>{{ this.currentPageCoaches }}</b> z <b>{{ this.pagesCoaches }}</b>
+                            {{this.languageStore.t.table_footer_page}} <b>{{ this.currentPageCoaches }}</b> {{this.languageStore.t.table_footer_of}} <b>{{ this.pagesCoaches }}</b>
                         </span>
                     </div>
                     <div class="w-[230px] h-full flex items-center 2xl:justify-end xl:justify-end lg:justify-end md:justify-end sm:justify-end xs:justify-center">
                         <span class="font-bold">{{ this.coachesSorted[this.currentPageCoaches - 1].length }}</span>
-                        <span class="mx-1">z</span>
+                        <span class="mx-1">{{this.languageStore.t.table_footer_of}}</span>
                         <span class="font-bold">{{ this.coaches.length }}</span>
                     </div>
                 </div>
@@ -165,21 +165,21 @@
                         <v-icon @click="this.dialogUpdate = false; this.currentUpdate = {};" class="cursor-pointer text-gray-500 transition ease-in-out duration-300" style="font-size:28px !important;">mdi-close</v-icon>
                     </div>
                     <div class="flex flex-col mb-7 font-inter">
-                        <span class="font-medium mb-5 text-[1.5rem] leading-[1.5] tracking-[0.005em]">Edytowanie trenera.</span>
-                        <span class="text-[1rem] text-gray-500 leading-[1.5] tracking-[0.005em] mb-3">Edytujesz dane trenera <b>{{ currentUpdate.name }}</b>.</span>
-                        <span class="text-[1rem] text-red-700 leading-[1.5] tracking-[0.005em]">Ta akcja <b>nie może</b> być cofnięta.</span>
+                        <span class="font-medium mb-5 text-[1.5rem] leading-[1.5] tracking-[0.005em]">{{this.languageStore.t.dialog_update_coaches}}</span>
+                        <span class="text-[1rem] text-gray-500 leading-[1.5] tracking-[0.005em] mb-3">{{this.languageStore.t.dialog_update_coaches_desc}} <b>{{ currentUpdate.name }}</b>.</span>
+                        <span class="text-[1rem] text-red-700 leading-[1.5] tracking-[0.005em]">{{this.languageStore.t.dialog_cant_undo}}</span>
                     </div>
                     <div class="flex flex-col mt-3 mb-8 font-inter">
-                        <v-text-field v-model="this.currentUpdate.name" :rules="this.nameRules" variant="outlined" class="max-h-[56px] w-full mb-8" placeholder="Name" label="Name"></v-text-field>
-                        <v-text-field v-model="this.currentUpdate.team" :rules="this.teamRules" variant="outlined" class="max-h-[56px] w-full mb-8" placeholder="Trenowana drużyna" label="Trenowana drużyna"></v-text-field>
+                        <v-text-field v-model="this.currentUpdate.name" :rules="this.nameRules" variant="outlined" class="max-h-[56px] w-full mb-8" :placeholder="this.languageStore.t.placeholder_name" :label="this.languageStore.t.placeholder_name"></v-text-field>
+                        <v-text-field v-model="this.currentUpdate.team" :rules="this.teamRules" variant="outlined" class="max-h-[56px] w-full mb-8" :placeholder="this.languageStore.t.placeholder_team" :label="this.languageStore.t.placeholder_team"></v-text-field>
                         <div class="flex flex-row justify-between">
-                            <v-select v-model="this.currentUpdate.status" variant="outlined" class="max-h-[56px] max-w-[48%]" :items="statuses" item-title="title" item-value="value" return-object placeholder="Status" label="Status"></v-select>
-                            <v-select v-model="this.currentUpdate.type" variant="outlined" class="max-h-[56px] max-w-[48%]" :items="types" item-title="title" item-value="value" return-object placeholder="Position" label="Position"></v-select>
+                            <v-select v-model="this.currentUpdate.status" variant="outlined" class="max-h-[56px] max-w-[48%]" :items="[{ title: this.languageStore.t.table_data_status_n, value: 'nieaktywny' }, { title: this.languageStore.t.table_data_status_a, value: 'aktywny' },]" item-title="title" item-value="value" return-object :placeholder="this.languageStore.t.placeholder_status" :label="this.languageStore.t.placeholder_status"></v-select>
+                            <v-select v-model="this.currentUpdate.type" variant="outlined" class="max-h-[56px] max-w-[48%]" :items="[{ title: this.languageStore.t.table_data_role_gw, value: 'GW' }, { title: this.languageStore.t.table_data_role_as, value: 'AS' },]" item-title="title" item-value="value" return-object :placeholder="this.languageStore.t.placeholder_position" :label="this.languageStore.t.placeholder_position"></v-select>
                         </div>
                     </div>
                     <div class="flex flex-row w-full items-center justify-end font-inter">
-                        <MainButton :click="updateCoachClose" type="white" buttonText="Anuluj" style="color: black !important;" />
-                        <MainButton :click="updateCoachDialog" type="black" :loading="buttonLoading" :disabled="!updateValid" buttonText="Zapisz" class="ml-5" />
+                        <MainButton :click="updateCoachClose" type="white" :buttonText="this.languageStore.t.dialog_cancel" style="color: black !important;" />
+                        <MainButton :click="updateCoachDialog" type="black" :loading="buttonLoading" :disabled="!updateValid" :buttonText="this.languageStore.t.dialog_save" class="ml-5" />
                     </div>
                 </v-form>
             </v-dialog>
@@ -192,46 +192,46 @@
                         <v-icon @click="this.dialogImage = false; this.currentImage = {}; this.selectedImage = {};" class="cursor-pointer text-gray-500 transition ease-in-out duration-300" style="font-size:28px !important;">mdi-close</v-icon>
                     </div>
                     <div class="flex flex-col mb-7 font-inter">
-                        <span class="font-medium mb-5 text-[1.5rem] leading-[1.5] tracking-[0.005em]">Edycja zdjęcia zawodnika.</span>
-                        <span class="text-[1rem] text-gray-500 leading-[1.5] tracking-[0.005em] mb-3">Dodajesz nowe zdjęcie zawodnika <b>{{ this.currentImage.name }}</b>.</span>
-                        <span class="text-[1rem] text-red-700 leading-[1.5] tracking-[0.005em]">Ta akcja <b>nie może</b> być cofnięta.</span>
+                        <span class="font-medium mb-5 text-[1.5rem] leading-[1.5] tracking-[0.005em]">{{this.languageStore.t.dialog_image_coaches}}</span>
+                        <span class="text-[1rem] text-gray-500 leading-[1.5] tracking-[0.005em] mb-3">{{this.languageStore.t.dialog_image_coaches_desc}} <b>{{ this.currentImage.name }}</b>.</span>
+                        <span class="text-[1rem] text-red-700 leading-[1.5] tracking-[0.005em]">{{this.languageStore.t.dialog_cant_undo}}</span>
                     </div>
 
                     <div v-if="currentImage.image !== null && isObjectEmpty(selectedImage)" class="flex flex-col mt-3 mb-8 font-inter">
-                        <span class="font-medium text-[1.25rem] leading-[1.5] tracking-[0.005em] mb-3">Obecne zdjęcie</span>
+                        <span class="font-medium text-[1.25rem] leading-[1.5] tracking-[0.005em] mb-3">{{this.languageStore.t.dialog_image_players_current}}</span>
                         <img :src="currentImage.image" :alt="currentImage.name" class="rounded-xl 2xl:max-h-[418px] xl:max-h-[418px] lg:max-h-[418px] md:max-h-[418px] sm:max-h-[418px] xs:max-h-[358px]">
                     </div>
 
                     <div v-else class="flex flex-col mt-3 font-inter">
-                        <span v-if="isObjectEmpty(selectedImage)" class="italic mb-10">Zawodnik obecnie nie ma zdjęcia.</span>
+                        <span v-if="isObjectEmpty(selectedImage)" class="italic mb-10">{{this.languageStore.t.dialog_image_coaches_not}}</span>
 
                         <div v-if="!isObjectEmpty(selectedImage)" class="flex flex-row justify-between w-full items-center">
-                            <span class="font-medium text-[1.25rem] leading-[1.5] tracking-[0.005em] mb-3">Dodane zdjęcie</span>
+                            <span class="font-medium text-[1.25rem] leading-[1.5] tracking-[0.005em] mb-3">{{this.languageStore.t.dialog_image_players_added}}</span>
                             <v-icon @click="this.selectedImage = {};this.imageIsCropped = null;" class="cursor-pointer">mdi-close</v-icon>
                         </div>
 
                         <cropper v-if="!isObjectEmpty(selectedImage) && !this.imageIsCropped" class="cropper" :src="selectedImage.url" :stencil-props="{aspectRatio: 1 / 1, }" ref="cropper"/>
                         <div v-if="!isObjectEmpty(selectedImage) && !this.imageIsCropped" class="flex mt-5 w-full items-center justify-end">
-                            <MainButton :click="imageCoachClose" type="white" buttonText="Anuluj" style="color: black !important;" />
-                            <MainButton :click="deleteImagePreview" type="red" buttonText="Usuń zdjęcie" class="bg-red-700 hover:bg-red-800 ml-5" />
-                            <MainButton :click="cropImage" type="green" buttonText="Wytnij" class="bg-green-700 hover:bg-green-800 ml-5" />
+                            <MainButton :click="imageCoachClose" type="white" :buttonText="this.languageStore.t.dialog_cancel" style="color: black !important;" />
+                            <MainButton :click="deleteImagePreview" type="red" :buttonText="this.languageStore.t.dialog_image_delete" class="bg-red-700 hover:bg-red-800 ml-5" />
+                            <MainButton :click="cropImage" type="green" :buttonText="this.languageStore.t.dialog_image_crop" class="bg-green-700 hover:bg-green-800 ml-5" />
                         </div>
 
                         <canvas v-if="!isObjectEmpty(selectedImage) && this.imageIsCropped" ref="canvas" class="rounded-xl max-h-[600px] w-auto object-contain"></canvas>
                     </div>
 
                     <div v-if="isObjectEmpty(selectedImage)" class="flex flex-row w-full items-center justify-end font-inter">
-                        <MainButton :click="imageCoachClose" type="white" buttonText="Anuluj" style="color: black !important;" />
+                        <MainButton :click="imageCoachClose" type="white" :buttonText="this.languageStore.t.dialog_cancel" style="color: black !important;" />
                         <label v-if="isObjectEmpty(selectedImage)" @click="this.loadingImage = true;" for="file-upload" class="btn h-[40px] text-white bg-blue-700 hover:bg-blue-800 transition ease-in-out duration-300 rounded-[0.5rem] text-[1rem] font-medium px-4 py-1 w-auto flex items-center justify-center font-inter leading-[1.5] tracking-[0.005em] ml-5">
-                            Dodaj nowe zdjęcie
+                            {{this.languageStore.t.dialog_add_image}}
                         </label>
                         <input type="file" id="file-upload" ref="fileInput" accept="image/*" @change="previewImage">
                     </div>
 
                     <div v-if="imageIsCropped && !isObjectEmpty(selectedImage)" class="flex flex-row items-center justify-end mt-10">
-                        <MainButton :click="imageCoachClose" type="white" buttonText="Anuluj" style="color: black !important;" />
-                        <MainButton v-if="croppedImage !== null" :click="deleteCanvasImage" type="red" buttonText="Usuń zdjęcie" class="bg-red-700 hover:bg-red-800 ml-5" />
-                        <Input :icon="false" :click="imageCoachDialog" buttonText="Zapisz zdjęcie" class="ml-5" />
+                        <MainButton :click="imageCoachClose" type="white" :buttonText="this.languageStore.t.dialog_cancel" style="color: black !important;" />
+                        <MainButton v-if="croppedImage !== null" :click="deleteCanvasImage" type="red" :buttonText="this.languageStore.t.dialog_image_delete" class="bg-red-700 hover:bg-red-800 ml-5" />
+                        <Input :icon="false" :click="imageCoachDialog" :buttonText="this.languageStore.t.dialog_image_save" class="ml-5" />
                     </div>
                 </div>
             </v-dialog>
@@ -244,13 +244,13 @@
                         <v-icon @click="this.dialogDelete = false; this.currentDelete = {};" class="cursor-pointer text-gray-500 transition ease-in-out duration-300" style="font-size:28px !important;">mdi-close</v-icon>
                     </div>
                     <div class="flex flex-col mb-7 font-inter">
-                        <span class="font-medium mb-5 text-[1.5rem] leading-[1.5] tracking-[0.005em]">Usuwanie zawodnika.</span>
-                        <span class="text-[1rem] text-gray-500 leading-[1.5] tracking-[0.005em] mb-3">Czy na pewno chcesz usunąć zawdonika <b>{{ this.currentDelete.name }}</b> z bazy danych?</span>
-                        <span class="text-[1rem] text-red-700 leading-[1.5] tracking-[0.005em]">Ta akcja <b>nie może</b> być cofnięta.</span>
+                        <span class="font-medium mb-5 text-[1.5rem] leading-[1.5] tracking-[0.005em]">{{this.languageStore.t.dialog_delete_coaches}}</span>
+                        <span class="text-[1rem] text-gray-500 leading-[1.5] tracking-[0.005em] mb-3">{{this.languageStore.t.dialog_delete_coaches_desc1}} <b>{{ this.currentDelete.name }}</b> {{this.languageStore.t.dialog_delete_players_desc2}}</span>
+                        <span class="text-[1rem] text-red-700 leading-[1.5] tracking-[0.005em]">{{this.languageStore.t.dialog_cant_undo}}</span>
                     </div>
                     <div class="flex flex-row w-full items-center justify-end font-inter">
-                        <MainButton :click="deleteCoachClose" type="white" buttonText="Anuluj" style="color: black !important;" />
-                        <MainButton :click="deleteCoachDialog" type="red" buttonText="Usuń zawodnika" class="bg-red-700 hover:bg-red-800ml-5" />
+                        <MainButton :click="deleteCoachClose" type="white" :buttonText="this.languageStore.t.dialog_cancel" style="color: black !important;" />
+                        <MainButton :click="deleteCoachDialog" type="red" :buttonText="this.languageStore.t.dialog_delete_coach" class="bg-red-700 hover:bg-red-800ml-5 ml-5" />
                     </div>
                 </v-form>
             </v-dialog>
@@ -263,20 +263,20 @@
                         <v-icon @click="this.dialogAdd = false; this.currentAdd = {};" class="cursor-pointer text-gray-500 transition ease-in-out duration-300" style="font-size:28px !important;">mdi-close</v-icon>
                     </div>
                     <div class="flex flex-col mb-7 font-inter">
-                        <span class="font-medium mb-5 text-[1.5rem] leading-[1.5] tracking-[0.005em]">Dodawanie trenera.</span>
-                        <span class="text-[1rem] text-gray-500 leading-[1.5] tracking-[0.005em]">Dodajesz trenera do bazy danych <b>Latarnika Choczewo</b>.</span>
+                        <span class="font-medium mb-5 text-[1.5rem] leading-[1.5] tracking-[0.005em]">{{this.languageStore.t.dialog_add_coaches}}</span>
+                        <span class="text-[1rem] text-gray-500 leading-[1.5] tracking-[0.005em]">{{this.languageStore.t.dialog_add_coaches_desc}} <b>{{this.languageStore.t.dialog_add_players_desc_name}}</b>.</span>
                     </div>
                     <div class="flex flex-col mt-3 mb-8 font-inter">
-                        <v-text-field v-model="this.currentAdd.name" :rules="this.nameRules" variant="outlined" class="max-h-[56px] w-full mb-8" placeholder="Name" label="Name"></v-text-field>
-                        <v-text-field v-model="this.currentAdd.team" :rules="this.teamRules" variant="outlined" class="max-h-[56px] w-full mb-8" placeholder="Trenowana drużyna" label="Trenowana drużyna"></v-text-field>
+                        <v-text-field v-model="this.currentAdd.name" :rules="this.nameRules" variant="outlined" class="max-h-[56px] w-full mb-8" :placeholder="this.languageStore.t.placeholder_name" :label="this.languageStore.t.placeholder_name"></v-text-field>
+                        <v-text-field v-model="this.currentAdd.team" :rules="this.teamRules" variant="outlined" class="max-h-[56px] w-full mb-8" :placeholder="this.languageStore.t.placeholder_team" :label="this.languageStore.t.placeholder_team"></v-text-field>
                         <div class="flex flex-row justify-between">
-                            <v-select v-model="this.currentAdd.status" variant="outlined" class="max-h-[56px] max-w-[48%]" :items="statuses" item-title="title" item-value="value" return-object placeholder="Status" label="Status"></v-select>
-                            <v-select v-model="this.currentAdd.type" variant="outlined" class="max-h-[56px] max-w-[48%]" :items="types" item-title="title" item-value="value" return-object placeholder="Rola" label="Rola"></v-select>
+                            <v-select v-model="this.currentAdd.status" variant="outlined" class="max-h-[56px] max-w-[48%]" :items="[{ title: this.languageStore.t.table_data_status_n, value: 'nieaktywny' }, { title: this.languageStore.t.table_data_status_a, value: 'aktywny' },]" item-title="title" item-value="value" return-object :placeholder="this.languageStore.t.placeholder_status" :label="this.languageStore.t.placeholder_status"></v-select>
+                            <v-select v-model="this.currentAdd.type" variant="outlined" class="max-h-[56px] max-w-[48%]" :items="[{ title: this.languageStore.t.table_data_role_gw, value: 'GW' }, { title: this.languageStore.t.table_data_role_as, value: 'AS' },]" item-title="title" item-value="value" return-object :placeholder="this.languageStore.t.placeholder_position" :label="this.languageStore.t.placeholder_position"></v-select>
                         </div>
                     </div>
                     <div class="flex flex-row w-full items-center justify-end font-inter">
-                        <MainButton :click="addCoachClose" type="white" buttonText="Anuluj" style="color: black !important;" />
-                        <MainButton :click="addCoachDialog" :loading="buttonLoading" buttonText="Dodaj trenera" :disabled="!addValid" type="green" class="ml-5" />
+                        <MainButton :click="addCoachClose" type="white" :buttonText="this.languageStore.t.dialog_cancel" style="color: black !important;" />
+                        <MainButton :click="addCoachDialog" :loading="buttonLoading" :buttonText="this.languageStore.t.table_nav_add_coach" :disabled="!addValid" type="green" class="ml-5" />
                     </div>
                 </v-form>
             </v-dialog>
@@ -289,27 +289,27 @@
                         <v-icon @click="this.dialogFilter = false;" class="cursor-pointer text-gray-500 transition ease-in-out duration-300" style="font-size:28px !important;">mdi-close</v-icon>
                     </div>
                     <div class="flex flex-col mb-10 font-inter">
-                        <span class="font-medium mb-1 text-[1.5rem] leading-[1.5] tracking-[0.005em]">Filtrowanie zawodników.</span>
-                        <span class="text-[1rem] text-gray-500 leading-[1.5] tracking-[0.005em]">Wybierz opcje, według których mają być zwróceni zawodnicy.</span>
+                        <span class="font-medium mb-1 text-[1.5rem] leading-[1.5] tracking-[0.005em]">{{this.languageStore.t.dialog_filter_coaches}}</span>
+                        <span class="text-[1rem] text-gray-500 leading-[1.5] tracking-[0.005em]">{{this.languageStore.t.dialog_filter_players_coaches}}</span>
                     </div>
                     <div class="flex flex-col mt-3 mb-8 font-inter">
                         <div class="w-full flex items-center">
                             <v-icon class="mr-3">mdi-account-badge</v-icon>
-                            <span class="text-[1rem]">Status</span>
+                            <span class="text-[1rem]">{{this.languageStore.t.table_header_status}}</span>
                         </div>
                         <div class="flex flex-wrap ml-5 mt-2 font-inter text-black">
                             <div class="form-control w-1/2">
                                 <label class="label cursor-pointer flex justify-start">
                                     <input v-if="this.filterOptions.statusN" v-model="filterOptions.statusA" disabled type="checkbox" class="checkbox checkbox-[#000000] bg-gray-300 border-[1px] border-gray-300 mr-2" />
                                     <input v-else v-model="filterOptions.statusA" type="checkbox" class="checkbox checkbox-[#000000] bg-gray-300 border-[1px] border-gray-300 mr-2" />
-                                    <span class="label-text">Aktywny</span> 
+                                    <span class="label-text">{{this.languageStore.t.table_data_status_a}}</span> 
                                 </label>
                             </div>
                             <div class="form-control w-1/2">
                                 <label class="label cursor-pointer flex justify-start">
                                     <input v-if="this.filterOptions.statusA" v-model="filterOptions.statusN" disabled type="checkbox" class="checkbox checkbox-[#000000] bg-gray-300 border-[1px] border-gray-300 mr-2" />
                                     <input v-else v-model="filterOptions.statusN" type="checkbox" class="checkbox checkbox-[#000000] bg-gray-300 border-[1px] border-gray-300 mr-2" />
-                                    <span class="label-text">Nieaktywny</span> 
+                                    <span class="label-text">{{this.languageStore.t.table_data_status_n}}</span> 
                                 </label>
                             </div>
                         </div>
@@ -323,40 +323,40 @@
                                 <label class="label cursor-pointer flex justify-start">
                                     <input v-if="this.filterOptions.typeAS" v-model="filterOptions.typeGW" disabled type="checkbox" class="checkbox checkbox-[#000000] bg-gray-300 border-[1px] border-gray-300 mr-2" />
                                     <input v-else v-model="filterOptions.typeGW" type="checkbox" class="checkbox checkbox-[#000000] bg-gray-300 border-[1px] border-gray-300 mr-2" />
-                                    <span class="label-text">Trener główny</span> 
+                                    <span class="label-text">{{this.languageStore.t.table_data_role_gw}}</span> 
                                 </label>
                             </div>
                             <div class="form-control w-1/2">
                                 <label class="label cursor-pointer flex justify-start">
                                     <input v-if="this.filterOptions.typeGW" v-model="filterOptions.typeAS" disabled type="checkbox" class="checkbox checkbox-[#000000] bg-gray-300 border-[1px] border-gray-300 mr-2" />
                                     <input v-else v-model="filterOptions.typeAS" type="checkbox" class="checkbox checkbox-[#000000] bg-gray-300 border-[1px] border-gray-300 mr-2" />
-                                    <span class="label-text">Asystent</span> 
+                                    <span class="label-text">{{this.languageStore.t.table_data_role_as}}</span> 
                                 </label>
                             </div>
                         </div>
                     </div>
                     <div class="flex flex-row w-full items-center justify-end font-inter">
-                        <MainButton :click="filterClose" type="white" buttonText="Anuluj" style="color: black !important;" />
-                        <MainButton :click="updateFilter" type="yellow" buttonText="Filtruj" class="bg-yellow-700 hover:bg-yellow-800 ml-5" style="color: white !important;" />
+                        <MainButton :click="filterClose" type="white" :buttonText="this.languageStore.t.dialog_cancel" style="color: black !important;" />
+                        <MainButton :click="updateFilter" type="yellow" :buttonText="this.languageStore.t.table_nav_filter" class="bg-yellow-700 hover:bg-yellow-800 ml-5" style="color: white !important;" />
                     </div>
                 </div>
             </v-dialog>
         </div>
         <v-snackbar v-model="snackbar" :timeout="snackbarTimeout" variant="outlined" color="rgba(1, 1, 1, 0)">
             <div class="p-4 my-4 w-[350px] text-sm text-green-600 border-[1px] border-green-900 rounded-lg bg-green-50 text-center flex items-start justify-between" type="alert">
-                <span class="font-medium font-inter">{{ this.languageStore.t.auth_sign_up_mess_success }}</span> 
+                <span class="font-medium font-inter">{{ this.languageStore.t.dialog_snackbar_success }}</span> 
                 <v-icon @click="this.snackbar = false;">mdi-close</v-icon>
             </div>
         </v-snackbar>
         <v-snackbar v-model="snackbarError" :timeout="snackbarTimeout" variant="outlined" color="rgba(1, 1, 1, 0)">
             <div class="p-4 my-4 w-[350px] text-sm text-red-600 border-[1px] border-red-900 rounded-lg bg-red-50 text-center flex items-start justify-between" type="alert">
-                <span class="font-medium font-inter">{{ this.languageStore.t.auth_login_mess_error }}</span> 
+                <span class="font-medium font-inter">{{ this.languageStore.t.dialog_snackbar_error }}</span> 
                 <v-icon @click="this.snackbarError = false;">mdi-close</v-icon>
             </div>
         </v-snackbar>
         <v-snackbar v-model="snackbarErrorPhoto" :timeout="snackbarTimeout" variant="outlined" color="rgba(1, 1, 1, 0)">
             <div class="p-4 my-4 w-[350px] text-sm text-red-600 border-[1px] border-red-900 rounded-lg bg-red-50 text-center flex items-start justify-between" type="alert">
-                <span class="font-medium font-inter">{{ this.languageStore.t.auth_login_mess_error }}</span> 
+                <span class="font-medium font-inter">{{ this.languageStore.t.dialog_snackbar_error_photo }}</span> 
                 <v-icon @click="this.snackbarErrorPhoto = false;">mdi-close</v-icon>
             </div>
         </v-snackbar>
@@ -446,15 +446,6 @@ export default{
             croppedImage: null,
             imageIsCropped: null,
 
-            statuses: [
-                { title: 'Nieaktywny', value: 'nieaktywny' },
-                { title: 'Aktywny', value: 'aktywny' },
-            ],
-            types: [
-                { title: 'Trener Główny', value: 'GW' },
-                { title: 'Asystent', value: 'AS' },
-            ],
-
             searchText: '',
 
             snackbar: false,
@@ -481,15 +472,19 @@ export default{
         }
 
         this.nameRules = [
-            (v) => !!v || this.languageStore.t.rules_email_not,
-            (v) => (v && v.length >= 5 && v.length <= 60) || this.languageStore.t.rules_email_length,
+            (v) => !!v || this.languageStore.t.rules_name_not,
+            (v) => (v && v.length >= 5 && v.length <= 60) || this.languageStore.t.rules_name_length,
+        ];
+        this.teamRules = [
+            (v) => !!v || this.languageStore.t.rules_team_not,
+            (v) => (v && v.length >= 5 && v.length <= 60) || this.languageStore.t.rules_team_length,
         ];
         this.numberRules = [
-            (v) => !isNaN(parseFloat(v)) && isFinite(v) && v >= 1 && v <= 99 || 'Number',
+            (v) => !isNaN(parseFloat(v)) && isFinite(v) && v >= 1 && v <= 99 || this.languageStore.t.rules_number,
         ];
 
         this.yearRules = [
-            (v) => !isNaN(parseFloat(v)) && isFinite(v) && Number.isInteger(parseFloat(v)) && v >= 1970 && v <= 2019 || 'Year',
+            (v) => !isNaN(parseFloat(v)) && isFinite(v) && Number.isInteger(parseFloat(v)) && v >= 1970 && v <= 2019 || this.languageStore.t.rules_year,
         ];
 
         // this.socket = new WebSocket('ws://127.0.0.1:8000/ws/chat/'); // Your WebSocket URL
@@ -627,7 +622,17 @@ export default{
                 this.loading = false;
             }
         },
-        updateCoach(id: String, name: String, type: Object, status: Object, team: String) {
+        updateCoach(id: String, name: String, type, status, team: String) {
+            if (status.value === 'aktywny') {
+                status = {title: this.languageStore.t.table_data_status_a, value: 'aktywny'}
+            } else if (status.value === 'nieaktywny') {
+                 status = {title: this.languageStore.t.table_data_status_n, value: 'nieaktywny'}
+            }
+            if (type.value === 'GW') {
+                type = {title: this.languageStore.t.table_data_role_gw, value: 'GW'}
+            } else if (type.value === 'AS') {
+                 type = {title: this.languageStore.t.table_data_role_as, value: 'AS'}
+            }
             this.currentUpdate = {
                 id: id,
                 name: name,
@@ -670,8 +675,8 @@ export default{
                     this.dialogUpdate = false;
                     this.currentUpdate = {
                         name: '',
-                        type: {title: 'Asystent', value: 'AS'},
-                        status: { title: 'Aktywny', value: 'aktywny' },
+                        type: {title: this.languageStore.t.table_data_role_as, value: 'AS'},
+                        status: { title: this.languageStore.t.table_data_status_a, value: 'aktywny' },
                         number: '',
                         year: ''
                     };
@@ -729,8 +734,8 @@ export default{
         addCoach() {
             this.currentAdd = {
                 name: '',
-                type: {title: 'Asystent', value: 'AS'},
-                status: {title: 'Aktywny', value: 'aktywny'},
+                type: {title: this.languageStore.t.table_data_role_as, value: 'AS'},
+                status: {title: this.languageStore.t.table_data_status_a, value: 'aktywny'},
                 team: '',
             }
             this.dialogAdd = true;
@@ -756,8 +761,8 @@ export default{
                     this.dialogAdd = false;
                     this.currentAdd = {
                         name: '',
-                        type: {title: 'Asystent', value: 'AS'},
-                        status: { title: 'Aktywny', value: 'aktywny' },
+                        type: {title: this.languageStore.t.table_data_role_as, value: 'AS'},
+                        status: { title: this.languageStore.t.table_data_status_a, value: 'aktywny' },
                         team: '',
                     };
                 } else {
@@ -824,15 +829,15 @@ export default{
             let coachesToSort: CoachOrganize[] = [...this.coaches];
             for (let i = 0; i < coachesToSort.length; i++) {
                 if (coachesToSort[i].status === 'nieaktywny') {
-                    coachesToSort[i].status = {title: 'Nieaktywny', value: 'nieaktywny'};
+                    coachesToSort[i].status = {title: this.languageStore.t.table_data_status_n, value: 'nieaktywny'};
                 } else if (coachesToSort[i].status === 'aktywny') {
-                    coachesToSort[i].status = {title: 'Aktywny', value: 'aktywny'};
+                    coachesToSort[i].status = {title: this.languageStore.t.table_data_status_a, value: 'aktywny'};
                 }
 
                 if (coachesToSort[i].type === 'GW') {
-                    coachesToSort[i].type = {title: 'Trener Główny', value: 'GW'};
+                    coachesToSort[i].type = {title: this.languageStore.t.table_data_role_gw, value: 'GW'};
                 } else if (coachesToSort[i].type === 'AS') {
-                    coachesToSort[i].type = {title: 'Asystent', value: 'AS'};
+                    coachesToSort[i].type = {title: this.languageStore.t.table_data_role_as, value: 'AS'};
                 }
             }
             this.pagesCoaches = Math.ceil(coachesToSort.length / this.itemsPerPage);

@@ -108,7 +108,7 @@
                         </div>
                         <div v-if="this.playersSorted.length === 0" class="w-full h-[599px] border-b-[0.0625rem] border-[hsl(0 0% 92%)] flex items-center justify-center px-10 font-inter text-[#2b2b2b]">
                             <span class="font-inter text-[3rem]">
-                                Nic nie znaleziono!
+                                {{this.languageStore.t.table_nothing}}
                             </span>
                         </div>
                         <div v-for="(player, index) in this.playersSorted[this.currentPagePlayers - 1]" :key="player.id" :class="{ 'border-b-[0.0625rem] border-[hsl(0 0% 92%)]': index !== this.playersSorted[this.currentPagePlayers - 1].length - 1 }" class="w-full h-[60px] flex items-center justify-between 2xl:px-10 xl:px-10 lg:px-10 md:px-8 sm:px-3 xs:px-2 font-inter text-[#2b2b2b] 2xl:text-[1rem] xl:text-[1rem] lg:text-[1rem] md:text-[0.85rem] sm:text-[0.85rem] xs:text-[0.75rem]">
