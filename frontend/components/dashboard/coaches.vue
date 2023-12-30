@@ -598,7 +598,6 @@ export default{
             console.error('WebSocket error:', error);
         },
         async getAllCoaches() {
-            this.searchText = '';
             try {
                 this.loading = true;
                 this.coaches = await getCoaches(); 
@@ -831,7 +830,6 @@ export default{
             this.loading = false;
         },
         async organizeCoaches(): Promise<void> {
-            this.searchText = '';
             interface CoachOrganize {
                 status: string | { title: string; value: string };
                 type: string | { title: string; value: string };
