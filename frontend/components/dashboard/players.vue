@@ -709,7 +709,6 @@ export default{
             console.error('WebSocket error:', error);
         },
         async getAllPlayers() {
-            this.searchText = '';
             try {
                 this.loading = true;
                 this.players = await getPlayers(); 
@@ -974,7 +973,6 @@ export default{
             this.loading = false;
         },
         async organizePlayers(): Promise<void> {
-            this.searchText = '';
             interface PlayerOrganize {
                 status: string | { title: string; value: string };
                 position: string | { title: string; value: string };
